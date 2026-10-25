@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { LAYER } from "../../../shared/lib/layers";
 import { prettyCwd } from "../../../shared/lib/paths";
 import { projectSessionCount } from "../model/projectData";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   name: string;
@@ -16,6 +17,7 @@ type Props = {
  * disk is left alone; opening it again brings the project back empty.
  */
 export function RemoveProjectDialog({ name, path, onCancel, onConfirm }: Props) {
+  const t = useT();
   const [sessions, setSessions] = useState<number | null>(null);
   const cancelRef = useRef<HTMLButtonElement>(null);
 
@@ -62,10 +64,7 @@ export function RemoveProjectDialog({ name, path, onCancel, onConfirm }: Props) 
             Delete “{name}”?
           </h2>
           <p className="text-[12px] leading-snug text-content/55">
-            All conversations for this project will be deleted. It also
-            leaves the sidebar. The folder on disk stays put, and opening it
-            again brings the project back empty.
-          </p>
+            {t("ui.projects.allConversationsForThisProjectWill")}</p>
           {sessions != null && sessions > 0 ? (
             <p className="text-[12px] leading-snug text-content/45">
               {sessions === 1
@@ -85,15 +84,13 @@ export function RemoveProjectDialog({ name, path, onCancel, onConfirm }: Props) 
             onClick={onCancel}
             className="rounded-md px-3 py-1.5 text-[12px] text-content/70 hover:bg-content/8 hover:text-content"
           >
-            Cancel
-          </button>
+            {t("ui.projects.cancel")}</button>
           <button
             type="button"
             onClick={onConfirm}
             className="rounded-md bg-red-500/20 px-3 py-1.5 text-[12px] font-medium text-red-300 hover:bg-red-500/30"
           >
-            Delete
-          </button>
+            {t("ui.projects.delete")}</button>
         </div>
       </div>
     </div>,

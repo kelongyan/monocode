@@ -14,6 +14,7 @@ import {
   rememberEmoji,
   saveEmojiSkinTone,
 } from "../lib/emojiData";
+import { useT } from "../../shared/i18n";
 
 const COLUMNS = 8;
 
@@ -63,6 +64,7 @@ export function EmojiPickerPopover({
   onPick: (emoji: string) => void;
   onDismiss: () => void;
 }) {
+  const t = useT();
   const [search, setSearch] = useState("");
   const [recent] = useState(loadRecentEmoji);
   const [initialTone] = useState(loadEmojiSkinTone);
@@ -110,8 +112,8 @@ export function EmojiPickerPopover({
             <Search className="size-3.5 shrink-0 text-content/45" />
             <Picker.Search
               ref={searchField}
-              aria-label="Search emoji"
-              placeholder="Search emoji"
+              aria-label={t("ui.shared.searchEmoji")}
+              placeholder={t("ui.shared.searchEmoji")}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               className="min-w-0 flex-1 bg-transparent text-[13px] text-content outline-none placeholder:text-content/35 [&::-webkit-search-cancel-button]:hidden"
@@ -121,8 +123,7 @@ export function EmojiPickerPopover({
         {recent.length > 0 && !search ? (
           <div className="px-2">
             <p className="px-1 pt-1 pb-1 text-[11px] font-medium text-content/45">
-              Recent
-            </p>
+              {t("ui.shared.recent")}</p>
             <div className="flex flex-wrap">
               {recent.slice(0, COLUMNS).map((emoji) => (
                 <button
@@ -144,11 +145,9 @@ export function EmojiPickerPopover({
           className="relative min-h-0 flex-1 px-2 outline-none"
         >
           <Picker.Loading className="absolute inset-0 grid place-items-center text-[12px] text-content/45">
-            Loading…
-          </Picker.Loading>
+            {t("ui.shared.loading")}</Picker.Loading>
           <Picker.Empty className="absolute inset-0 grid place-items-center text-[12px] text-content/45">
-            No emoji found
-          </Picker.Empty>
+            {t("ui.shared.noEmojiFound")}</Picker.Empty>
           <Picker.List
             className="select-none pb-1"
             components={LIST_COMPONENTS}
@@ -190,8 +189,8 @@ export function EmojiPickerPopover({
               return (
                 <button
                   type="button"
-                  title="Skin tone"
-                  aria-label="Change skin tone"
+                  title={t("ui.shared.skinTone")}
+                  aria-label={t("ui.shared.changeSkinTone")}
                   onClick={() => {
                     setSkinTone(next);
                     saveEmojiSkinTone(next);

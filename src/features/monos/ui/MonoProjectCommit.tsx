@@ -507,8 +507,7 @@ export function MonoProjectCommit({
             ) : (
               <Check className="size-3.5" strokeWidth={2} />
             )}
-            Commit
-          </button>
+            {t("ui.monos.commit")}</button>
           <button
             type="button"
             aria-label={t("changes.commitOptions")}
@@ -546,8 +545,7 @@ export function MonoProjectCommit({
                 onClick={() => void commit(true, true)}
                 className="flex h-7 w-full items-center px-3 text-left text-[12px] text-content hover:bg-content/10 disabled:opacity-40"
               >
-                Commit, Push & Create PR
-              </button>
+                {t("ui.monos.commitPushCreatePr")}</button>
             </div>
           ) : null}
         </div>

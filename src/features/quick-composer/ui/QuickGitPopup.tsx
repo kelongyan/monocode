@@ -19,6 +19,7 @@ import {
   type QuickGitRequest,
 } from "../model/quickGitPopup";
 import type { QuickWorkspace } from "../model/quickWorkspace";
+import { useT } from "../../../shared/i18n";
 
 export function QuickGitPopup({ onShown }: { onShown: () => void }) {
   const [request, setRequest] = useState<QuickGitRequest | null>(null);
@@ -131,6 +132,7 @@ export function QuickGitPopupPicker({
   request: QuickGitRequest;
   onFinish: (id: string, choice?: QuickWorkspace) => Promise<void>;
 }) {
+  const t = useT();
   const finished = useRef(false);
   const { choice } = request;
   const cwd = choice.tree?.path ?? choice.cwd ?? "";
@@ -173,8 +175,7 @@ export function QuickGitPopupPicker({
           className="rounded-md px-2 py-1 text-content/70 hover:bg-content/10"
           onClick={() => finish()}
         >
-          Close
-        </button>
+          {t("ui.quickComposer.close")}</button>
       </div>
     );
   if (request.kind === "branch")

@@ -135,8 +135,7 @@ export function HabitPage({
           {runningSince != null ? <RunningRow since={runningSince} /> : null}
           {runs.length === 0 && runningSince == null ? (
             <p className="px-2 py-3 text-[12px] text-content/40">
-              It hasn't run yet.
-            </p>
+              {t("ui.monos.itHasntRunYet")}</p>
           ) : (
             <ul className="flex flex-col gap-px">
               {runs.map((run) => (
@@ -188,10 +187,11 @@ export function RunningFor({ since }: { since: number }) {
 }
 
 function RunningRow({ since }: { since: number }) {
+  const t = useT();
   return (
     <div className="flex items-center gap-2.5 rounded-md px-2 py-2 text-[12px]">
       <span className="size-2 shrink-0 animate-pulse rounded-full bg-[var(--mono-color)]" />
-      <span className="flex-1 text-content/85">Running now</span>
+      <span className="flex-1 text-content/85">{t("ui.monos.runningNow")}</span>
       <span className="text-content/40">
         <RunningFor since={since} />
       </span>

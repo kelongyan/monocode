@@ -86,8 +86,7 @@ export function NewHabitPage({
           data-tauri-drag-region="false"
           className="h-6 rounded-md bg-content/10 px-2 text-[12px] text-content enabled:hover:bg-content/[0.14] disabled:opacity-40"
         >
-          Create
-        </button>
+          {t("ui.monos.create")}</button>
       </PageHeader>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none">
@@ -163,7 +162,7 @@ function ScheduleFields({
         <>
           <span className="text-content/45">on</span>
           <SearchableSelect
-            label="Day"
+            label={t("ui.monos.day")}
             value={String(schedule.dayOfWeek)}
             options={DAYS}
             variant="pill"

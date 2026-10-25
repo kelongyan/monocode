@@ -12,7 +12,7 @@ import {
   runtimeModeLabel,
   type RuntimeMode,
 } from "../../sessions/model/session";
-import { useLocale } from "../../../shared/i18n";
+import { useLocale, useT } from "../../../shared/i18n";
 
 const ICONS = {
   supervised: Lock,
@@ -46,6 +46,7 @@ export function QuickPermissions({
   onChange: (mode: RuntimeMode) => void;
   onClose: () => void;
 }) {
+  const t = useT();
   useLocale();
   const root = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -62,7 +63,7 @@ export function QuickPermissions({
     <div
       ref={root}
       role="listbox"
-      aria-label="Permissions"
+      aria-label={t("ui.quickComposer.permissions")}
       aria-activedescendant={`${id}-${active}`}
       tabIndex={-1}
       className="min-h-0 overflow-y-auto overscroll-none border-t border-stroke p-2 outline-none"

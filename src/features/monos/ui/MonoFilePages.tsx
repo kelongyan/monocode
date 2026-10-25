@@ -82,7 +82,7 @@ export function SoulPage({
             placeholder={t("monos.soulPlaceholder")}
           />
         ) : (
-          <Empty>Loading…</Empty>
+          <Empty>{t("ui.monos.loading")}</Empty>
         )}
       </div>
     </div>
@@ -157,9 +157,9 @@ export function MemoryPage({
       ) : null}
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none px-2 py-2">
         {!files ? (
-          <Empty>Loading…</Empty>
+          <Empty>{t("ui.monos.loading")}</Empty>
         ) : facts.length === 0 && !adding ? (
-          <Empty>Nothing remembered yet</Empty>
+          <Empty>{t("ui.monos.nothingRememberedYet")}</Empty>
         ) : (
           <ul className="flex flex-col gap-px">
             {adding ? (

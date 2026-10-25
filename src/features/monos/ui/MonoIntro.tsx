@@ -45,8 +45,7 @@ export function MonoIntroCard({ look, onCreate, onHide }: Props) {
     >
       <div className="flex items-center gap-2 pl-2.5 pr-2 pt-2">
         <h3 className="min-w-0 flex-1 truncate text-[13px] font-medium text-content">
-          Meet Monos
-        </h3>
+          {t("ui.monos.meetMonos")}</h3>
         <button
           type="button"
           role="switch"
@@ -109,9 +108,7 @@ export function MonoIntroCard({ look, onCreate, onHide }: Props) {
       </div>
 
       <p className="px-2.5 pt-1.5 text-[11px] leading-snug text-content/55">
-        Agents of your own that work across your projects and run habits on
-        their own.
-      </p>
+        {t("ui.monos.agentsOfYourOwnThatWork")}</p>
 
       <div className="p-2">
         <button
@@ -119,8 +116,7 @@ export function MonoIntroCard({ look, onCreate, onHide }: Props) {
           onClick={onCreate}
           className="h-7 w-full cursor-default rounded-md bg-content text-[12px] font-medium text-background-base hover:bg-content/85 active:scale-[0.98]"
         >
-          Create mono
-        </button>
+          {t("ui.monos.createMono")}</button>
       </div>
     </section>
   );

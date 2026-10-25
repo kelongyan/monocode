@@ -82,6 +82,7 @@ import {
   resolveQuickModel,
   type QuickLaunch,
 } from "../model/quickComposer";
+import { useT } from "../../../shared/i18n";
 
 /** Tallest the prompt grows before it scrolls, in px. */
 const PROMPT_MAX_HEIGHT = 220;
@@ -112,6 +113,7 @@ export function quickPromptMode(text: string): {
 }
 
 export function QuickComposer({ onShown }: { onShown: () => void }) {
+  const t = useT();
   const [projects, setProjects] = useState(loadQuickProjects);
   const [projectAppearance, setProjectAppearance] = useState(
     loadQuickProjectAppearance,
@@ -497,7 +499,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
       className="relative flex max-h-[520px] flex-col overflow-clip rounded-[16px] border border-content/10 bg-background-base/45 text-content"
     >
       <div
-        title="Drag to move"
+        title={t("ui.quickComposer.dragToMove")}
         className="group absolute inset-x-0 top-0 z-10 flex h-3 cursor-grab items-start justify-center pt-1 active:cursor-grabbing"
         onMouseDown={(event) => {
           if (event.button !== 0) return;
@@ -511,7 +513,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
       </div>
       <button
         type="button"
-        aria-label="Close composer"
+        aria-label={t("ui.quickComposer.closeComposer")}
         title="Close (Esc)"
         onClick={dismiss}
         className="absolute right-2 top-3.5 z-20 grid size-5 place-items-center rounded text-content/35 hover:bg-selection-hover hover:text-content"
@@ -520,8 +522,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
       </button>
       {attachments.dragging ? (
         <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center rounded-[16px] border border-dashed border-accent/60 bg-background-base/90 text-sm text-accent">
-          Drop to attach
-        </div>
+          {t("ui.quickComposer.dropToAttach")}</div>
       ) : null}
       <div className="flex shrink-0 items-center gap-2 px-5 pt-3 pr-8">
         <QuickWorkspaceControls
@@ -557,7 +558,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
       </div>
       {attachments.files.length ? (
         <div
-          aria-label="Attachments"
+          aria-label={t("ui.quickComposer.attachments")}
           className="flex max-h-28 shrink-0 flex-wrap gap-1.5 overflow-y-auto px-5 pt-4 pb-1"
         >
           {attachments.files.map((file) => (
@@ -616,7 +617,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
               : "Open a project in MonoCode first"
           }
           disabled={!cwd}
-          aria-label="Prompt"
+          aria-label={t("ui.quickComposer.prompt")}
           aria-autocomplete="list"
           aria-controls={
             picker === "commands" ? "quick-composer-commands" : undefined
@@ -634,15 +635,13 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
 
       {attachments.files.length && !attachmentsSupported ? (
         <p role="alert" className="px-5 pb-2 text-xs text-amber-400">
-          Choose a provider that supports attachments, or remove the attached
-          files.
-        </p>
+          {t("ui.quickComposer.chooseAProviderThatSupportsAttachments")}</p>
       ) : null}
       <div className="flex shrink-0 items-center gap-1.5 border-t border-stroke px-3 py-2">
         <button
           type="button"
           ref={plusRef}
-          aria-label="Add attachment"
+          aria-label={t("ui.quickComposer.addAttachment")}
           aria-expanded={picker === "attachments"}
           title={
             attachmentsSupported
@@ -673,7 +672,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
             type="button"
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => openPicker("permissions")}
-            title="Permissions"
+            title={t("ui.quickComposer.permissions")}
             aria-expanded={picker === "permissions"}
             className={`flex min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-[12px] ${picker === "permissions" ? "bg-selection-emphasis text-content" : "text-content/70 hover:bg-selection-hover hover:text-content"}`}
           >
@@ -687,7 +686,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
         ) : null}
         <span className="ml-auto flex shrink-0 items-center gap-3 text-[11px] text-content/45">
           {attachments.loading ? (
-            <span role="status">Adding attachment…</span>
+            <span role="status">{t("ui.quickComposer.addingAttachment")}</span>
           ) : error ? (
             <span className="max-w-72 truncate text-red-400" title={error}>
               {error}
@@ -736,8 +735,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
             className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs hover:bg-selection-hover disabled:opacity-40"
           >
             <ImagePlus className="size-3.5" />
-            Choose files…
-          </button>
+            {t("ui.quickComposer.chooseFiles")}</button>
           <button
             type="button"
             disabled={attachments.loading || !attachmentsSupported}
@@ -749,8 +747,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
             className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs hover:bg-selection-hover disabled:opacity-40"
           >
             <Maximize2 className="size-3.5" />
-            Take screenshot…
-          </button>
+            {t("ui.quickComposer.takeScreenshot")}</button>
         </Popover>
       ) : null}
       {picker && picker !== "attachments" ? (
@@ -760,13 +757,12 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
               ref={listRef}
               id="quick-composer-commands"
               role="listbox"
-              aria-label="Commands"
+              aria-label={t("ui.quickComposer.commands")}
               className="shrink-0 border-t border-stroke p-2"
             >
               {commandOptions.length === 0 ? (
                 <p className="px-2 py-2 text-[12px] text-content/45">
-                  No matching commands
-                </p>
+                  {t("ui.quickComposer.noMatchingCommands")}</p>
               ) : (
                 commandOptions.map((command, index) => (
                   <button
@@ -835,8 +831,8 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
                       closePicker();
                     }
                   }}
-                  placeholder="Find a project"
-                  aria-label="Find a project"
+                  placeholder={t("ui.quickComposer.findAProject")}
+                  aria-label={t("ui.quickComposer.findAProject")}
                   spellCheck={false}
                   autoComplete="off"
                   className="min-w-0 flex-1 bg-transparent text-[13px] text-content outline-none placeholder:text-content/35"
@@ -845,13 +841,12 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
               <div
                 ref={listRef}
                 role="listbox"
-                aria-label="Projects"
+                aria-label={t("ui.quickComposer.projects")}
                 className="min-h-0 max-h-64 overflow-y-auto overscroll-none px-2 pb-2"
               >
                 {optionCount === 0 ? (
                   <p className="px-2 py-2 text-[12px] text-content/45">
-                    No matches
-                  </p>
+                    {t("ui.quickComposer.noMatches")}</p>
                 ) : (
                   projectOptions.map((path, index) => (
                     <button

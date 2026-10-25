@@ -103,8 +103,7 @@ export function MonoProjects({
         <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-dashed border-content/15">
           <Plus className="size-3.5 shrink-0" strokeWidth={1.75} />
         </span>
-        Add project
-      </button>
+        {t("ui.monos.addProject")}</button>
       {adding ? (
         <ProjectPickerPopover
           anchor={anchor}

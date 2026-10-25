@@ -32,6 +32,7 @@ import {
 } from "../model/projectChatBackground";
 import { useProjectBackgroundEffect } from "./useProjectBackgroundEffect";
 import { GradientBlurBackground } from "../../settings/ui/GradientBlurBackground";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   project: string;
@@ -58,6 +59,7 @@ export function ProjectBackgroundDialog({
   locked = false,
   onClose,
 }: Props) {
+  const t = useT();
   const initial = loadProjectChatBackgroundSettings(project);
   const [path, setPath] = useState(initial?.path ?? null);
   const [emptyOpacity, setEmptyOpacity] = useState(
@@ -173,7 +175,7 @@ export function ProjectBackgroundDialog({
 
   return (
     <Modal
-      title="Background Image"
+      title={t("ui.projects.backgroundImage")}
       description={`Choose a background image for ${name}`}
       size="sm"
       fitViewport
@@ -208,8 +210,7 @@ export function ProjectBackgroundDialog({
               )
             ) : (
               <div className="grid h-40 place-items-center text-[12px] text-content/40">
-                No background selected
-              </div>
+                {t("ui.projects.noBackgroundSelected")}</div>
             )}
           </div>
           <button
@@ -240,15 +241,14 @@ export function ProjectBackgroundDialog({
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <span className="text-[13px] font-medium text-content">
-                  Background effect
-                </span>
+                  {t("ui.projects.backgroundEffect")}</span>
                 <p className="text-[11px] text-content/45 line-clamp-1">
                   {NEW_THREAD_BACKGROUND_EFFECT_DESCRIPTIONS[effect]}
                 </p>
               </div>
               <div className="w-36 shrink-0">
                 <SearchableSelect
-                  label="Project background effect"
+                  label={t("ui.projects.projectBackgroundEffect")}
                   variant="transparent"
                   value={effect}
                   options={NEW_THREAD_BACKGROUND_EFFECTS.map((option) => ({
@@ -268,10 +268,10 @@ export function ProjectBackgroundDialog({
 
         {locked ? null : (
           <>
-            <ProjectBackgroundRow label="Show on">
+            <ProjectBackgroundRow label={t("ui.projects.showOn")}>
               <div
                 role="radiogroup"
-                aria-label="Show project background on"
+                aria-label={t("ui.projects.showProjectBackgroundOn")}
                 className="grid w-44 grid-cols-2 gap-0.5 rounded-md border border-content/10 p-0.5 text-[12px]"
               >
                 {[
@@ -296,14 +296,14 @@ export function ProjectBackgroundDialog({
               </div>
             </ProjectBackgroundRow>
 
-            <ProjectBackgroundRow label="Empty chat visibility">
+            <ProjectBackgroundRow label={t("ui.projects.emptyChatVisibility")}>
               <div className="flex w-56 items-center gap-3">
                 <input
                   type="range"
                   min={Math.round(CHAT_BACKGROUND_OPACITY_MIN * 100)}
                   max={Math.round(CHAT_BACKGROUND_OPACITY_MAX * 100)}
                   value={Math.round(emptyOpacity * 100)}
-                  aria-label="Project background visibility in empty chats"
+                  aria-label={t("ui.projects.projectBackgroundVisibilityInEmptyChats")}
                   className="sidebar-opacity-slider min-w-0 flex-1"
                   onChange={(event) =>
                     updateOpacity("empty", Number(event.target.value))
@@ -315,14 +315,14 @@ export function ProjectBackgroundDialog({
               </div>
             </ProjectBackgroundRow>
 
-            <ProjectBackgroundRow label="Session visibility">
+            <ProjectBackgroundRow label={t("ui.projects.sessionVisibility")}>
               <div className="flex w-56 items-center gap-3">
                 <input
                   type="range"
                   min={Math.round(CHAT_BACKGROUND_OPACITY_MIN * 100)}
                   max={Math.round(CHAT_BACKGROUND_OPACITY_MAX * 100)}
                   value={Math.round(sessionOpacity * 100)}
-                  aria-label="Project background visibility in sessions"
+                  aria-label={t("ui.projects.projectBackgroundVisibilityInSessions")}
                   className="sidebar-opacity-slider min-w-0 flex-1"
                   onChange={(event) =>
                     updateOpacity("session", Number(event.target.value))
@@ -343,8 +343,7 @@ export function ProjectBackgroundDialog({
             disabled={busy}
             className="w-full rounded-md border border-content/10 px-2.5 py-1.5 text-[12px] text-red-400 hover:border-red-400/40 hover:bg-red-400/10 disabled:opacity-40"
           >
-            Remove background image
-          </button>
+            {t("ui.projects.removeBackgroundImage")}</button>
         ) : null}
       </div>
     </Modal>

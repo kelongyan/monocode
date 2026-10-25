@@ -382,8 +382,7 @@ export function MonoComposer({
       >
         {fileDrag ? (
           <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center rounded-lg bg-accent/8 text-[12px] text-content/70">
-            Drop files to attach
-          </div>
+            {t("ui.monos.dropFilesToAttach")}</div>
         ) : null}
         {dropError ? (
           <p role="alert" className="px-3 pt-2 text-xs text-red-400">

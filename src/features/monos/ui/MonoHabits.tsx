@@ -16,7 +16,7 @@ import {
 } from "../model/monoHabits";
 import { RunningFor, useHabitRunning } from "./HabitPage";
 import { Empty, Section } from "./monoPanelParts";
-import { useT } from "../../../shared/i18n";
+import { t, useT } from "../../../shared/i18n";
 
 /** Each Mono's habits as last loaded, so switching back shows them at once. */
 const loadedHabits = new Map<string, Habit[]>();
@@ -142,7 +142,7 @@ export function HabitRow({
           <span className="truncate text-[11px] leading-4 text-content/40">
             {running ? (
               <>
-                Running now · <RunningFor since={runningSince} />
+                {t("ui.monos.runningNow2")}<RunningFor since={runningSince} />
               </>
             ) : starting ? (
               "Starting…"
@@ -211,7 +211,7 @@ export function HabitsList({
   habits,
   actions,
   onOpen,
-  empty = <Empty>No habits yet</Empty>,
+  empty = <Empty>{t("ui.monos.noHabitsYet")}</Empty>,
 }: {
   habits: Habit[] | undefined;
   actions: HabitActions;
@@ -368,6 +368,7 @@ const CLOCK_GLOW_PATH = mascotPath(CLOCK_GLOW);
 
 /** Empty state for a Mono with no habits yet. */
 export function HabitsEmpty() {
+  const t = useT();
   return (
     <div className="flex flex-col items-center justify-center gap-4 border-t border-stroke px-6 py-10 text-center">
       <svg
@@ -380,7 +381,7 @@ export function HabitsEmpty() {
         <path d={CLOCK_GLOW_PATH} opacity={0.4} />
         <path d={CLOCK_PATH} />
       </svg>
-      <p className="text-[12px] text-content/45">No habits yet</p>
+      <p className="text-[12px] text-content/45">{t("ui.monos.noHabitsYet")}</p>
     </div>
   );
 }

@@ -34,6 +34,7 @@ import {
   filterQuickModels,
   QUICK_COMPOSER_CATALOG_REQUEST_EVENT,
 } from "../model/quickComposer";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   model: AgentModel;
@@ -53,6 +54,7 @@ export function QuickModelSelector({
   onSettingsChange,
   onClose,
 }: Props) {
+  const t = useT();
   const catalogVersion = useSyncExternalStore(
     subscribeModels,
     getModelSnapshot,
@@ -164,7 +166,7 @@ export function QuickModelSelector({
 
   return (
     <section
-      aria-label="Model selector"
+      aria-label={t("ui.quickComposer.modelSelector")}
       className="flex min-h-0 flex-col border-t border-stroke"
       onKeyDown={(event) => {
         if (event.key === "Escape") {
@@ -176,7 +178,7 @@ export function QuickModelSelector({
     >
       <nav
         role="tablist"
-        aria-label="Providers"
+        aria-label={t("ui.quickComposer.providers")}
         className="grid h-11 shrink-0 grid-flow-col auto-cols-fr items-center gap-1 border-b border-stroke px-2"
       >
         {tabs.map((id, index) => {
@@ -231,14 +233,14 @@ export function QuickModelSelector({
               setActive(0);
             }}
             role="combobox"
-            aria-label="Search models"
+            aria-label={t("ui.quickComposer.searchModels")}
             aria-controls={listId}
             aria-expanded="true"
             aria-autocomplete="list"
             aria-activedescendant={
               models[active] ? `${listId}-${active}` : undefined
             }
-            placeholder="Search models…"
+            placeholder={t("ui.quickComposer.searchModels2")}
             autoComplete="off"
             spellCheck={false}
             className="min-w-0 flex-1 bg-transparent text-[13px] text-content outline-none placeholder:text-content/35"
@@ -266,7 +268,7 @@ export function QuickModelSelector({
           ref={listRef}
           id={listId}
           role="listbox"
-          aria-label="Models"
+          aria-label={t("ui.quickComposer.models")}
           className="h-60 min-h-0 overflow-y-auto overscroll-none p-2"
         >
           {models.length ? (
@@ -343,7 +345,7 @@ export function QuickModelSelector({
               {canToggleFast ? (
                 <button
                   type="button"
-                  aria-label="Fast mode"
+                  aria-label={t("ui.quickComposer.fastMode")}
                   aria-pressed={fastEnabled}
                   title={
                     fastEnabled ? "Turn off fast mode" : "Turn on fast mode"
@@ -366,8 +368,8 @@ export function QuickModelSelector({
               </span>
               <button
                 type="button"
-                aria-label="Reset to saved defaults"
-                title="Reset to saved defaults"
+                aria-label={t("ui.quickComposer.resetToSavedDefaults")}
+                title={t("ui.quickComposer.resetToSavedDefaults")}
                 onClick={resetSettings}
                 className="grid size-7 place-items-center rounded-md text-content/40 hover:bg-selection-hover hover:text-content"
               >

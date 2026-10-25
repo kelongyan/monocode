@@ -358,6 +358,7 @@ export function FileField({
   placeholder: string;
   autoFocus?: boolean;
 }) {
+  const t = useT();
   const [draft, setDraft] = useState(value);
   const [conflict, setConflict] = useState(false);
   // The version the draft started from; a newer one replaces a clean draft.
@@ -410,15 +411,13 @@ export function FileField({
             }}
             className="rounded px-1.5 py-0.5 text-content/70 hover:bg-content/8 hover:text-content"
           >
-            Use theirs
-          </button>
+            {t("ui.monos.useTheirs")}</button>
           <button
             type="button"
             onClick={() => void save(true)}
             className="rounded px-1.5 py-0.5 text-content/70 hover:bg-content/8 hover:text-content"
           >
-            Keep mine
-          </button>
+            {t("ui.monos.keepMine")}</button>
         </div>
       ) : null}
     </>
