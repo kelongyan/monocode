@@ -26,6 +26,7 @@ import {
   saveMonoFile,
   type MonoFile,
 } from "../model/monoFiles";
+import { useT } from "../../../shared/i18n";
 
 /**
  * The top of a page in the Mono's panel: back, a title, and its actions.
@@ -40,6 +41,7 @@ export function PageHeader({
   onBack?: () => void;
   children?: ReactNode;
 }) {
+  const t = useT();
   return (
     // Same height as the panel's own header, so a page does not jump.
     <header
@@ -52,7 +54,7 @@ export function PageHeader({
       data-tauri-drag-region="deep"
     >
       {onBack ? (
-        <IconButton label="Back" onClick={onBack}>
+        <IconButton label={t("common.back")} onClick={onBack}>
           <ChevronLeft className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       ) : null}
@@ -225,11 +227,12 @@ export function MascotPicker({
   /** Five lays them out as larger tiles, for a popover of their own. */
   columns?: 5 | 10;
 }) {
+  const t = useT();
   const large = columns === 5;
   return (
     <div
       role="radiogroup"
-      aria-label="Mascot"
+      aria-label={t("monos.mascot")}
       className={`grid gap-0.5 px-1 ${large ? "grid-cols-5 gap-1" : "grid-cols-10"}`}
     >
       {PROJECT_MASCOTS.map(({ name }) => {
@@ -278,11 +281,12 @@ export function ColorPicker({
   /** Five lays them out as larger swatches, under the larger mascots. */
   columns?: 5 | 10;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const anchor = useRef<HTMLDivElement>(null);
   const presetIndex = MONO_COLORS.findIndex((color) => color === current);
   return (
-    <div ref={anchor} role="group" aria-label="Color">
+    <div ref={anchor} role="group" aria-label={t("monos.color")}>
       <ColorSwatchRow
         className={`grid place-items-center px-1 ${
           columns === 5 ? "grid-cols-5 gap-y-2" : "grid-cols-10 gap-0.5"

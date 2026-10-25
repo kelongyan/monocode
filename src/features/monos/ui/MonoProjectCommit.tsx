@@ -54,6 +54,7 @@ import {
   sameIndex,
   usePrStatus,
 } from "../../source-control/ui/GitChangesPanel";
+import { useT } from "../../../shared/i18n";
 
 /** One session file, with its path inside the repository that holds it. */
 export type MonoProjectFile = { file: CheckpointFile; relative: string };
@@ -145,6 +146,7 @@ export function MonoProjectCommit({
   /** The file, opened with its changes over the list. */
   onOpenFile: (path: string) => void;
 }) {
+  const t = useT();
   const { pr, reload: reloadPr } = usePrStatus(root, index?.branch);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
@@ -509,8 +511,8 @@ export function MonoProjectCommit({
           </button>
           <button
             type="button"
-            aria-label="Commit options"
-            title="Commit options"
+            aria-label={t("changes.commitOptions")}
+            title={t("changes.commitOptions")}
             aria-expanded={menuOpen}
             disabled={!!busy || !index?.branch}
             onClick={() => setMenuOpen((open) => !open)}
@@ -525,7 +527,7 @@ export function MonoProjectCommit({
           {menuOpen ? (
             <div
               role="menu"
-              aria-label="Commit options"
+              aria-label={t("changes.commitOptions")}
               className="absolute top-full right-0 z-30 mt-1 min-w-48 rounded-md border border-content/10 bg-background-base py-1 shadow-lg"
             >
               <button
@@ -586,7 +588,7 @@ export function MonoProjectCommit({
             ) : null}
             {staged.length > 0 ? (
               <FileSection
-                title="Staged Changes"
+                title={t("changes.stagedChanges")}
                 count={staged.length}
                 open={commitOpen}
                 onToggle={() => setCommitOpen((open) => !open)}
@@ -610,7 +612,7 @@ export function MonoProjectCommit({
             ) : null}
             {unstaged.length > 0 ? (
               <FileSection
-                title="Changes"
+                title={t("changes.title")}
                 count={unstaged.length}
                 open={restOpen}
                 onToggle={() => setRestOpen((open) => !open)}

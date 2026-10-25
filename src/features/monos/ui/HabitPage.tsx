@@ -17,6 +17,7 @@ import {
   type Habit,
   type HabitRun,
 } from "../model/monoHabits";
+import { useT } from "../../../shared/i18n";
 
 const dayTime = new Intl.DateTimeFormat(undefined, {
   weekday: "short",
@@ -73,6 +74,7 @@ export function HabitPage({
   onToggle: () => void;
   onRemove: () => void;
 }) {
+  const t = useT();
   const runningSince = useHabitRunning(habit.id);
   const starting = runningSince == null && habitStarting(habit);
   const runs = habit.runs ?? [];
@@ -106,30 +108,30 @@ export function HabitPage({
             <Play className="size-3.5" strokeWidth={1.75} />
           )}
         </IconButton>
-        <IconButton label="Remove" onClick={onRemove}>
+        <IconButton label={t("common.remove")} onClick={onRemove}>
           <Trash2 className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       </PageHeader>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none">
         <dl className="flex flex-col gap-0.5 px-4 py-3 text-[12px]">
-          <Row label="Runs">
+          <Row label={t("monos.habitRuns")}>
             {habit.enabled ? habitScheduleLabel(habit.schedule) : "Paused"}
           </Row>
           {starting ? (
-            <Row label="Next">Starting…</Row>
+            <Row label={t("monos.habitNext")}>{t("monos.starting")}</Row>
           ) : habit.enabled ? (
-            <Row label="Next">{when(habit.nextRunAt)}</Row>
+            <Row label={t("monos.habitNext")}>{when(habit.nextRunAt)}</Row>
           ) : null}
         </dl>
 
-        <Section title="What it does">
+        <Section title={t("monos.habitWhatItDoes")}>
           <p className="whitespace-pre-wrap px-2 text-[12px] leading-5 text-content/75">
             {habit.instructions}
           </p>
         </Section>
 
-        <Section title="Recent runs">
+        <Section title={t("monos.habitRecentRuns")}>
           {runningSince != null ? <RunningRow since={runningSince} /> : null}
           {runs.length === 0 && runningSince == null ? (
             <p className="px-2 py-3 text-[12px] text-content/40">

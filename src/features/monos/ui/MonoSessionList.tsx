@@ -34,6 +34,7 @@ import {
 import { SessionCard } from "../../../app/shell/Sidebar";
 import type { MonoLook } from "../model/mono";
 import { EmptyState, PageHeader } from "./monoPanelParts";
+import { useT } from "../../../shared/i18n";
 
 /** A launched session open over the overview, live and fully usable. */
 export type ShownMonoSession = {
@@ -412,12 +413,13 @@ export function LaunchedSessionPage({
   onClose: () => void;
   children: ReactNode;
 }) {
+  const t = useT();
   const [error, setError] = useState<string>();
   return (
     <>
       <PageHeader title={title} onBack={onBack}>
         <IconButton
-          label="Open in workspace"
+          label={t("monos.openInWorkspace")}
           onClick={() => {
             setError(undefined);
             void Promise.resolve(onOpenInWorkspace()).catch((cause) =>
@@ -431,7 +433,7 @@ export function LaunchedSessionPage({
         >
           <ExternalLink className="size-3.5" strokeWidth={1.75} />
         </IconButton>
-        <IconButton label="Hide overview" active onClick={onClose}>
+        <IconButton label={t("monos.hideOverview")} active onClick={onClose}>
           <PanelRightToggle className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       </PageHeader>

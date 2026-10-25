@@ -31,6 +31,7 @@ import { MonoComposer } from "./MonoComposer";
 import { MonoStatusDot } from "./MonoRailMascot";
 import { MonoStatus } from "./MonoStatus";
 import { MONO_PAGE_TURNS } from "../../sessions/data/sessionStore";
+import { useT } from "../../../shared/i18n";
 
 const EMPTY: FloatingMonoView = {
   monos: [],
@@ -51,6 +52,7 @@ const CARD =
   "body-glass relative my-1.5 mr-1.5 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[10px] shadow-[0_0_0_100vmax_rgb(0_0_0/0.28)] [html.theme-light_&]:shadow-[0_0_0_100vmax_rgb(0_0_0/0.05)]";
 
 export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
+  const t = useT();
   const [view, setView] = useState(EMPTY);
   const [error, setError] = useState<string | null>(null);
   const [focus, setFocus] = useState(0);
@@ -200,8 +202,8 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
           {view.session?.busy ? (
             <button
               type="button"
-              aria-label="Stop reply"
-              title="Stop reply (Escape)"
+              aria-label={t("monos.stopReply")}
+              title={t("monos.stopReplyHint")}
               className={BUTTON}
               onClick={() => void action({ kind: "stop" })}
             >
@@ -210,8 +212,8 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
           ) : null}
           <button
             type="button"
-            aria-label="Open in MonoCode"
-            title="Open in MonoCode"
+            aria-label={t("monos.openInApp")}
+            title={t("monos.openInApp")}
             disabled={loading}
             className={BUTTON}
             onClick={() => void action({ kind: "reveal" })}
@@ -220,8 +222,8 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
           </button>
           <button
             type="button"
-            aria-label="Hide chat"
-            title="Hide chat"
+            aria-label={t("monos.hideChat")}
+            title={t("monos.hideChat")}
             className={BUTTON}
             onClick={() => void getCurrentWindow().hide()}
           >
@@ -302,10 +304,11 @@ function MonoRail({
   onSwitch: (monoId: string) => void;
   onCreate: () => Promise<boolean>;
 }) {
+  const t = useT();
   const [creating, setCreating] = useState(false);
   return (
     <nav
-      aria-label="Monos"
+      aria-label={t("monos.title")}
       data-floating-mono-rail
       data-tauri-drag-region
       // 17px puts the first mascot's center level with the header's: the
@@ -354,8 +357,8 @@ function MonoRail({
       })}
       <button
         type="button"
-        title="New mono"
-        aria-label="New mono"
+        title={t("monos.newMono")}
+        aria-label={t("monos.newMono")}
         disabled={creating || !currentId}
         onClick={() => {
           setCreating(true);
@@ -522,6 +525,7 @@ function ArtifactSheet({
   action: (action: FloatingMonoAction) => Promise<boolean>;
   onClose: () => void;
 }) {
+  const t = useT();
   const { artifact, loaded, error, setError } = useArtifact(id);
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -597,8 +601,8 @@ function ArtifactSheet({
           ) : null}
           <button
             type="button"
-            aria-label="Open in MonoCode"
-            title="Open in MonoCode"
+            aria-label={t("monos.openInApp")}
+            title={t("monos.openInApp")}
             className={BUTTON}
             onClick={() => void action({ kind: "openArtifact", id })}
           >
@@ -606,8 +610,8 @@ function ArtifactSheet({
           </button>
           <button
             type="button"
-            aria-label="Close document"
-            title="Close (Escape)"
+            aria-label={t("monos.closeDocument")}
+            title={t("monos.closeHint")}
             className={BUTTON}
             onClick={close}
           >

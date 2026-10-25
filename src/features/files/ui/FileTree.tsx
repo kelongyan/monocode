@@ -71,6 +71,7 @@ import {
 import { ExplorerMenu, type ExplorerMenuItem } from "./ExplorerMenu";
 import { FileTypeIcon } from "./FileTypeIcon";
 import { PaneHeader } from "../../../shared/ui/PaneHeader";
+import { useT } from "../../../shared/i18n";
 
 const GIT_STATUS_COLOR: Record<string, string> = {
   modified: "text-amber-400",
@@ -260,6 +261,7 @@ export const FileTree = memo(function FileTree({
   onSearch,
   gitStatuses,
 }: Props) {
+  const t = useT();
   const [expanded, setExpanded] = useState(() => loadExpanded(cwd));
   const [selectedPath, setSelectedPath] = useState(() => loadSelected(cwd));
   const [children, setChildren] = useState<FsEntry[] | null>(() =>
@@ -1016,20 +1018,20 @@ export const FileTree = memo(function FileTree({
         <PaneHeader
           compact={compactHeader}
           role="toolbar"
-          aria-label="Explorer"
+          aria-label={t("explorer.title")}
           onContextMenu={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
         >
-          <HeaderIcon label="New File" onClick={() => startCreate(false)}>
+          <HeaderIcon label={t("explorer.newFile")} onClick={() => startCreate(false)}>
             <FilePlus className="size-3.5" strokeWidth={1.75} />
           </HeaderIcon>
-          <HeaderIcon label="New Folder" onClick={() => startCreate(true)}>
+          <HeaderIcon label={t("explorer.newFolder")} onClick={() => startCreate(true)}>
             <FolderPlus className="size-3.5" strokeWidth={1.75} />
           </HeaderIcon>
           <HeaderIcon
-            label="Collapse All"
+            label={t("explorer.collapseAll")}
             onClick={() => {
               setCreating(null);
               setRenaming(null);
@@ -1367,6 +1369,7 @@ export function NameRow({
   onCommit: (raw: string) => Promise<void>;
   onCancel: () => void;
 }) {
+  const t = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const finished = useRef(false);
   const [value, setValue] = useState(initial);
@@ -1438,7 +1441,7 @@ export function NameRow({
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
-          aria-label="Type file name. Press Enter to confirm or Escape to cancel."
+          aria-label={t("explorer.renameHint")}
           onChange={(e) => {
             setValue(e.target.value);
             setSubmitError(null);

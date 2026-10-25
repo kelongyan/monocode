@@ -100,6 +100,7 @@ import {
   subscribeSessionFolders,
 } from "../../sessions/model/sessionFolders";
 import { loadModelControls, subscribeModelControls } from "../../settings/model/settings";
+import { useT } from "../../../shared/i18n";
 import {
   loadTabGroupColors,
   loadTabGroupCustomColors,
@@ -147,10 +148,11 @@ export function AutomationsView({
   onLaunch,
   onOpenSession,
 }: Props) {
+  const t = useT();
   return (
     <div
       role="region"
-      aria-label="Automations"
+      aria-label={t("automations.title")}
       data-app-automations
       className="flex min-h-0 min-w-0 flex-1 flex-col text-content"
     >
@@ -196,6 +198,7 @@ function AutomationsContent({
   Props,
   "cwd" | "scopeProject" | "recents" | "onLaunch" | "onOpenSession"
 >) {
+  const t = useT();
   const [automations, setAutomations] = useState<Automation[]>(
     () => peekAutomations() ?? [],
   );
@@ -392,7 +395,7 @@ function AutomationsContent({
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Filter automations"
+              placeholder={t("automations.filter")}
               spellCheck={false}
               autoComplete="off"
               className="h-7 w-full rounded-md bg-transparent pl-7 pr-2 text-[12px] outline-none placeholder:text-content/40"
@@ -400,8 +403,8 @@ function AutomationsContent({
           </label>
           <button
             type="button"
-            title="New automation"
-            aria-label="New automation"
+            title={t("automations.newAutomation")}
+            aria-label={t("automations.newAutomation")}
             onClick={beginCreate}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
           >
@@ -851,6 +854,7 @@ function AutomationEditor({
   onDelete?: () => void;
   onOpenSession: (sessionId: string) => void | Promise<void>;
 }) {
+  const t = useT();
   const [tab, setTab] = useState<"settings" | "history">("settings");
   const settingsTabId = useId();
   const historyTabId = useId();
@@ -1007,10 +1011,10 @@ function AutomationEditor({
             <div className="flex items-start gap-6">
               <input
                 autoFocus
-                aria-label="Automation name"
+                aria-label={t("automations.nameLabel")}
                 value={draft.name}
                 onChange={(event) => update("name", event.target.value)}
-                placeholder="Untitled"
+                placeholder={t("automations.untitled")}
                 className="min-w-0 flex-1 bg-transparent text-[20px] font-semibold leading-tight text-content outline-none placeholder:text-content/35"
               />
               <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
@@ -1080,8 +1084,8 @@ function AutomationEditor({
                   <button
                     ref={menuButton}
                     type="button"
-                    title="Automation actions"
-                    aria-label="Automation actions"
+                    title={t("automations.actions")}
+                    aria-label={t("automations.actions")}
                     aria-haspopup="menu"
                     aria-expanded={menuOpen}
                     onClick={() => setMenuOpen((open) => !open)}
@@ -1102,7 +1106,7 @@ function AutomationEditor({
                       width={200}
                       constrainHeight={false}
                       role="menu"
-                      aria-label="Automation actions"
+                      aria-label={t("automations.actions")}
                       onDismiss={() => setMenuOpen(false)}
                       className="p-1"
                     >
@@ -1127,20 +1131,20 @@ function AutomationEditor({
           {historyAvailable ? (
             <div
               role="tablist"
-              aria-label="Automation view"
+              aria-label={t("automations.viewLabel")}
               className="flex h-9 items-stretch gap-4"
             >
               <PageTab
                 id={settingsTabId}
                 controls={tabPanelId}
-                label="Settings"
+                label={t("automations.settingsTab")}
                 selected={!showingHistory}
                 onSelect={() => setTab("settings")}
               />
               <PageTab
                 id={historyTabId}
                 controls={tabPanelId}
-                label="Run history"
+                label={t("automations.runHistoryTab")}
                 selected={showingHistory}
                 onSelect={() => setTab("history")}
               />
@@ -1219,7 +1223,7 @@ function AutomationEditor({
                   gap={4}
                   width={250}
                   role="menu"
-                  aria-label="Choose automation trigger"
+                  aria-label={t("automations.chooseTrigger")}
                   layer={LAYER.popover}
                   ignore="[data-trigger-submenu]"
                   onDismiss={() => {
@@ -1235,7 +1239,7 @@ function AutomationEditor({
                       autoFocus
                       value={triggerQuery}
                       onChange={(event) => setTriggerQuery(event.target.value)}
-                      placeholder="Search triggers"
+                      placeholder={t("automations.searchTriggers")}
                       className="min-w-0 flex-1 bg-transparent text-[13px] text-content outline-none placeholder:text-content/35"
                     />
                   </label>
@@ -1402,11 +1406,11 @@ function AutomationEditor({
               <SectionTitle>Session</SectionTitle>
               <div className="mt-3 divide-y divide-content/7 rounded-md border border-content/10">
                 <SettingsRow
-                  label="Working copy"
+                  label={t("automations.workingCopy")}
                   hint="This repo, or a fresh worktree"
                 >
                   <SettingsSelect
-                    label="Working copy"
+                    label={t("automations.workingCopy")}
                     value={
                       draft.workspaceMode === "worktree"
                         ? "worktree"
@@ -1424,11 +1428,11 @@ function AutomationEditor({
                   />
                 </SettingsRow>
                 <SettingsRow
-                  label="Conversation"
+                  label={t("automations.conversation")}
                   hint="New chat, or continue the last run"
                 >
                   <SettingsSelect
-                    label="Conversation"
+                    label={t("automations.conversation")}
                     value={draft.reuseSession ? "reuse" : "fresh"}
                     disabled={draft.workspaceMode === "worktree"}
                     options={CONVERSATION_OPTIONS}
@@ -1438,14 +1442,14 @@ function AutomationEditor({
                   />
                 </SettingsRow>
                 <SettingsRow
-                  label="Session folder"
+                  label={t("automations.sessionFolder")}
                   hint="Where runs appear in the sidebar"
                 >
                   <SearchableSelect
                     variant="pill"
                     searchable={folderOptions.length > 6}
                     align="end"
-                    label="Session folder"
+                    label={t("automations.sessionFolder")}
                     value={draft.sessionFolderId}
                     options={folderOptions}
                     onChange={(value) => update("sessionFolderId", value)}
@@ -1468,11 +1472,11 @@ function AutomationEditor({
               </summary>
               <div className="divide-y divide-content/7 border-t border-content/8">
                 <SettingsRow
-                  label="Missed-run grace"
+                  label={t("automations.missedRunGrace")}
                   hint="Catch up if a scheduled run was missed"
                 >
                   <SettingsSelect
-                    label="Missed-run grace"
+                    label={t("automations.missedRunGrace")}
                     value={String(draft.missedRunGraceMinutes)}
                     options={GRACE_OPTIONS}
                     onChange={(value) =>
@@ -1782,6 +1786,7 @@ function TriggerRow({
   onChange: (trigger: AutomationTrigger) => void;
   onRemove: () => void;
 }) {
+  const t = useT();
   const [branches, setBranches] = useState<string[]>([]);
   const projectPath = looksLikeProject(cwd) ? cwd : "";
   const push = trigger.event === "push_to_branch";
@@ -1836,7 +1841,7 @@ function TriggerRow({
       </div>
       <button
         type="button"
-        aria-label="Remove trigger"
+        aria-label={t("automations.removeTrigger")}
         onClick={onRemove}
         className="grid size-7 shrink-0 place-items-center rounded-md text-content/35 opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-content/8 hover:text-content focus-visible:opacity-100"
       >
@@ -1855,6 +1860,7 @@ function TimeTriggerSentence({
   nextAt: number;
   onChange: (trigger: AutomationTrigger) => void;
 }) {
+  const t = useT();
   const dayOptions = AUTOMATION_WEEKDAYS.map((label, value) => ({
     value: String(value),
     label,
@@ -1889,14 +1895,14 @@ function TimeTriggerSentence({
       ) : null}
       {trigger.scheduleKind === "hourly" ? (
         <TriggerPill
-          label="Minute"
+          label={t("automations.minute")}
           value={String(trigger.minute)}
           options={minuteOptions}
           onChange={(value) => onChange({ ...trigger, minute: Number(value) })}
         />
       ) : (
         <TriggerPill
-          label="Time"
+          label={t("automations.time")}
           value={trigger.time}
           options={timeOptions(trigger.time)}
           onChange={(value) => onChange({ ...trigger, time: value })}
@@ -1919,6 +1925,7 @@ function EventTriggerSentence({
   projectChosen: boolean;
   onChange: (trigger: AutomationTrigger) => void;
 }) {
+  const t = useT();
   const stem =
     trigger.event === "push_to_branch"
       ? "Push"
@@ -1931,10 +1938,10 @@ function EventTriggerSentence({
         <>
           <span>on</span>
           <TriggerPill
-            label="Branch"
+            label={t("automations.branch")}
             value={trigger.branch}
             options={branchOptions}
-            placeholder="Select a branch"
+            placeholder={t("automations.selectBranch")}
             disabled={!projectChosen}
             emptyLabel={
               projectChosen ? "No branches found" : "Choose a project first"
@@ -1945,7 +1952,7 @@ function EventTriggerSentence({
       ) : null}
       <span>by</span>
       <TriggerPill
-        label="Actor"
+        label={t("automations.actor")}
         value={trigger.actor || "anyone"}
         options={[{ value: "anyone", label: "Anyone" }]}
         onChange={(value) => onChange({ ...trigger, actor: value })}

@@ -29,6 +29,7 @@ import { ConfirmReset } from "./ConfirmReset";
 import { MemoryPage, SoulPage, useMonoFiles } from "./MonoFilePages";
 import { MonoProjects } from "./MonoProjects";
 import { ColorPicker, MascotPicker, SwitchRow } from "./monoPanelParts";
+import { useT } from "../../../shared/i18n";
 
 export type MonoSettingsSection = "general" | "soul" | "memory";
 
@@ -74,6 +75,7 @@ export function MonoSettingsDialog({
   onClose,
   ...general
 }: Props) {
+  const t = useT();
   const [section, setSection] = useState(initialSection);
   const files = useMonoFiles(monoId, status);
   return (
@@ -93,7 +95,7 @@ export function MonoSettingsDialog({
         data-mono-settings
       >
         <nav
-          aria-label="Settings sections"
+          aria-label={t("monos.settingsSections")}
           className="flex w-48 shrink-0 flex-col gap-px border-r border-stroke p-2"
         >
           <p className="px-2.5 pb-2 pt-1.5 text-[11px] text-content/45">
@@ -144,6 +146,7 @@ function GeneralSection({
   onRuntimeModeChange,
   onReset,
 }: Omit<Props, "status" | "initialSection" | "onClose">) {
+  const t = useT();
   const lock = useLockOverscroll<HTMLDivElement>();
   const shown = useSyncExternalStore(
     subscribeMonos,
@@ -165,11 +168,11 @@ function GeneralSection({
         <NameField key={monoId} monoId={monoId} fallback={agent.mascot} />
       </div>
 
-      <GroupHeading title="Model" />
+      <GroupHeading title={t("monos.modelTitle")} />
       <SettingGroup>
         <SettingRow
-          label="Model"
-          description="What it thinks and replies with."
+          label={t("monos.modelTitle")}
+          description={t("monos.modelDescription")}
         >
           <ModelPicker
             harness={harness}
@@ -194,8 +197,8 @@ function GeneralSection({
           )}
         />
         <SettingRow
-          label="Permissions"
-          description="What it may do without asking."
+          label={t("monos.permissionsLabel")}
+          description={t("monos.permissionsDescription")}
         >
           <AccessPicker
             value={runtimeMode}
@@ -208,18 +211,18 @@ function GeneralSection({
       </SettingGroup>
 
       <GroupHeading
-        title="Projects"
-        description="It can see every session, note and folder in these."
+        title={t("monos.projects")}
+        description={t("monos.projectsDescription")}
       />
       <SettingGroup>
         <MonoProjects monoId={monoId} projects={agent.projects} />
       </SettingGroup>
 
-      <GroupHeading title="Sessions it starts" />
+      <GroupHeading title={t("monos.sessionsItStarts")} />
       <SettingGroup>
         <SwitchRow
-          label="Show sessions in sidebar"
-          description="Sessions it starts appear in your project sidebar. Hidden ones stay saved and open from its overview."
+          label={t("monos.showSessionsInSidebar")}
+          description={t("monos.showSessionsDescription")}
           on={shown}
           onChange={(on) =>
             updateMono(monoId, (mono) => ({
@@ -230,7 +233,7 @@ function GeneralSection({
         />
         {/* Hidden sessions have no sidebar folder to go in. */}
         <SwitchRow
-          label="Group in a folder"
+          label={t("monos.groupInFolder")}
           description={`Sessions it starts go in a “${agent.name}” folder in your project sidebar.`}
           on={shown && folders}
           disabled={!shown}
@@ -244,9 +247,9 @@ function GeneralSection({
 
       {onReset ? (
         <>
-          <GroupHeading title="Conversation" />
+          <GroupHeading title={t("monos.conversationTitle")} />
           <ConfirmReset
-            label="Reset conversation"
+            label={t("monos.resetConversation")}
             title={`Reset ${agent.name}'s conversation?`}
             body="All messages in this Mono's conversation will be deleted and any active reply will be stopped. This can't be undone."
             kept="Its soul, memory and habits will be kept."
@@ -256,8 +259,8 @@ function GeneralSection({
             {(open, ref) => (
               <SettingGroup>
                 <SettingRow
-                  label="Reset conversation"
-                  description="Clear all messages and start fresh. Its soul, memory and habits stay."
+                  label={t("monos.resetConversation")}
+                  description={t("monos.resetConversationDescription")}
                 >
                   <button
                     ref={ref}
@@ -336,6 +339,7 @@ function SettingRow({
 
 /** The Mono's face, which opens its mascots and colors in a popover. */
 function LookButton({ monoId, agent }: { monoId: string; agent: MonoLook }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const anchor = useRef<HTMLButtonElement>(null);
   return (
@@ -343,10 +347,10 @@ function LookButton({ monoId, agent }: { monoId: string; agent: MonoLook }) {
       <button
         ref={anchor}
         type="button"
-        aria-label="Change mascot and color"
+        aria-label={t("monos.changeMascotAndColor")}
         aria-haspopup="dialog"
         aria-expanded={open}
-        title="Change mascot and color"
+        title={t("monos.changeMascotAndColor")}
         onClick={() => setOpen((value) => !value)}
         className={`grid size-20 shrink-0 place-items-center rounded-2xl border border-stroke hover:bg-content/8 ${
           open ? "bg-content/8" : "bg-content/4"
@@ -367,7 +371,7 @@ function LookButton({ monoId, agent }: { monoId: string; agent: MonoLook }) {
           constrainHeight={false}
           onDismiss={() => setOpen(false)}
           role="dialog"
-          aria-label="Mascot and color"
+          aria-label={t("monos.mascotAndColor")}
           className="flex flex-col gap-3 p-3"
         >
           <MascotPicker
@@ -393,6 +397,7 @@ function LookButton({ monoId, agent }: { monoId: string; agent: MonoLook }) {
 
 /** The Mono's name, edited in place; empty goes back to its mascot's name. */
 function NameField({ monoId, fallback }: { monoId: string; fallback: string }) {
+  const t = useT();
   const saved = () => findMono(monoId)?.name ?? "";
   const [draft, setDraft] = useState(saved);
   const editing = useRef(false);
@@ -412,7 +417,7 @@ function NameField({ monoId, fallback }: { monoId: string; fallback: string }) {
   };
   return (
     <input
-      aria-label="Name"
+      aria-label={t("monos.name")}
       value={draft}
       placeholder={placeholder}
       maxLength={40}

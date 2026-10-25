@@ -6,6 +6,7 @@ import {
 import { UsageLimitNotice } from "../../sessions/ui/UsageLimitNotice";
 import { ModelPicker } from "../../sessions/ui/ModelPicker";
 import { UsageLimitAccountPicker } from "../../sessions/ui/UsageLimitAccountPicker";
+import { useT } from "../../../shared/i18n";
 
 export function MonoUsageLimitNotice({
   session,
@@ -20,6 +21,7 @@ export function MonoUsageLimitNotice({
   onResume: () => void;
   onResumeAtReset: (enabled: boolean) => void;
 }) {
+  const t = useT();
   if (!session.usageLimit) return null;
   return (
     <UsageLimitNotice
@@ -36,7 +38,7 @@ export function MonoUsageLimitNotice({
             values={session.modelSettings}
             project={session.cwd}
             hideSettings
-            triggerLabel="Choose another model"
+            triggerLabel={t("monos.chooseAnotherModel")}
             onChange={onModelChange}
             onSettingsChange={() => {}}
           />

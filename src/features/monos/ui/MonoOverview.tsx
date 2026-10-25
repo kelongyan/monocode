@@ -38,6 +38,7 @@ import { HARNESSES, type HarnessId } from "../../sessions/model/session";
 import { MonoSidebar, MonoSidebarHeader } from "./MonoSidebar";
 import type { SessionChangeTotals } from "../../sessions/ui/SessionReview";
 import { MonoChangesView, type MonoChangesRequest } from "./MonoChangesView";
+import { useT } from "../../../shared/i18n";
 
 export type MonoOverviewTab =
   "activity" | "sessions" | "habits" | "documents" | "changes";
@@ -129,6 +130,7 @@ export function MonoOverview({
   onClose,
   windowControls,
 }: Props) {
+  const t = useT();
   const lock = useLockOverscroll<HTMLDivElement>();
   const habits = useHabits(monoId, state.status);
   const actions = habitActions(monoId);
@@ -240,7 +242,7 @@ export function MonoOverview({
       <PanelStack pages={pages}>
         {/* Pages replace this header too, keeping their back button at the top. */}
         <MonoSidebarHeader
-          title="Overview"
+          title={t("monos.overview")}
           heading={
             <OverviewTabs tab={tab} counts={counts} onChange={onTabChange} />
           }
@@ -261,7 +263,7 @@ export function MonoOverview({
                 </IconButton>
               ) : null}
               <TabButton
-                label="Activity"
+                label={t("monos.activity")}
                 icon={ListBullet}
                 selected={tab === "activity"}
                 aria-label={
@@ -289,7 +291,7 @@ export function MonoOverview({
         {changes && changesVisited ? (
           <div
             role="tabpanel"
-            aria-label="Changes"
+            aria-label={t("changes.title")}
             hidden={tab !== "changes"}
             className="flex min-h-0 flex-1 flex-col"
             data-mono-overview={tab === "changes" ? "changes" : undefined}
@@ -390,6 +392,7 @@ function SessionSearchBar({
   onFiltersChange: (filters: SessionSidebarFilters) => void;
   harnesses: HarnessId[];
 }) {
+  const t = useT();
   const filterButton = useRef<HTMLButtonElement>(null);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const active = hasActiveSessionFilters(filters);
@@ -400,8 +403,8 @@ function SessionSearchBar({
         <input
           type="text"
           value={query}
-          placeholder="Search sessions..."
-          aria-label="Search sessions"
+          placeholder={t("monos.searchSessions")}
+          aria-label={t("monos.searchSessions")}
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"
@@ -419,8 +422,8 @@ function SessionSearchBar({
       <button
         ref={filterButton}
         type="button"
-        title="Filter sessions"
-        aria-label="Filter sessions"
+        title={t("monos.filterSessions")}
+        aria-label={t("monos.filterSessions")}
         aria-expanded={!!menu}
         aria-haspopup="menu"
         onClick={() => {
@@ -462,10 +465,11 @@ function OverviewTabs({
   counts: Record<(typeof TABS)[number]["id"], number | undefined>;
   onChange: (tab: MonoOverviewTab) => void;
 }) {
+  const t = useT();
   return (
     <div
       role="tablist"
-      aria-label="Overview"
+      aria-label={t("monos.overview")}
       className="-ml-2 flex items-center gap-0.5"
     >
       {TABS.map(({ id, label, icon }) => {

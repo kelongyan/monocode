@@ -16,6 +16,7 @@ import {
   removeMonoProject,
   type MonoProject,
 } from "../model/mono";
+import { useT } from "../../../shared/i18n";
 
 /** A project as the rail shows it: its mascot in its color, then its name. */
 function ProjectFace({ path }: { path: string }) {
@@ -47,6 +48,7 @@ export function MonoProjects({
   monoId: string;
   projects: readonly MonoProject[];
 }) {
+  const t = useT();
   const anchor = useRef<HTMLButtonElement>(null);
   const [adding, setAdding] = useState(false);
   const taken = new Set(projects.map((project) => projectKey(project.path)));
@@ -109,7 +111,7 @@ export function MonoProjects({
           projects={choices}
           onDismiss={() => setAdding(false)}
           onSelectProject={(path) => addMonoProject(monoId, path)}
-          label="Add a project"
+          label={t("monos.addProject")}
           emptyMessage={
             choices.length === 0
               ? "It already works on every project."

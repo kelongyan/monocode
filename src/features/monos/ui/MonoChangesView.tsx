@@ -45,6 +45,7 @@ import {
 import { lazySurface } from "../../../shared/ui/lazySurface";
 import { isImagePath, isVideoPath } from "../../files/model/filePreview";
 import { BinaryFileView } from "../../files/ui/BinaryFileView";
+import { useT } from "../../../shared/i18n";
 
 const FileEditor = lazySurface(async () => {
   const module = await import("../../files/ui/FileEditor");
@@ -211,6 +212,7 @@ function ProjectTabs({
   indexes: ReadonlyMap<string, GitDiffIndex | null>;
   onSelect: (root: string) => void;
 }) {
+  const t = useT();
   const { groupLabels, groupColors, groupCustomColors, groupMascots } =
     useProjectAppearance();
   const groupLogos = useTabGroupLogos();
@@ -232,7 +234,7 @@ function ProjectTabs({
   return (
     <div
       role="tablist"
-      aria-label="Projects"
+      aria-label={t("monos.projects")}
       // Sideways only, with the native bounce at either end.
       className="flex h-9 shrink-0 items-center gap-px overflow-x-auto overflow-y-hidden overscroll-x-contain border-b border-stroke px-2"
     >

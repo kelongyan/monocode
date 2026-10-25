@@ -67,6 +67,7 @@ import { TerminalSpinner } from "./TerminalSpinner";
 import { Popover } from "../../../shared/ui/Popover";
 import { ProjectMascot } from "../../projects/ui/ProjectMascot";
 import { PixelMascot } from "../../projects/ui/PixelMascot";
+import { useT } from "../../../shared/i18n";
 import type { MonoLook } from "../../monos/model/mono";
 import {
   monoSpawnedSessions,
@@ -2063,6 +2064,7 @@ function TurnMetricsBadge({
   metrics?: TurnMetrics;
   elapsedMs: number | null;
 }) {
+  const t = useT();
   const root = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
   if (!metrics || !hasTurnMetrics(metrics)) return null;
@@ -2110,7 +2112,7 @@ function TurnMetricsBadge({
         role="img"
         tabIndex={0}
         aria-label={`Turn metrics: ${label}`}
-        title="Turn metrics"
+        title={t("transcript.turnMetrics")}
         className="grid rounded-md p-1 text-content/40 outline-none hover:bg-content/8 hover:text-content/70 focus-visible:ring-1 focus-visible:ring-accent"
       >
         <ChartBreakoutSquare className="size-3.5" strokeWidth={1.75} />
@@ -2562,6 +2564,7 @@ function UserMessageBlock({
   onSendDraft?: (block: Block) => boolean | void;
   onRemoveDraft?: (block: Block) => boolean | void;
 }) {
+  const t = useT();
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const [singleLine, setSingleLine] = useState(false);
@@ -2859,8 +2862,8 @@ function UserMessageBlock({
                   <span className="flex items-center gap-1">
                     <button
                       type="button"
-                      title="Remove draft"
-                      aria-label="Remove draft"
+                      title={t("transcript.removeDraft")}
+                      aria-label={t("transcript.removeDraft")}
                       onClick={() => onRemoveDraft?.(block)}
                       className="flex h-7 items-center gap-1.5 rounded-md px-2 text-xs text-content/55 hover:bg-content/10 hover:text-content"
                     >
@@ -2869,8 +2872,8 @@ function UserMessageBlock({
                     </button>
                     <button
                       type="button"
-                      title="Send draft"
-                      aria-label="Send draft"
+                      title={t("transcript.sendDraft")}
+                      aria-label={t("transcript.sendDraft")}
                       onClick={() => onSendDraft?.(block)}
                       className="primary-action flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition-transform duration-150 active:scale-[0.97]"
                     >
@@ -2913,7 +2916,7 @@ function UserMessageBlock({
               <CopyTurnButton
                 text={text}
                 attachments={block.attachments}
-                label="Copy message"
+                label={t("transcript.copyMessage")}
               />
             ) : null}
             {onEdit ? (
@@ -3560,6 +3563,7 @@ export function MonoActivityTrail({
   onOpenFile,
   onOpenDiff,
 }: Omit<ActivityPhasesProps, "done" | "padded"> & { live?: boolean }) {
+  const t = useT();
   const steps = blocks.filter(
     (block) =>
       !block.internal &&
@@ -3582,7 +3586,7 @@ export function MonoActivityTrail({
   }
   return (
     <ol
-      aria-label="Activity in chronological order"
+      aria-label={t("transcript.chronologicalActivity")}
       className="flex min-w-0 flex-col gap-3"
     >
       {segments.map((segment) => {

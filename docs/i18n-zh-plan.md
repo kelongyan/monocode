@@ -294,8 +294,34 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 **一个实施要点**：`SettingsView.tsx` 内有 15+ 个独立组件，每个用 `t()` 的组件都要有自己的 `useT()` / `useLocale()`；它们不在同一渲染分支，父组件重渲染不会带动它们。脚本批量插入 hook 时要注意：`function X({` 后是解构参数，hook 必须插在签名闭合的 `) {` 之后，不能紧跟函数名——在 `InboxPage` 上踩过一次，`tsc` 报 `':' expected`。
 
 
-### 阶段 3：核心工作流（3 天）
+### 阶段 3：核心工作流（3 天）— ✅ 已完成
+
 `AgentTranscript.tsx`、`InboxView.tsx`、`GitChangesPanel.tsx`、`FileTree.tsx`、`Monos` 系列、`AutomationsView.tsx`。
+
+#### 实际落地
+
+实际文案量远小于预估（预估基于字符串总数，把 CSS 类名和 `data-*` 也算进去了）。真实可见文案：
+
+| 文件 | 条数 | 命名空间 |
+| --- | --- | --- |
+| `AgentTranscript.tsx` | 7 | `transcript.*` |
+| `InboxView.tsx` | 19 | `inbox.*` |
+| `GitChangesPanel.tsx` | 11 | `changes.*` |
+| `FileTree.tsx` | 5 | `explorer.*` |
+| `AutomationsView.tsx` | 28 | `automations.*` |
+| Monos 系列 15 个文件 | ~90 | `monos.*` |
+
+`GitChangesPanel` 与 `MonoProjectCommit` 共用 `changes.*`；`NewHabitPage` 复用 `automations.minute` / `automations.time`；`common.edit` / `common.remove` / `common.back` 被 Monos 多个组件复用。
+
+**验证**：`tsc` 通过；`vitest` 5550 通过（仅剩 1 条预存时区失败）；`cargo fmt --check` 通过；5 个阶段 3 目标文件已无残留英文可见文案。
+
+#### 三个重要教训（这轮踩得很实）
+
+1. **这些文件是 CRLF**。脚本用 `"$"` 做行尾锚点匹配 import 行会全部失败，因为行尾有 `\r`。必须 `split(/\r?\n/)` 并按原 EOL 写回。我因此浪费了两轮调试。
+2. **`FileTree` 是 `export const FileTree = memo(function FileTree(...))`**，不是 `function FileTree`。我的组件识别正则最初只匹配后者，导致 hook 插不进去且误删了别处的 hook。最终正则需覆盖 `function X`、`const X = memo(function X`、`const X = (` 三种形态。
+3. **批量改脚本必须可重入**。第一次运行改了 A 文件后失败退出，第二次运行时 A 已改完，`includes` 检查失败又被当作错误抛出。后半程改为"不存在则跳过"，才可安全重跑。
+
+**删除 hook 比添加更危险**：我的"未使用则删除"逻辑一度误删了 `AutomationCard`、`HeaderIcon`、`InboxDetailTab` 里确实未使用的 hook（这些是正确删除），但也曾因组件识别失败而把 `FileTree` 主组件的 hook 判为孤立。最终改为「先扫全部 t() 调用定位所属组件，再对照是否已声明」的自洽算法，并用 66 处 hook 的全量合法性核查（都在组件内、且无前置 return）兜底。
 
 ### 阶段 4：原生层（1 天）
 - `menu.rs`：`build()` 已接收参数，加 `locale: &str` 查表；新增 command 在语言切换时**重建菜单**。

@@ -29,6 +29,7 @@ import {
   consumeQuoteRequest,
   type QuoteRequest,
 } from "../../sessions/model/quoteDraft";
+import { useT } from "../../../shared/i18n";
 
 // Loaded on first open, with its emoji data, so neither weighs on startup.
 const EmojiPickerPopover = lazy(() =>
@@ -92,6 +93,7 @@ export function MonoComposer({
   controls,
   tools,
 }: Props) {
+  const t = useT();
   const [text, setText] = useState(() => getComposerDraft(sessionId) ?? "");
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const autocorrect = useComposerAutocorrect();
@@ -310,8 +312,8 @@ export function MonoComposer({
   const attachButton = (className: string, tool = false) => (
     <button
       type="button"
-      title="Attach files"
-      aria-label="Attach files"
+      title={t("monos.attachFiles")}
+      aria-label={t("monos.attachFiles")}
       disabled={!enabled || submitting}
       onClick={() => readAttachments(pickAttachments)}
       className={className}
@@ -357,7 +359,7 @@ export function MonoComposer({
   const sendButton = (className: string) => (
     <button
       type="submit"
-      aria-label="Send"
+      aria-label={t("monos.send")}
       title={pendingReads ? "Reading attachments…" : "Send"}
       disabled={!ready}
       className={`primary-action grid size-6.5 place-items-center rounded-md transition-[background-color,color,transform] duration-150 active:scale-90 disabled:cursor-default ${className}`}
@@ -453,8 +455,8 @@ export function MonoComposer({
           <button
             ref={emojiButton}
             type="button"
-            title="Emoji"
-            aria-label="Add emoji"
+            title={t("monos.emoji")}
+            aria-label={t("monos.addEmoji")}
             aria-expanded={emojiOpen}
             disabled={!enabled || submitting}
             onClick={toggleEmoji}

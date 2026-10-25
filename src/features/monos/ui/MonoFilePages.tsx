@@ -27,6 +27,7 @@ import {
   MemoryGauge,
   PageHeader,
 } from "./monoPanelParts";
+import { useT } from "../../../shared/i18n";
 
 const dateFormat = new Intl.DateTimeFormat(undefined, {
   month: "short",
@@ -64,9 +65,10 @@ export function SoulPage({
   files: MonoFiles | undefined;
   onBack?: () => void;
 }) {
+  const t = useT();
   return (
     <div className="flex min-h-0 flex-1 flex-col" data-mono-soul>
-      <PageHeader title="Soul" onBack={onBack} />
+      <PageHeader title={t("monos.soul")} onBack={onBack} />
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none">
         {files ? (
           <FileField
@@ -77,7 +79,7 @@ export function SoulPage({
             hash={files.soulHash}
             label={`${agent.name} soul`}
             author={agent.name}
-            placeholder="Who it is, and what it should always keep in mind"
+            placeholder={t("monos.soulPlaceholder")}
           />
         ) : (
           <Empty>Loading…</Empty>
@@ -97,6 +99,7 @@ export function MemoryPage({
   files: MonoFiles | undefined;
   onBack?: () => void;
 }) {
+  const t = useT();
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<MemoryFact>();
   const [saveError, setSaveError] = useState<string>();
@@ -133,10 +136,10 @@ export function MemoryPage({
     save((memory) => withoutLine(memory, factIndex(memory, line)));
   return (
     <div className="flex min-h-0 flex-1 flex-col" data-mono-memory>
-      <PageHeader title="Memory" onBack={onBack}>
+      <PageHeader title={t("monos.memory")} onBack={onBack}>
         {files ? (
           <IconButton
-            label="Add memory"
+            label={t("monos.addMemory")}
             disabled={adding}
             onClick={() => {
               setEditing(undefined);
@@ -162,9 +165,9 @@ export function MemoryPage({
             {adding ? (
               <li>
                 <FactEditor
-                  label="New memory"
+                  label={t("monos.newMemory")}
                   initial=""
-                  placeholder="Something it should remember"
+                  placeholder={t("monos.memoryPlaceholder")}
                   // Enter saves and leaves the field open for the next one.
                   keepOpen
                   onSave={(fact) =>
@@ -183,7 +186,7 @@ export function MemoryPage({
               return edit ? (
                 <li key={`editing:${edit.line}`} data-memory-line={fact.index}>
                   <FactEditor
-                    label="Edit memory"
+                    label={t("monos.editMemory")}
                     initial={edit.text}
                     onSave={(text) =>
                       text === edit.text
@@ -262,6 +265,7 @@ function FactRow({
   onEdit: () => void;
   onForget: () => void;
 }) {
+  const t = useT();
   const body = (
     <>
       <FactIcon dim={struck} />
@@ -301,7 +305,7 @@ function FactRow({
       )}
       <span className="flex shrink-0 items-center pr-2 opacity-0 transition-opacity group-hover/fact:opacity-100 focus-within:opacity-100">
         {struck ? null : (
-          <HabitButton label="Edit" onClick={onEdit}>
+          <HabitButton label={t("common.edit")} onClick={onEdit}>
             <Pencil className="size-3.5" strokeWidth={1.75} />
           </HabitButton>
         )}

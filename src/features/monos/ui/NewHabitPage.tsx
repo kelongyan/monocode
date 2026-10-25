@@ -9,6 +9,7 @@ import {
 } from "../model/monoHabits";
 import { when } from "./HabitPage";
 import { AutoTextarea, PageHeader, Property, Section } from "./monoPanelParts";
+import { useT } from "../../../shared/i18n";
 
 const KINDS = [
   { value: "daily", label: "Daily" },
@@ -40,6 +41,7 @@ export function NewHabitPage({
   onBack: () => void;
   onCreated: () => void;
 }) {
+  const t = useT();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
   const [schedule, setSchedule] = useState<HabitSchedule>({
@@ -76,7 +78,7 @@ export function NewHabitPage({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col" data-new-habit>
-      <PageHeader title="New habit" onBack={onBack}>
+      <PageHeader title={t("monos.newHabit")} onBack={onBack}>
         <button
           type="button"
           disabled={!ready}
@@ -92,10 +94,10 @@ export function NewHabitPage({
         <div className="px-2 pt-3">
           <input
             ref={nameRef}
-            aria-label="Name"
+            aria-label={t("monos.name")}
             value={name}
             maxLength={80}
-            placeholder="Name"
+            placeholder={t("monos.name")}
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => {
               if (
@@ -110,15 +112,15 @@ export function NewHabitPage({
         </div>
 
         <dl className="flex flex-col gap-0.5 px-4 py-3">
-          <Property label="Runs">
+          <Property label={t("monos.habitRuns")}>
             <ScheduleFields schedule={schedule} onChange={setSchedule} />
           </Property>
-          <Property label="Next">
+          <Property label={t("monos.habitNext")}>
             {when(nextHabitRunAt(schedule, Date.now()))}
           </Property>
         </dl>
 
-        <Section title="What it does">
+        <Section title={t("monos.habitWhatItDoes")}>
           <Instructions
             value={instructions}
             onChange={setInstructions}
@@ -140,11 +142,12 @@ function ScheduleFields({
   schedule: HabitSchedule;
   onChange: (schedule: HabitSchedule) => void;
 }) {
+  const t = useT();
   const kind = schedule.scheduleKind;
   return (
     <span className="flex flex-wrap items-center gap-1.5 py-0.5">
       <SearchableSelect
-        label="Repeats"
+        label={t("monos.repeats")}
         value={kind}
         options={KINDS}
         variant="pill"
@@ -174,7 +177,7 @@ function ScheduleFields({
       <span className="text-content/45">at</span>
       {kind === "hourly" ? (
         <SearchableSelect
-          label="Minute"
+          label={t("automations.minute")}
           value={String(schedule.minute)}
           options={MINUTES}
           variant="pill"
@@ -184,7 +187,7 @@ function ScheduleFields({
       ) : (
         <input
           type="time"
-          aria-label="Time"
+          aria-label={t("automations.time")}
           value={schedule.time}
           required
           onChange={(event) => {
@@ -208,13 +211,14 @@ function Instructions({
   onChange: (value: string) => void;
   onSubmit: () => void;
 }) {
+  const t = useT();
   return (
     <AutoTextarea
-      aria-label="What it does"
+      aria-label={t("monos.habitWhatItDoes")}
       value={value}
       rows={3}
       maxLength={4_000}
-      placeholder="What it should do on each run, and when it's worth telling you about."
+      placeholder={t("monos.habitPlaceholder")}
       onChange={(event) => onChange(event.target.value)}
       onKeyDown={(event) => {
         if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {

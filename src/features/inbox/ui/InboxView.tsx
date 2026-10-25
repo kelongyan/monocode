@@ -204,6 +204,7 @@ import {
   type InboxSessionPortal,
 } from "./InboxDiscussionPanel";
 import { inboxAskKey } from "../model/inboxAsk";
+import { useT } from "../../../shared/i18n";
 
 const MIN_WIDTH = 240;
 const MAX_WIDTH = 420;
@@ -416,6 +417,7 @@ export function InboxView({
   target = null,
   onOpenIntegrations,
 }: Props) {
+  const t = useT();
   const [discussionOpen, setDiscussionOpen] = useState(false);
   const listLock = useLockOverscroll<HTMLDivElement>();
   const listScrollRef = useRef<HTMLDivElement>(null);
@@ -942,7 +944,7 @@ export function InboxView({
         {visibleSources.length > 0 ? (
           <div
             role="tablist"
-            aria-label="Inbox source"
+            aria-label={t("inbox.source")}
             className="flex min-w-0 basis-0 items-center gap-px"
             style={{ flexGrow: visibleSources.length }}
           >
@@ -960,10 +962,10 @@ export function InboxView({
           <button
             ref={connectButtonRef}
             type="button"
-            aria-label="Connect an inbox source"
+            aria-label={t("inbox.connectSource")}
             aria-haspopup="menu"
             aria-expanded={connectMenuOpen}
-            title="Connect an inbox source"
+            title={t("inbox.connectSource")}
             onClick={() => setConnectMenuOpen((open) => !open)}
             className={`flex h-6 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md px-2 text-[12px] leading-none ${
               connectMenuOpen
@@ -983,8 +985,8 @@ export function InboxView({
             <input
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Filter inbox"
-              aria-label="Filter inbox"
+              placeholder={t("inbox.filter")}
+              aria-label={t("inbox.filter")}
               spellCheck={false}
               autoComplete="off"
               className="h-7 w-full rounded-md bg-transparent pl-7 pr-2 text-[12px] text-content outline-none placeholder:text-content/40"
@@ -992,8 +994,8 @@ export function InboxView({
           </div>
           <button
             type="button"
-            title="Filter inbox"
-            aria-label="Filter inbox"
+            title={t("inbox.filter")}
+            aria-label={t("inbox.filter")}
             aria-expanded={!!filterMenu}
             aria-haspopup="menu"
             onClick={onFilterButtonClick}
@@ -1005,8 +1007,8 @@ export function InboxView({
           </button>
           <button
             type="button"
-            title="Mark all as read"
-            aria-label="Mark all as read"
+            title={t("inbox.markAllRead")}
+            aria-label={t("inbox.markAllRead")}
             disabled={!sourceHasUnseen}
             onClick={() =>
               setReadStatusError(
@@ -1021,7 +1023,7 @@ export function InboxView({
           </button>
           <button
             type="button"
-            aria-label="Refresh"
+            aria-label={t("inbox.refresh")}
             onClick={() => setRefresh((value) => value + 1)}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
           >
@@ -1126,7 +1128,7 @@ export function InboxView({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize inbox list"
+        aria-label={t("inbox.resizeList")}
         className={`absolute inset-y-0 -right-px z-10 w-1.5 cursor-col-resize touch-none ${
           resize.dragging ? "bg-content/15" : "hover:bg-content/10"
         }`}
@@ -1168,7 +1170,7 @@ export function InboxView({
   return (
     <div
       role="region"
-      aria-label="Inbox"
+      aria-label={t("inbox.title")}
       data-app-inbox
       className="flex min-h-0 min-w-0 flex-1 flex-col text-content"
     >
@@ -1762,6 +1764,7 @@ export function GithubPrActions({
   headRef: string;
   onChange?: (item: InboxItem) => void;
 }) {
+  const t = useT();
   const mergeGroup = useRef<HTMLDivElement>(null);
   const [mergeAction, setMergeAction] = useState<GithubPrMergeAction>("merge");
   const [mergeMenuOpen, setMergeMenuOpen] = useState(false);
@@ -1833,7 +1836,7 @@ export function GithubPrActions({
         <div
           ref={mergeGroup}
           role="group"
-          aria-label="Merge pull request"
+          aria-label={t("inbox.mergePullRequest")}
           className="inline-flex h-7 overflow-hidden rounded-md bg-content text-background-base"
         >
           <button
@@ -1849,8 +1852,8 @@ export function GithubPrActions({
           </button>
           <button
             type="button"
-            title="Merge options"
-            aria-label="Merge options"
+            title={t("inbox.mergeOptions")}
+            aria-label={t("inbox.mergeOptions")}
             aria-haspopup="menu"
             aria-expanded={mergeMenuOpen}
             disabled={busy}
@@ -1919,7 +1922,7 @@ export function GithubPrActions({
           onDismiss={() => setMergeMenuOpen(false)}
           role="menu"
           tabIndex={-1}
-          aria-label="Merge method"
+          aria-label={t("inbox.mergeMethod")}
           className="p-1"
         >
           {GITHUB_PR_MERGE_OPTIONS.map((option) => (
@@ -2054,6 +2057,7 @@ export function InboxDetail({
   onOpenSession?: (sessionId: string) => void | Promise<void>;
   onItemChange?: (item: InboxItem) => void;
 }) {
+  const t = useT();
   const detailLock = useLockOverscroll<HTMLDivElement>();
   const panel = mode === "panel";
   const linear = item.provider === "linear";
@@ -2913,12 +2917,12 @@ export function InboxDetail({
                   className="flex items-stretch gap-4"
                 >
                   <InboxDetailTab
-                    label="Summary"
+                    label={t("inbox.summary")}
                     selected={tab === "summary"}
                     onSelect={() => setTab("summary")}
                   />
                   <InboxDetailTab
-                    label="Code"
+                    label={t("inbox.code")}
                     count={panel ? prDiff?.files.length : undefined}
                     selected={tab === "code"}
                     onSelect={() => {
@@ -2937,7 +2941,7 @@ export function InboxDetail({
                 {tab === "code" && inboxShowsFullFileDiff(item) ? (
                   <div
                     role="group"
-                    aria-label="Diff context"
+                    aria-label={t("inbox.diffContext")}
                     className="ml-auto flex items-center self-center rounded-md border border-content/10 bg-content/[0.03] p-0.5"
                   >
                     <button

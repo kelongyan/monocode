@@ -16,6 +16,7 @@ import {
 } from "../model/monoHabits";
 import { RunningFor, useHabitRunning } from "./HabitPage";
 import { Empty, Section } from "./monoPanelParts";
+import { useT } from "../../../shared/i18n";
 
 /** Each Mono's habits as last loaded, so switching back shows them at once. */
 const loadedHabits = new Map<string, Habit[]>();
@@ -103,6 +104,7 @@ export function HabitRow({
   actions: HabitActions;
   onOpen: () => void;
 }) {
+  const t = useT();
   const runningSince = useHabitRunning(habit.id);
   const running = runningSince != null;
   const starting = !running && habitStarting(habit);
@@ -172,7 +174,7 @@ export function HabitRow({
             <Play className="size-3.5" strokeWidth={1.75} />
           )}
         </HabitButton>
-        <HabitButton label="Remove" onClick={() => actions.remove(habit.id)}>
+        <HabitButton label={t("common.remove")} onClick={() => actions.remove(habit.id)}>
           <Trash2 className="size-3.5" strokeWidth={1.75} />
         </HabitButton>
       </span>
@@ -297,6 +299,7 @@ export function TodayHabits({
   actions: HabitActions;
   onOpen: (id: string) => void;
 }) {
+  const t = useT();
   const now = useTodayTick();
   if (!habits) return null;
   if (habits.length === 0) return <HabitsEmpty />;
@@ -319,9 +322,9 @@ export function TodayHabits({
   return (
     <>
       {upcoming.length ? (
-        <Section title="Upcoming">{cards(upcoming)}</Section>
+        <Section title={t("monos.upcoming")}>{cards(upcoming)}</Section>
       ) : null}
-      {done.length ? <Section title="Done">{cards(done)}</Section> : null}
+      {done.length ? <Section title={t("monos.done")}>{cards(done)}</Section> : null}
     </>
   );
 }

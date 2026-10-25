@@ -3,6 +3,7 @@ import { PROJECT_MASCOTS } from "../../projects/model/projectMascots";
 import { PixelMascot } from "../../projects/ui/PixelMascot";
 import { TAB_GROUP_COLORS } from "../../workspace/model/tabGroups";
 import { playCue } from "../../settings/model/sounds";
+import { useT } from "../../../shared/i18n";
 type Look = { mascot: string; color: string };
 
 type Props = {
@@ -32,12 +33,13 @@ export function monoIntroCrowd(look: Look) {
  * make their first. The switch hides Monos altogether.
  */
 export function MonoIntroCard({ look, onCreate, onHide }: Props) {
+  const t = useT();
   const crowd = monoIntroCrowd(look);
   const middle = (crowd.length - 1) / 2;
 
   return (
     <section
-      aria-label="Meet Monos"
+      aria-label={t("monos.meetMonos")}
       data-mono-intro
       className="mx-2 overflow-hidden rounded-lg bg-content/[0.03]"
     >
@@ -49,8 +51,8 @@ export function MonoIntroCard({ look, onCreate, onHide }: Props) {
           type="button"
           role="switch"
           aria-checked
-          aria-label="Show monos"
-          title="Hide monos from the rail. Turn them back on in Settings › Monos."
+          aria-label={t("monos.showMonos")}
+          title={t("monos.hideFromRail")}
           onClick={() => {
             onHide();
             playCue("switch");

@@ -82,6 +82,7 @@ import { MOD } from "../../../platform/tauri/platform";
 import { applyProjectDiffStats } from "../hooks/useProjectDiffStats";
 import { useLockOverscroll } from "../../../shared/hooks/useLockOverscroll";
 import { isRemoteProjectPath } from "../../projects/model/recents";
+import { useT } from "../../../shared/i18n";
 
 const GIT_POLL_MS = 2000;
 
@@ -131,6 +132,7 @@ export function GitChangesPanel({
   onOpenAllChanges,
   onOpenCommit,
 }: Props) {
+  const t = useT();
   const { index, reload } = useDiffIndex(cwd, enabled);
   useEffect(() => {
     if (!enabled) return;
@@ -197,7 +199,7 @@ export function GitChangesPanel({
       ref={paneRef}
       className="flex h-full min-h-0 flex-1 flex-col overflow-hidden"
     >
-      <PaneHeader compact={compactHeader} role="toolbar" aria-label="Changes">
+      <PaneHeader compact={compactHeader} role="toolbar" aria-label={t("changes.title")}>
         <span className="shrink-0">Changes</span>
         {status ? (
           <span
@@ -227,7 +229,7 @@ export function GitChangesPanel({
               ref={branchMenuRef}
               type="button"
               aria-haspopup="menu"
-              aria-label="Branch actions"
+              aria-label={t("changes.branchActions")}
               aria-expanded={branchMenuOpen}
               disabled={busy !== null}
               onClick={() => setBranchMenuOpen((open) => !open)}
@@ -245,7 +247,7 @@ export function GitChangesPanel({
                 align="end"
                 onDismiss={() => setBranchMenuOpen(false)}
                 role="menu"
-                aria-label="Branch actions"
+                aria-label={t("changes.branchActions")}
                 className="min-w-36 p-1"
               >
                 <button
@@ -367,6 +369,7 @@ function ChangedFiles({
   onOpenAllChanges: (kind: GitFileDiffKind) => void;
   onMutated: (paths?: string[]) => void;
 }) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const menuRef = useRef<HTMLDivElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
@@ -773,8 +776,8 @@ function ChangedFiles({
 
           <button
             type="button"
-            title="Commit options"
-            aria-label="Commit options"
+            title={t("changes.commitOptions")}
+            aria-label={t("changes.commitOptions")}
             aria-expanded={menuOpen}
             disabled={!canOpenMenu}
             onClick={() => setMenuOpen((open) => !open)}
@@ -792,7 +795,7 @@ function ChangedFiles({
               align="end"
               onDismiss={() => setMenuOpen(false)}
               role="menu"
-              aria-label="Commit options"
+              aria-label={t("changes.commitOptions")}
               className="min-w-48 p-1"
             >
               <button
@@ -867,7 +870,7 @@ function ChangedFiles({
           <>
             {staged.length > 0 ? (
               <FileSection
-                title="Staged Changes"
+                title={t("changes.stagedChanges")}
                 count={staged.length}
                 open={stagedExpanded}
                 onToggle={() => {
@@ -904,7 +907,7 @@ function ChangedFiles({
             ) : null}
             {unstaged.length > 0 ? (
               <FileSection
-                title="Changes"
+                title={t("changes.title")}
                 count={unstaged.length}
                 open={changesExpanded}
                 onToggle={() => {
@@ -1492,6 +1495,7 @@ function ChangeRow({
     action: "stage" | "unstage" | "discard",
   ) => void;
 }) {
+  const t = useT();
   const name = basename(file.relative);
   const tree = depth !== undefined;
   const dir = tree ? "" : dirname(file.relative);
@@ -1535,7 +1539,7 @@ function ChangeRow({
         >
           {kind === "unstaged" ? (
             <IconAction
-              title="Discard Changes"
+              title={t("changes.discardChanges")}
               disabled={busy}
               onClick={() => onAction(file, "discard")}
             >
@@ -1544,7 +1548,7 @@ function ChangeRow({
           ) : null}
           {kind === "staged" ? (
             <IconAction
-              title="Unstage Changes"
+              title={t("changes.unstageChanges")}
               disabled={busy}
               onClick={() => onAction(file, "unstage")}
             >
@@ -1552,7 +1556,7 @@ function ChangeRow({
             </IconAction>
           ) : (
             <IconAction
-              title="Stage Changes"
+              title={t("changes.stageChanges")}
               disabled={busy}
               onClick={() => onAction(file, "stage")}
             >
