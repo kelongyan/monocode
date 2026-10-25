@@ -22,6 +22,7 @@ import type {
   GithubPrCheckState,
 } from "../model/githubPrChecks";
 import { githubActionsJobId } from "../model/githubPrChecks";
+import { useT } from "../../../shared/i18n";
 
 type RepairState =
   | GithubPrCheckState
@@ -286,6 +287,7 @@ function RepairCard({
   view: GithubPrChecksView;
   onShowCheck?: (check: RepairItem["check"]) => void;
 }) {
+  const t = useT();
   const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
   const counts = new Map<RepairState, number>();
@@ -407,11 +409,9 @@ function RepairCard({
             ))}
           </ul>
           <p>
-            Latest PR commit:{" "}
-            <span className="font-mono">
-              {view.checks?.headOid.slice(0, 7) || "Unavailable"}
-            </span>
-            . Results appear in the checks below.
+            {t("ui.inbox.latestPrCommit", {
+              sha: view.checks?.headOid.slice(0, 7) || t("ui.inbox.unavailable"),
+            })}
           </p>
         </div>
       ) : null}

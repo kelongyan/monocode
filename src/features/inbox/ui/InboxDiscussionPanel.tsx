@@ -4,6 +4,7 @@ import { IconButton } from "../../../app/shell/TitleBar";
 import { useDragResize } from "../../../shared/hooks/useDragResize";
 import { inboxItemRef, type InboxItem } from "../model/githubTasks";
 import { inboxAskKey } from "../model/inboxAsk";
+import { useT } from "../../../shared/i18n";
 
 export type InboxSessionPortal = { sessionId: string; host: HTMLElement };
 let rememberedWidth = 440;
@@ -22,6 +23,7 @@ export function InboxDiscussionPanel({
   onRestart: (item: InboxItem) => Promise<string>;
   onMount: (portal: InboxSessionPortal | null) => void;
 }) {
+  const t = useT();
   const host = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,7 +68,7 @@ export function InboxDiscussionPanel({
     >
       <div
         role="separator"
-        aria-label="Resize discussion"
+        aria-label={t("ui.inbox.resizeDiscussion")}
         aria-orientation="vertical"
         onPointerDown={resize.onPointerDown}
         onDoubleClick={resize.onDoubleClick}
@@ -77,7 +79,7 @@ export function InboxDiscussionPanel({
           Ask · {inboxItemRef(item)}
         </span>
         <IconButton
-          label="Restart conversation"
+          label={t("ui.inbox.restartConversation")}
           disabled={loading}
           onClick={() => {
             setLoading(true);
@@ -92,7 +94,7 @@ export function InboxDiscussionPanel({
         >
           <RotateCcw className="size-3.5" />
         </IconButton>
-        <IconButton label="Close panel" onClick={onClose}>
+        <IconButton label={t("ui.inbox.closePanel")} onClick={onClose}>
           <PanelLeft className="size-3.5" />
         </IconButton>
       </header>

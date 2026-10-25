@@ -974,7 +974,7 @@ export function InboxView({
             }`}
           >
             <Plus className="size-3.5 shrink-0" strokeWidth={1.75} />
-            <span className="min-w-0 truncate">Add connection</span>
+            <span className="min-w-0 truncate">{t("ui.inbox.addConnection")}</span>
           </button>
         ) : null}
       </div>
@@ -1049,8 +1049,7 @@ export function InboxView({
       >
         {noSourcesConnected ? (
           <p className="px-3 py-3 text-[12px] text-content/50">
-            Add a connection to start using the Inbox.
-          </p>
+            {t("ui.inbox.addAConnectionToStartUsing")}</p>
         ) : sourceError && visibleItems.length === 0 ? (
           <p className="px-3 py-2 text-[12px] text-content/50">{sourceError}</p>
         ) : loading && items.length === 0 ? (
@@ -1190,7 +1189,7 @@ export function InboxView({
               className="size-3.5 shrink-0 text-content/45"
               strokeWidth={1.75}
             />
-            <span className="min-w-0 truncate text-content">Inbox</span>
+            <span className="min-w-0 truncate text-content">{t("ui.inbox.inbox")}</span>
           </div>
           {IS_MAC ? null : <WindowControls />}
         </div>
@@ -1253,6 +1252,7 @@ export function LinkedWorkItemPanel({
   visible?: boolean;
   onClose: () => void;
 }) {
+  const t = useT();
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
   const logos = useTabGroupLogos();
@@ -1424,8 +1424,7 @@ export function LinkedWorkItemPanel({
                 className={ACTION_OUTLINE}
               >
                 <ExternalLink className="size-3.5" strokeWidth={1.75} />
-                Open on GitHub
-              </button>
+                {t("ui.inbox.openOnGithub")}</button>
             </div>
           ) : (
             <div className="flex h-full items-center justify-center text-content/40">
@@ -1466,11 +1465,12 @@ function InboxDetailBody({
   onOpenSession?: (sessionId: string) => void | Promise<void>;
   onItemChange?: (item: InboxItem) => void;
 }) {
+  const t = useT();
   if (!item) {
     return (
       <div className="flex h-full flex-col items-center justify-center px-6 text-center">
         <Inbox className="mb-3 size-6 text-content/30" strokeWidth={1.75} />
-        <p className="text-[13px] text-content/45">Select an inbox item</p>
+        <p className="text-[13px] text-content/45">{t("ui.inbox.selectAnInboxItem")}</p>
       </div>
     );
   }
@@ -1872,8 +1872,7 @@ export function GithubPrActions({
           className={stateButton}
         >
           <GitPullRequest className="size-3.5" strokeWidth={1.75} />
-          Ready for review
-        </button>
+          {t("ui.inbox.readyForReview")}</button>
       ) : null}
       {state === "open" && !item.draft ? (
         <button
@@ -1883,8 +1882,7 @@ export function GithubPrActions({
           className={stateButton}
         >
           <GitPullRequestDraft className="size-3.5" strokeWidth={1.75} />
-          Convert to draft
-        </button>
+          {t("ui.inbox.convertToDraft")}</button>
       ) : null}
       {state === "open" ? (
         <button
@@ -1894,8 +1892,7 @@ export function GithubPrActions({
           className={`${stateButton} hover:text-rose-400`}
         >
           <GitPullRequestClosed className="size-3.5" strokeWidth={1.75} />
-          Close pull request
-        </button>
+          {t("ui.inbox.closePullRequest")}</button>
       ) : null}
       {state === "closed" ? (
         <button
@@ -1905,8 +1902,7 @@ export function GithubPrActions({
           className={stateButton}
         >
           <GitPullRequest className="size-3.5" strokeWidth={1.75} />
-          Reopen pull request
-        </button>
+          {t("ui.inbox.reopenPullRequest")}</button>
       ) : null}
       {notice ? (
         <span role="status" className="text-[11px] text-content/55">
@@ -1997,8 +1993,7 @@ export function GithubPrActions({
               onClick={dismissConfirmation}
               className={`h-7 rounded-md px-3 text-[12px] text-content/65 hover:bg-content/8 hover:text-content disabled:cursor-default disabled:opacity-40 ${PR_ACTION_PRESS}`}
             >
-              Cancel
-            </button>
+              {t("ui.inbox.cancel")}</button>
             <button
               type="button"
               disabled={busy}
@@ -2755,7 +2750,7 @@ export function InboxDetail({
                         ))}
                       </span>
                     ) : (
-                      <span>Unassigned</span>
+                      <span>{t("ui.inbox.unassigned")}</span>
                     )}
                   </>
                 ) : null}
@@ -2766,14 +2761,20 @@ export function InboxDetail({
                       dateTime={item.createdAt}
                       title={new Date(item.createdAt).toLocaleString()}
                     >
-                      Created {formatRelativeTime(item.createdAt)}
+                      {t("ui.inbox.createdRelative", {
+                        when: formatRelativeTime(item.createdAt),
+                      })}
                     </time>
                   </>
                 ) : null}
                 {formatRelativeTime(item.updatedAt) ? (
                   <>
                     <span aria-hidden>·</span>
-                    <span>Updated {formatRelativeTime(item.updatedAt)}</span>
+                    <span>
+                      {t("ui.inbox.updatedRelative", {
+                        when: formatRelativeTime(item.updatedAt),
+                      })}
+                    </span>
                   </>
                 ) : null}
                 {baseRef && headRef ? (
@@ -2802,7 +2803,7 @@ export function InboxDetail({
                 <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
                   <span className="mr-0.5 inline-flex shrink-0 items-center gap-1 text-[11px] text-content/45">
                     <MessageMultiple className="size-3.5" strokeWidth={1.75} />
-                    Related{" "}
+                    {t("ui.inbox.related")}{" "}
                     {relatedSessions.length === 1 ? "thread" : "threads"}
                   </span>
                   {relatedSessions.map((session) => {
@@ -2821,8 +2822,7 @@ export function InboxDetail({
                         <span className="truncate">{title}</span>
                         {session.archived ? (
                           <span className="shrink-0 text-content/40">
-                            Archived
-                          </span>
+                            {t("ui.inbox.archived")}</span>
                         ) : null}
                       </button>
                     );
@@ -2887,8 +2887,7 @@ export function InboxDetail({
                     className={ACTION_OUTLINE}
                   >
                     <MessageSquare className="size-3.5" strokeWidth={1.75} />{" "}
-                    Ask
-                  </button>
+                    {t("ui.inbox.ask")}</button>
                 ) : null}
                 {panel ? null : (
                   <button
@@ -2954,8 +2953,7 @@ export function InboxDetail({
                           : "text-content/45 hover:text-content/70"
                       }`}
                     >
-                      Hunks
-                    </button>
+                      {t("ui.inbox.hunks")}</button>
                     <button
                       type="button"
                       aria-pressed={diffMode === "full"}
@@ -2966,8 +2964,7 @@ export function InboxDetail({
                           : "text-content/45 hover:text-content/70"
                       }`}
                     >
-                      Full file
-                    </button>
+                      {t("ui.inbox.fullFile")}</button>
                   </div>
                 ) : null}
               </div>
@@ -3013,7 +3010,7 @@ export function InboxDetail({
                   focusPath={diffFocusPath}
                 />
               ) : (
-                <p className="text-[13px] text-content/45">No file changes</p>
+                <p className="text-[13px] text-content/45">{t("ui.inbox.noFileChanges")}</p>
               )
             ) : isPr && tab === "checks" ? (
               <InboxPrChecks
@@ -3063,7 +3060,7 @@ export function InboxDetail({
                     allowRemoteMedia
                   />
                 ) : (
-                  <p className="text-[13px] text-content/45">No description</p>
+                  <p className="text-[13px] text-content/45">{t("ui.inbox.noDescription")}</p>
                 )}
                 {panel && isPr ? (
                   <InboxPrChangesGlance

@@ -39,6 +39,7 @@ import {
   type GithubPrCheckState,
   type GithubCheckDetails,
 } from "../model/githubPrChecks";
+import { useT } from "../../../shared/i18n";
 
 const TAB =
   "relative flex h-9 items-center gap-1.5 text-[12px] leading-none select-none";
@@ -96,6 +97,7 @@ export function PrChecksTab({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const t = useT();
   const mark = overallMark(overall);
   const label = `Checks: ${overall.description}`;
   const failClass =
@@ -110,7 +112,7 @@ export function PrChecksTab({
       onClick={onSelect}
       className={`${TAB} ${selected ? "text-content" : "text-content/50 hover:text-content"}`}
     >
-      <span className="leading-none">Checks</span>
+      <span className="leading-none">{t("ui.inbox.checks")}</span>
       <mark.Icon
         className={`size-3.5 shrink-0 ${mark.className}`}
         strokeWidth={1.75}
@@ -178,6 +180,7 @@ function PrCheckRow({
   wideStatus: boolean;
   revealToken?: number;
 }) {
+  const t = useT();
   const rowRef = useRef<HTMLLIElement>(null);
   const fixRef = useRef<HTMLButtonElement>(null);
   const fixOpen = Boolean(fixAnchor && fixAnchor === fixRef.current);
@@ -358,7 +361,7 @@ function PrCheckRow({
             aria-haspopup="dialog"
             aria-expanded={fixOpen}
             aria-label={`Fix ${check.name} with AI`}
-            title="Fix with AI"
+            title={t("ui.inbox.fixWithAi")}
             className="grid size-7 shrink-0 place-items-center rounded-lg bg-content/[0.03] text-content/65 hover:bg-selection hover:text-content focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/50"
           >
             <Sparkles className="size-3.5" strokeWidth={1.75} />
@@ -386,7 +389,7 @@ function PrCheckRow({
         {linked ? (
           <button
             type="button"
-            title="View full log on GitHub"
+            title={t("ui.inbox.viewFullLogOnGithub")}
             aria-label={`View ${check.name} on GitHub`}
             onClick={() => void openUrl(url)}
             className={`${REFRESH_BUTTON} opacity-60 group-hover/check:opacity-100 focus-visible:opacity-100`}
@@ -411,20 +414,18 @@ function PrCheckRow({
                 className="size-4 shrink-0 animate-spin"
                 strokeWidth={1.75}
               />
-              Loading steps…
-            </p>
+              {t("ui.inbox.loadingSteps")}</p>
           ) : null}
           {error ? (
             <div role="alert" className="space-y-2 text-content/60">
-              <p>Could not load job details.</p>
+              <p>{t("ui.inbox.couldNotLoadJobDetails")}</p>
               <p className="break-words text-[11px]">{error}</p>
               <button
                 type="button"
                 onClick={() => setRetry((value) => value + 1)}
                 className="rounded px-2 py-1 hover:bg-content/5"
               >
-                Retry details
-              </button>
+                {t("ui.inbox.retryDetails")}</button>
             </div>
           ) : null}
           {details ? (
@@ -441,8 +442,7 @@ function PrCheckRow({
                 <details className="group/steps">
                   <summary className="flex cursor-pointer list-none items-center gap-1 text-[11px] text-content/50 hover:text-content [&::-webkit-details-marker]:hidden">
                     <ChevronRight className="size-3 transition-transform group-open/steps:rotate-90 motion-reduce:transition-none" />
-                    View run steps
-                    <span className="ml-auto pl-2 text-right text-[10px] text-content/35 @max-[420px]/checks:hidden">
+                    {t("ui.inbox.viewRunSteps")}<span className="ml-auto pl-2 text-right text-[10px] text-content/35 @max-[420px]/checks:hidden">
                       {describeCheckCounts(countChecks(details.steps))}
                     </span>
                   </summary>
@@ -474,15 +474,13 @@ function PrCheckRow({
                 </details>
               ) : (
                 <p className="text-content/50">
-                  No steps reported for this job.
-                </p>
+                  {t("ui.inbox.noStepsReportedForThisJob")}</p>
               )}
               {check.state === "fail" &&
               !details.annotations.length &&
               !details.notice ? (
                 <p className="mt-3 text-content/50">
-                  No error annotations reported. View the full log on GitHub.
-                </p>
+                  {t("ui.inbox.noErrorAnnotationsReportedViewThe")}</p>
               ) : null}
               {details.notice ? (
                 <p role="status" className="mt-3 text-content/50">
@@ -515,6 +513,7 @@ export function InboxPrChecks({
   repo?: string;
   repair?: CheckRepair;
 }) {
+  const t = useT();
   const { checks, loading, refreshing, error, stale } = view;
   const repairGroups = useCheckRepairs(cwd, repo, repair?.number, view);
   const revealScope = JSON.stringify([
@@ -561,14 +560,13 @@ export function InboxPrChecks({
         </p>
         <button
           type="button"
-          title="Retry loading checks"
-          aria-label="Retry loading checks"
+          title={t("ui.inbox.retryLoadingChecks")}
+          aria-label={t("ui.inbox.retryLoadingChecks")}
           onClick={onRefresh}
           className="inline-flex h-7 items-center gap-1.5 rounded-md border border-content/15 px-3 text-[12px] text-content/80 hover:bg-content/5"
         >
           <RefreshCw className="size-3.5" strokeWidth={1.75} />
-          Retry
-        </button>
+          {t("ui.inbox.retry")}</button>
       </div>
     );
   }
@@ -598,7 +596,7 @@ export function InboxPrChecks({
   return (
     <section
       data-inbox-pr-checks
-      aria-label="Pull request checks"
+      aria-label={t("ui.inbox.pullRequestChecks")}
       className="@container/checks flex min-w-0 flex-col gap-2"
     >
       <div className="mb-3 flex min-w-0 flex-wrap items-start justify-between gap-3 px-2">
@@ -631,15 +629,14 @@ export function InboxPrChecks({
                 })
               }
               aria-haspopup="dialog"
-              aria-label="Fix all failed"
+              aria-label={t("ui.inbox.fixAllFailed")}
               aria-expanded={Boolean(
                 selection && selection.anchor === allFixRef.current,
               )}
               className="primary-action inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[12px] font-medium focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/50"
             >
               <Sparkles className="size-3.5" strokeWidth={1.75} />
-              Fix all failed
-              <span
+              {t("ui.inbox.fixAllFailed")}<span
                 aria-hidden="true"
                 className="ml-1 border-l border-current/20 pl-2 text-[10px] opacity-55"
               >
@@ -649,8 +646,8 @@ export function InboxPrChecks({
           ) : null}
           <button
             type="button"
-            title="Refresh checks"
-            aria-label="Refresh checks"
+            title={t("ui.inbox.refreshChecks")}
+            aria-label={t("ui.inbox.refreshChecks")}
             disabled={refreshing}
             onClick={onRefresh}
             className={REFRESH_BUTTON}
@@ -686,8 +683,7 @@ export function InboxPrChecks({
       ) : null}
       {stale && error ? (
         <p role="status" className="px-2 text-[12px] text-content/55">
-          Saved results may be out of date.
-        </p>
+          {t("ui.inbox.savedResultsMayBeOutOf")}</p>
       ) : null}
       {selection && selectionValid && repair ? (
         <CheckRepairForm
@@ -706,7 +702,7 @@ export function InboxPrChecks({
         <div className="flex items-center justify-between gap-3 py-2">
           <div
             className="inline-flex gap-0.5 rounded-lg border border-stroke bg-content/[0.02] p-0.5"
-            aria-label="Filter checks"
+            aria-label={t("ui.inbox.filterChecks")}
           >
             {(
               [
@@ -738,7 +734,7 @@ export function InboxPrChecks({
         </div>
       ) : null}
       {rows.length === 0 ? (
-        <p className="text-[13px] text-content/45">No checks reported</p>
+        <p className="text-[13px] text-content/45">{t("ui.inbox.noChecksReported")}</p>
       ) : (
         <>
           {groups.map((group) =>

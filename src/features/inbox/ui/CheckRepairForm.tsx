@@ -20,6 +20,7 @@ import {
   githubActionsJobId,
   type GithubPrCheck,
 } from "../model/githubPrChecks";
+import { useT } from "../../../shared/i18n";
 
 export type CheckRepair = {
   onOpenSession?: (sessionId: string) => void | Promise<void>;
@@ -50,6 +51,7 @@ export function CheckRepairForm({
   blocked?: boolean;
   onClose: () => void;
 }) {
+  const t = useT();
   const [sessionId, setSessionId] = useState("");
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -155,7 +157,7 @@ export function CheckRepairForm({
       width={320}
       maxHeight={460}
       role="dialog"
-      aria-label="Fix checks with AI"
+      aria-label={t("ui.inbox.fixChecksWithAi")}
       onDismiss={(reason) => dismiss(reason === "escape")}
       className="flex min-h-0 flex-col overflow-hidden"
     >
@@ -166,8 +168,7 @@ export function CheckRepairForm({
         />
         <div className="min-w-0 flex-1">
           <p className="text-[13px] font-medium leading-5 text-content">
-            Fix with AI
-          </p>
+            {t("ui.inbox.fixWithAi")}</p>
           <p
             title={checks.map((check) => check.name).join(", ")}
             className="mt-0.5 truncate text-[11px] leading-4 text-content/45"
@@ -180,7 +181,7 @@ export function CheckRepairForm({
         </div>
         <button
           type="button"
-          aria-label="Close fix picker"
+          aria-label={t("ui.inbox.closeFixPicker")}
           onClick={() => dismiss()}
           className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 hover:bg-content/10 hover:text-content"
         >
@@ -194,12 +195,12 @@ export function CheckRepairForm({
           value={query}
           disabled={busy}
           role="combobox"
-          aria-label="Search project chats"
+          aria-label={t("ui.inbox.searchProjectChats")}
           aria-expanded={true}
           aria-controls={listId}
           aria-autocomplete="list"
           aria-activedescendant={`${listId}-${active}`}
-          placeholder="Search chats..."
+          placeholder={t("ui.inbox.searchChats")}
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -223,7 +224,7 @@ export function CheckRepairForm({
         ref={listRef}
         id={listId}
         role="listbox"
-        aria-label="Project chats"
+        aria-label={t("ui.inbox.projectChats")}
         className="my-1.5 min-h-0 max-h-56 overflow-y-auto overscroll-none px-1.5"
       >
         {choices.map((session, index) => {
@@ -265,8 +266,7 @@ export function CheckRepairForm({
         })}
         {choices.length === 1 && query.trim() ? (
           <p className="px-2.5 py-3 text-[12px] text-content/45">
-            No matching chats
-          </p>
+            {t("ui.inbox.noMatchingChats")}</p>
         ) : null}
       </div>
       {error ? (
@@ -279,15 +279,14 @@ export function CheckRepairForm({
       ) : null}
       {blocked && !busy ? (
         <p role="status" className="px-3.5 pb-3 text-[12px] leading-4 text-content/55">
-          Wait for the latest checks before starting a fix.
-        </p>
+          {t("ui.inbox.waitForTheLatestChecksBefore")}</p>
       ) : null}
       <div className="flex shrink-0 items-center gap-3 border-t border-stroke px-3 py-2.5">
         <div className="min-w-0 flex-1 text-[11px] leading-4">
           <p className="truncate text-content/65" title={selectedTitle}>
             {selectedTitle}
           </p>
-          <p className="text-content/35">CI details included</p>
+          <p className="text-content/35">{t("ui.inbox.ciDetailsIncluded")}</p>
         </div>
         <button
           type="button"

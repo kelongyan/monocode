@@ -23,6 +23,7 @@ import {
   Trash2,
   X,
 } from "../../../shared/ui/icons";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   sessionId: string;
@@ -68,6 +69,7 @@ export function LinkedWorkItemUpdateNotice({
   onArchiveSession,
   onDeleteSession,
 }: Props) {
+  const t = useT();
   const [cleanupAction, setCleanupAction] = useState<
     "archive" | "delete" | undefined
   >();
@@ -146,12 +148,11 @@ export function LinkedWorkItemUpdateNotice({
             <span className="size-2 shrink-0 rounded-full bg-accent" />
             <KindIcon className="size-3.5 text-content/55" strokeWidth={1.75} />
             <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
-              GitHub activity
-            </span>
+              {t("ui.inbox.githubActivity")}</span>
           </div>
           <button
             type="button"
-            title="Dismiss"
+            title={t("ui.inbox.dismiss")}
             aria-label={`Dismiss updates for ${kindLabel} ${card.number}`}
             onClick={dismiss}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 hover:bg-content/10 hover:text-content"
@@ -236,12 +237,12 @@ export function LinkedWorkItemUpdateNotice({
               <span className="font-medium text-content/75">
                 {terminalLabel}
               </span>
-              <span className="text-content/45">Clean up this session</span>
+              <span className="text-content/45">{t("ui.inbox.cleanUpThisSession")}</span>
             </div>
             <div className="mt-2 flex items-center gap-1.5">
               <button
                 type="button"
-                title="Archive session"
+                title={t("ui.inbox.archiveSession")}
                 disabled={Boolean(cleanupAction) || !onArchiveSession}
                 onClick={() => void runCleanup("archive", onArchiveSession)}
                 className="inline-flex min-w-0 items-center gap-1.5 overflow-hidden rounded-md bg-content/10 px-2 py-1 text-[11px] font-medium hover:bg-content/15 disabled:opacity-40"
@@ -252,12 +253,11 @@ export function LinkedWorkItemUpdateNotice({
                   <Archive className="size-3 shrink-0" strokeWidth={1.75} />
                 )}
                 <span className="min-w-0 truncate whitespace-nowrap">
-                  Archive session
-                </span>
+                  {t("ui.inbox.archiveSession")}</span>
               </button>
               <button
                 type="button"
-                title="Delete session"
+                title={t("ui.inbox.deleteSession")}
                 disabled={Boolean(cleanupAction) || !onDeleteSession}
                 onClick={() => void runCleanup("delete", onDeleteSession)}
                 className="inline-flex min-w-0 items-center gap-1.5 overflow-hidden rounded-md px-2 py-1 text-[11px] text-red-300/90 hover:bg-red-500/15 disabled:opacity-40"
@@ -268,8 +268,7 @@ export function LinkedWorkItemUpdateNotice({
                   <Trash2 className="size-3 shrink-0" strokeWidth={1.75} />
                 )}
                 <span className="min-w-0 truncate whitespace-nowrap">
-                  Delete…
-                </span>
+                  {t("ui.inbox.delete")}</span>
               </button>
             </div>
           </div>

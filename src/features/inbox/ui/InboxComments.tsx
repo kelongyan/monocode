@@ -22,6 +22,7 @@ import {
 } from "../model/githubTasks";
 import { MOD } from "../../../platform/tauri/platform";
 import { AgentMarkdown } from "../../sessions/ui/AgentMarkdown";
+import { useT } from "../../../shared/i18n";
 
 export type InboxReplyTarget = {
   id: string;
@@ -125,6 +126,7 @@ export function InboxComments({
   replyMode,
   onReply,
 }: Props) {
+  const t = useT();
   const commitCount = thread?.commits?.length ?? 0;
   if (
     thread &&
@@ -178,7 +180,9 @@ export function InboxComments({
           <h2 className="text-content/70">{label}</h2>
         )}
         {thread.truncated ? (
-          <span>Latest comments · more on {moreOn}</span>
+          <span>
+            {t("ui.inbox.latestCommentsMoreOn", { target: moreOn })}
+          </span>
         ) : null}
         {loading ? (
           <LoaderCircle

@@ -18,6 +18,7 @@ import {
   notificationMuteActions,
   notificationMuteDeadline,
 } from "../../notifications/ui/notificationMuteActions";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   x: number;
@@ -33,6 +34,7 @@ export function InboxNotificationMenu({
   onOpenSettings,
   onClose,
 }: Props) {
+  const t = useT();
   const notificationProjects = useNotificationProjects(projectPaths);
   const [saveError, setError] = useState<string | null>(null);
   const [customOpen, setCustomOpen] = useState(false);
@@ -84,12 +86,12 @@ export function InboxNotificationMenu({
         gap={0}
         width={280}
         role="dialog"
-        aria-label="Mute project notifications"
+        aria-label={t("ui.inbox.muteProjectNotifications")}
         onDismiss={onClose}
         className="space-y-1 overflow-y-auto p-3"
       >
         <div className="space-y-1">
-          <p className="px-1 text-xs font-medium text-content/85">Mute all projects</p>
+          <p className="px-1 text-xs font-medium text-content/85">{t("ui.inbox.muteAllProjects")}</p>
         </div>
         <NotificationMuteDatePicker
           projectIds={allIds}
@@ -103,15 +105,14 @@ export function InboxNotificationMenu({
     <ExplorerMenu
       x={x}
       y={y}
-      ariaLabel="Inbox actions"
+      ariaLabel={t("ui.inbox.inboxActions")}
       width={272}
       items={items}
       onClose={onClose}
       header={
         <div className="space-y-1 px-2 py-1.5">
           <p className="text-xs font-medium text-content">
-            Inbox
-          </p>
+            {t("ui.inbox.inbox")}</p>
           <p role="status" className="text-xs text-content/50">
             {`${allIds.length} ${allIds.length === 1 ? "project" : "projects"} · ${mutedIds.length} muted`}
           </p>

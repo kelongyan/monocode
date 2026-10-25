@@ -2,6 +2,7 @@ import { CircleDot, GitPullRequest, X } from "../../../shared/ui/icons";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import type { GithubLabel, InboxComposerCard } from "../model/githubTasks";
 import { InboxProviderMark } from "./InboxProviderMark";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   card: InboxComposerCard;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export function InboxMiniCard({ card, onDismiss }: Props) {
+  const t = useT();
   const KindIcon = card.kind === "pr" ? GitPullRequest : CircleDot;
   const kindLabel =
     card.kind === "pr"
@@ -76,7 +78,7 @@ export function InboxMiniCard({ card, onDismiss }: Props) {
         {onDismiss ? (
           <button
             type="button"
-            title="Remove"
+            title={t("ui.inbox.remove")}
             aria-label={`Remove ${kindLabel} ${card.identifier}`}
             onClick={onDismiss}
             className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"

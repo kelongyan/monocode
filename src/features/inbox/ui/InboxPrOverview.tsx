@@ -8,6 +8,7 @@ import { FileTypeIcon } from "../../files/ui/FileTypeIcon";
 import { formatInteger } from "../../../shared/lib/numbers";
 import { AgentMarkdown } from "../../sessions/ui/AgentMarkdown";
 import type { GithubPrDiff } from "../model/githubTasks";
+import { useT } from "../../../shared/i18n";
 
 const EXCERPT_LINES = 4;
 const EXCERPT_CHARS = 360;
@@ -69,11 +70,12 @@ export function InboxDescriptionSummary({
   body: string;
   cwd: string;
 }) {
+  const t = useT();
   const excerpt = useMemo(() => descriptionExcerpt(body), [body]);
   const [expanded, setExpanded] = useState(false);
 
   if (!body.trim()) {
-    return <p className="text-[13px] text-content/45">No description</p>;
+    return <p className="text-[13px] text-content/45">{t("ui.inbox.noDescription")}</p>;
   }
   if (!excerpt.truncated) {
     return <AgentMarkdown text={body} cwd={cwd} allowRemoteMedia />;
@@ -90,7 +92,7 @@ export function InboxDescriptionSummary({
           {excerpt.text}
         </p>
       ) : (
-        <p className="text-[13px] text-content/45">Description is media only</p>
+        <p className="text-[13px] text-content/45">{t("ui.inbox.descriptionIsMediaOnly")}</p>
       )}
       <button
         type="button"
@@ -126,6 +128,7 @@ export function InboxPrChangesGlance({
   error: string | null;
   onOpenFile: (path?: string) => void;
 }) {
+  const t = useT();
   const files = diff?.files ?? [];
   const maxChurn = Math.max(
     1,
@@ -136,7 +139,7 @@ export function InboxPrChangesGlance({
   return (
     <section data-inbox-pr-glance className="flex flex-col gap-2">
       <div className="flex items-center gap-2 text-[12px] text-content/50">
-        <h2 className="text-content/70">Changed files</h2>
+        <h2 className="text-content/70">{t("ui.inbox.changedFiles")}</h2>
         {diff ? (
           <>
             <span className="tabular-nums">
@@ -174,7 +177,7 @@ export function InboxPrChangesGlance({
       {error && !diff ? (
         <p className="text-[12px] text-content/45">{error}</p>
       ) : diff && files.length === 0 ? (
-        <p className="text-[12px] text-content/45">No file changes</p>
+        <p className="text-[12px] text-content/45">{t("ui.inbox.noFileChanges")}</p>
       ) : shown.length > 0 ? (
         <ul className="flex flex-col overflow-hidden rounded-lg border border-stroke">
           {shown.map((file) => {
