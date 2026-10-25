@@ -32,6 +32,7 @@ import {
   type McpServerRow,
   type McpSettingsSnapshot,
 } from "../model/mcpSettingsCache";
+import { useT } from "../../../shared/i18n";
 
 type Scope = McpConnection["scope"];
 type ServerRow = McpServerRow;
@@ -170,6 +171,7 @@ function AddServerModal({
   onClose: () => void;
   onAdded: () => Promise<void>;
 }) {
+  const t = useT();
   const [provider, setProvider] = useState<Provider>(initialProvider);
   const [scope, setScope] = useState<Scope>(SCOPES[initialProvider][0]);
   const [name, setName] = useState("");
@@ -204,15 +206,15 @@ function AddServerModal({
 
   return (
     <Modal
-      title="Add MCP server"
-      description="Paste a server configuration and choose where to add it."
+      title={t("ui.settings.addMcpServer")}
+      description={t("ui.settings.pasteAServerConfigurationAndChoose")}
       onClose={onClose}
       fitViewport
     >
       <form onSubmit={(event) => void add(event)} className="space-y-4 p-4">
         <div className="grid gap-3 sm:grid-cols-2">
           <McpPicker
-            label="Provider"
+            label={t("ui.settings.provider")}
             value={provider}
             options={PROVIDERS.map((option) => ({
               value: option,
@@ -225,7 +227,7 @@ function AddServerModal({
             }}
           />
           <McpPicker
-            label="Scope"
+            label={t("ui.settings.scope")}
             value={scope}
             options={SCOPES[provider].map((option) => ({
               value: option,
@@ -235,10 +237,9 @@ function AddServerModal({
           />
         </div>
         <label className="block text-xs text-content/65">
-          Name{" "}
+          {t("ui.settings.name")}{" "}
           <span className="text-content/40">
-            (optional for an mcpServers block)
-          </span>
+            {t("ui.settings.optionalForAnMcpserversBlock")}</span>
           <input
             value={name}
             pattern={provider === "opencode" ? undefined : "[A-Za-z0-9_-]*"}
@@ -248,8 +249,7 @@ function AddServerModal({
           />
         </label>
         <label className="block text-xs text-content/65">
-          JSON configuration
-          <textarea
+          {t("ui.settings.jsonConfiguration")}<textarea
             required
             value={config}
             onChange={(event) => setConfig(event.target.value)}
@@ -262,9 +262,7 @@ function AddServerModal({
           />
         </label>
         <p className="text-xs text-content/45">
-          Paste one entry from an mcpServers block, or a single server object
-          with a name above.
-        </p>
+          {t("ui.settings.pasteOneEntryFromAnMcpservers")}</p>
         {error ? (
           <p
             role="alert"
@@ -279,8 +277,7 @@ function AddServerModal({
             onClick={onClose}
             className="rounded-md border border-stroke px-3 py-1.5 text-xs hover:bg-content/5"
           >
-            Cancel
-          </button>
+            {t("ui.settings.cancel")}</button>
           <button
             type="submit"
             disabled={busy}
@@ -330,6 +327,7 @@ function McpConnections({
   cwd: string;
   projectPicker: ReactNode;
 }) {
+  const t = useT();
   const cached = getCachedMcpSettings(cwd);
   const [servers, setServers] = useState<ServerRow[]>(cached?.servers ?? []);
   const [filter, setFilter] = useState<Filter>("all");
@@ -448,13 +446,11 @@ function McpConnections({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h2 className="text-sm font-semibold">MCP connections</h2>
+            <h2 className="text-sm font-semibold">{t("ui.settings.mcpConnections")}</h2>
             {projectPicker}
           </div>
           <p className="mt-1 text-xs text-content/55">
-            Configured servers for the selected project and your provider
-            accounts.
-          </p>
+            {t("ui.settings.configuredServersForTheSelectedProject")}</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -464,8 +460,7 @@ function McpConnections({
             className="flex items-center gap-1.5 rounded-md border border-stroke px-3 py-1.5 text-xs hover:bg-content/5 disabled:opacity-50"
           >
             <RefreshCw className="size-3.5" />
-            Refresh
-          </button>
+            {t("ui.settings.refresh")}</button>
           <button
             type="button"
             aria-label={
@@ -486,7 +481,7 @@ function McpConnections({
           </button>
           <button
             type="button"
-            aria-label="Add MCP server"
+            aria-label={t("ui.settings.addMcpServer")}
             onClick={() => setAddOpen(true)}
             className="grid size-7 place-items-center rounded-md border border-stroke hover:bg-content/5"
           >
@@ -497,7 +492,7 @@ function McpConnections({
       <div
         role="group"
         className="inline-flex max-w-full flex-wrap gap-0.5 rounded-md border border-content/10 p-0.5 text-[12px]"
-        aria-label="Filter MCP servers by provider"
+        aria-label={t("ui.settings.filterMcpServersByProvider")}
       >
         {(["all", ...filterProviders] as const).map((provider) => (
           <button
@@ -532,15 +527,16 @@ function McpConnections({
       ) : null}
       {claudeError && (filter === "all" || filter === "claude") ? (
         <p className="text-xs text-content/55">
-          Claude connection status unavailable: {claudeError}
+          {t("ui.settings.claudeConnectionStatusUnavailableNamed", {
+            error: claudeError,
+          })}
         </p>
       ) : null}
       {loading ? (
-        <p className="text-sm text-content/55">Checking servers…</p>
+        <p className="text-sm text-content/55">{t("ui.settings.checkingServers")}</p>
       ) : visible.length === 0 ? (
         <p className="text-sm text-content/55">
-          No MCP servers configured for this provider.
-        </p>
+          {t("ui.settings.noMcpServersConfiguredForThis")}</p>
       ) : (
         <div className="overflow-hidden rounded-xl border border-content/10 bg-content/3">
           {visible.map((server) => (
@@ -577,14 +573,13 @@ function McpConnections({
                   onClick={() => void login(server)}
                   className="rounded-md border border-stroke px-2 py-1 text-xs hover:bg-content/5 disabled:opacity-50"
                 >
-                  Sign in
-                </button>
+                  {t("ui.settings.signIn")}</button>
               ) : null}
               {server.provider === "claude" ? (
                 <>
                   {!server.configPath ? (
                     <label className="text-xs text-content/55">
-                      Scope{" "}
+                      {t("ui.settings.scope")}{" "}
                       <select
                         aria-label={`Scope to remove ${server.name} from`}
                         value={removeScopes[server.name] ?? "local"}
@@ -596,9 +591,9 @@ function McpConnections({
                         }
                         className="rounded border border-stroke bg-background-base px-1 py-1 text-content"
                       >
-                        <option value="local">Local</option>
-                        <option value="project">Project</option>
-                        <option value="user">User</option>
+                        <option value="local">{t("ui.settings.local")}</option>
+                        <option value="project">{t("ui.settings.project")}</option>
+                        <option value="user">{t("ui.settings.user")}</option>
                       </select>
                     </label>
                   ) : null}
@@ -608,8 +603,7 @@ function McpConnections({
                     onClick={() => void remove(server)}
                     className="rounded-md border border-stroke px-2 py-1 text-xs hover:bg-content/5 disabled:opacity-50"
                   >
-                    Remove
-                  </button>
+                    {t("ui.settings.remove")}</button>
                 </>
               ) : (
                 <button
@@ -621,17 +615,14 @@ function McpConnections({
                   }
                   className="rounded-md border border-stroke px-2 py-1 text-xs hover:bg-content/5"
                 >
-                  Show config
-                </button>
+                  {t("ui.settings.showConfig")}</button>
               )}
             </div>
           ))}
         </div>
       )}
       <p className="text-xs text-content/45">
-        Claude Code status comes from its CLI. Other providers show configured
-        entries. Sign in opens your browser when supported.
-      </p>
+        {t("ui.settings.claudeCodeStatusComesFromIts")}</p>
       {addOpen ? (
         <AddServerModal
           cwd={cwd}

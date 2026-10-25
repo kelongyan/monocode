@@ -517,6 +517,7 @@ export function SettingsView({
   collapsedProjectRailMode,
   onCollapsedProjectRailModeChange,
 }: Props) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const [revealed, setRevealed] = useState<string | null>(anchor);
   const onCloseRef = useRef(onClose);
@@ -574,7 +575,7 @@ export function SettingsView({
           inTitleBar ? "pr-3 pl-1" : "px-3"
         }`}
       >
-        <span className="shrink-0 text-content/45">Settings</span>
+        <span className="shrink-0 text-content/45">{t("ui.settings.settings")}</span>
         <span aria-hidden className="shrink-0 text-content/25">
           /
         </span>
@@ -595,8 +596,7 @@ export function SettingsView({
             className="flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 text-[12px] text-content/50 hover:bg-content/10 hover:text-content"
           >
             <RotateCcw className="size-3.5" strokeWidth={1.75} />
-            Restore defaults
-          </button>
+            {t("ui.settings.restoreDefaults")}</button>
         ) : null}
         <SettingsSearch onReveal={onReveal} />
       </div>
@@ -815,8 +815,7 @@ function SettingsSearch({
         >
           {results.length === 0 ? (
             <p className="px-2 py-1.5 text-[12px] text-content/45">
-              No matching settings
-            </p>
+              {t("ui.settings.noMatchingSettings")}</p>
           ) : (
             results.map((result, index) => (
               <button
@@ -961,8 +960,7 @@ function GeneralPage({
           ) : null}
           {notificationsEnabled && notificationPermission === "unsupported" ? (
             <span className="text-[12px] text-content/45">
-              Not available on this platform
-            </span>
+              {t("ui.settings.notAvailableOnThisPlatform")}</span>
           ) : null}
           <Toggle
             label={t("settings.entries.notifications.label")}
@@ -1364,8 +1362,7 @@ function InboxPage({
         title={
           <span className="flex items-center gap-2">
             <InboxProviderMark provider="jira" className="size-4 shrink-0" />
-            Jira
-          </span>
+            {t("ui.settings.jira")}</span>
         }
         description={t("settings.pages.inbox.jiraDescription")}
       >
@@ -1377,8 +1374,7 @@ function InboxPage({
         title={
           <span className="flex items-center gap-2">
             <InboxProviderMark provider="linear" className="size-4 shrink-0" />
-            Linear
-          </span>
+            {t("ui.settings.linear")}</span>
         }
         description={t("settings.pages.inbox.linearDescription")}
       >
@@ -1441,8 +1437,7 @@ function GithubSettings() {
               void openUrl("https://cli.github.com/").catch(() => {});
             }}
           >
-            Installation guide
-          </SecondaryButton>
+            {t("ui.settings.installationGuide")}</SecondaryButton>
         ) : null}
         <SecondaryButton onClick={() => void checkStatus()} disabled={checking}>
           {checking ? "Checking" : "Check again"}
@@ -1531,8 +1526,7 @@ function GitlabSettings() {
               onClick={() => void onDisconnect()}
               disabled={busy}
             >
-              Disconnect
-            </SecondaryButton>
+              {t("ui.settings.disconnect")}</SecondaryButton>
           </div>
         ) : (
           <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
@@ -1556,7 +1550,7 @@ function GitlabSettings() {
                 onKeyDown={(event) => {
                   if (event.key === "Enter") void onSave();
                 }}
-                placeholder="glpat-…"
+                placeholder={t("ui.settings.glpat")}
                 aria-label={t("settings.pages.inbox.gitlabTokenLabel")}
                 autoComplete="off"
                 spellCheck={false}
@@ -1655,8 +1649,7 @@ function AzureDevOpsSettings() {
               onClick={() => void onDisconnect()}
               disabled={busy}
             >
-              Disconnect
-            </SecondaryButton>
+              {t("ui.settings.disconnect")}</SecondaryButton>
           </div>
         ) : (
           <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
@@ -1680,7 +1673,7 @@ function AzureDevOpsSettings() {
                 onKeyDown={(event) => {
                   if (event.key === "Enter") void onSave();
                 }}
-                placeholder="PAT…"
+                placeholder={t("ui.settings.pat")}
                 aria-label={t("settings.pages.inbox.azureTokenLabel")}
                 autoComplete="off"
                 spellCheck={false}
@@ -1800,8 +1793,7 @@ function LinearSettings() {
       >
         {connected ? (
           <SecondaryButton onClick={() => void onDisconnect()} disabled={busy}>
-            Disconnect
-          </SecondaryButton>
+            {t("ui.settings.disconnect")}</SecondaryButton>
         ) : (
           <div className="flex max-w-full flex-wrap items-center gap-2">
             <label className="flex h-7 w-52 max-w-full shrink-0 items-center rounded-md border border-content/10 px-2 focus-within:border-content/20">
@@ -1812,7 +1804,7 @@ function LinearSettings() {
                 onKeyDown={(event) => {
                   if (event.key === "Enter") void onSave();
                 }}
-                placeholder="lin_api_…"
+                placeholder={t("ui.settings.linApi")}
                 aria-label={t("settings.pages.inbox.linearKeyLabel")}
                 autoComplete="off"
                 spellCheck={false}
@@ -1835,10 +1827,9 @@ function LinearSettings() {
       ) : null}
       {connected && teams.length > 0 ? (
         <div className="border-b border-content/5 px-4 py-3.5 last:border-b-0">
-          <div className="text-[13px] font-medium text-content">Teams</div>
+          <div className="text-[13px] font-medium text-content">{t("ui.settings.teams")}</div>
           <p className="mt-1 text-[12px] leading-relaxed text-content/45">
-            Unchecked teams stay out of the inbox.
-          </p>
+            {t("ui.settings.uncheckedTeamsStayOutOfThe")}</p>
           <div className="-mx-2 mt-2 flex flex-col gap-0.5">
             {teams.map((team) => {
               const checked = !hiddenTeamIds.includes(team.id);
@@ -1929,8 +1920,7 @@ function UpdateRow({
       id="update"
       label={
         <span className="flex items-baseline gap-2">
-          Version
-          <span className="font-mono text-[12px] text-content/45">
+          {t("ui.settings.version")}<span className="font-mono text-[12px] text-content/45">
             {snapshot.currentVersion}
           </span>
         </span>
@@ -1942,8 +1932,7 @@ function UpdateRow({
           onClick={() => onOpenWhatsNew(snapshot.currentVersion)}
           disabled={snapshot.currentVersion === "…"}
         >
-          What's new
-        </SecondaryButton>
+          {t("ui.settings.whatsNew")}</SecondaryButton>
         <SecondaryButton onClick={() => void onClick()} disabled={busy}>
           {busy ? (
             <Loader className="size-3.5 animate-spin" aria-hidden />
@@ -2616,7 +2605,9 @@ function ChatBackgroundCard({
                 />
               )}
               <span className="pointer-events-none absolute bottom-2 left-2 text-[11px] text-content/40">
-                Empty chat preview at {emptyVisibility}%
+                {t("ui.settings.emptyChatPreviewAtPercent", {
+                  percent: emptyVisibility,
+                })}
               </span>
             </div>
           ) : (
@@ -2631,7 +2622,7 @@ function ChatBackgroundCard({
               ) : (
                 <ImagePlus className="size-5" aria-hidden />
               )}
-              <span className="text-[12px]">Choose an image</span>
+              <span className="text-[12px]">{t("ui.settings.chooseAnImage")}</span>
             </button>
           )}
         </div>
@@ -2644,15 +2635,13 @@ function ChatBackgroundCard({
               {busy ? (
                 <Loader className="size-3.5 animate-spin" aria-hidden />
               ) : null}
-              Change
-            </SecondaryButton>
+              {t("ui.settings.change")}</SecondaryButton>
             <SecondaryButton
               onClick={() => void appearance.onClearChatBackground()}
               disabled={busy}
               danger
             >
-              Remove
-            </SecondaryButton>
+              {t("ui.settings.remove")}</SecondaryButton>
           </div>
         ) : null}
         {appearance.chatBackgroundError ? (
@@ -2755,6 +2744,7 @@ function ShortcutEditor({
   onDisable: () => void | Promise<void>;
   onReset: () => void | Promise<void>;
 }) {
+  const t = useT();
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -2895,8 +2885,7 @@ function ShortcutEditor({
           className="pointer-events-none absolute top-1/2 right-full z-40 mr-3 -translate-y-1/2 text-[10px] whitespace-nowrap text-content/50"
           aria-live="polite"
         >
-          Del disables · Esc cancels
-        </p>
+          {t("ui.settings.delDisablesEscCancels")}</p>
       ) : null}
       {error ? (
         <p
@@ -3024,13 +3013,12 @@ function KeybindingsPage() {
     >
       <div className="flex items-center border-b border-stroke bg-content/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-content/40">
         <span className="min-w-0 flex-1">{t("settings.pages.keybindings.commandColumn")}</span>
-        <span className="w-40 shrink-0">Keybinding</span>
-        <span className="w-28 shrink-0">When</span>
+        <span className="w-40 shrink-0">{t("ui.settings.keybinding")}</span>
+        <span className="w-28 shrink-0">{t("ui.settings.when")}</span>
       </div>
       {rows.length === 0 ? (
         <p className="px-4 py-3 text-[12px] text-content/45">
-          No matching bindings
-        </p>
+          {t("ui.settings.noMatchingBindings")}</p>
       ) : (
         rows.map((row) => {
           const override = overrides[row.command];
@@ -3104,6 +3092,7 @@ function ProviderBinaryControl({
 }: {
   provider: ConfigurableBinaryProvider;
 }) {
+  const t = useT();
   const root = useRef<HTMLSpanElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const editInput = useRef<HTMLInputElement>(null);
@@ -3266,8 +3255,7 @@ function ProviderBinaryControl({
             </span>
             <div className="flex items-center gap-1.5">
               <span className="rounded-full bg-content/10 px-1.5 py-0.5 text-[10px] text-content/50">
-                Global path
-              </span>
+                {t("ui.settings.globalPath")}</span>
               <span className="rounded-full bg-content/10 px-1.5 py-0.5 text-[10px] text-content/50">
                 {error
                   ? "Needs attention"
@@ -3285,8 +3273,7 @@ function ProviderBinaryControl({
                 htmlFor={`${provider}-binary-path`}
                 className="text-[11px] text-content/50"
               >
-                CLI path
-              </label>
+                {t("ui.settings.cliPath")}</label>
               <input
                 id={`${provider}-binary-path`}
                 ref={editInput}
@@ -3299,9 +3286,7 @@ function ProviderBinaryControl({
                 className="mt-1.5 h-8 w-full rounded-md border border-content/10 bg-content/[0.04] px-2 font-mono text-[11px] text-content outline-none placeholder:font-sans placeholder:text-content/35 focus:border-accent/45 disabled:opacity-50"
               />
               <p className="mt-1.5 text-[10px] text-content/40">
-                Enter the absolute path to the CLI executable. Changes apply
-                after restarting MonoCode.
-              </p>
+                {t("ui.settings.enterTheAbsolutePathToThe")}</p>
               {error ? (
                 <span
                   role="alert"
@@ -3319,19 +3304,16 @@ function ProviderBinaryControl({
                     queueMicrotask(() => trigger.current?.focus());
                   }}
                 >
-                  Cancel
-                </SecondaryButton>
+                  {t("ui.settings.cancel")}</SecondaryButton>
                 {overridden ? (
                   <SecondaryButton
                     disabled={working}
                     onClick={() => void useAuto()}
                   >
-                    Use auto-detected path
-                  </SecondaryButton>
+                    {t("ui.settings.useAutoDetectedPath")}</SecondaryButton>
                 ) : null}
                 <SecondaryButton type="submit" disabled={working}>
-                  Save path
-                </SecondaryButton>
+                  {t("ui.settings.savePath")}</SecondaryButton>
               </div>
             </form>
           ) : (
@@ -3362,7 +3344,9 @@ function ProviderBinaryControl({
                   role="alert"
                   className="mt-1.5 block max-h-20 overflow-y-auto whitespace-pre-wrap break-words text-[10px] leading-4 text-red-400"
                 >
-                  Could not open the CLI location: {revealError}
+                  {t("ui.settings.couldNotOpenTheCliLocationNamed", {
+                    error: revealError,
+                  })}
                 </span>
               ) : null}
               <div className="mt-3 flex justify-end gap-2">
@@ -3396,16 +3380,14 @@ function ProviderBinaryControl({
                   }}
                 >
                   <ExternalLink className="size-3.5" strokeWidth={1.75} />
-                  Open location
-                </SecondaryButton>
+                  {t("ui.settings.openLocation")}</SecondaryButton>
                 <SecondaryButton
                   aria-label={`Edit ${title} CLI path`}
                   disabled={working}
                   onClick={() => setEditing(true)}
                 >
                   <Pencil className="size-3.5" strokeWidth={1.75} />
-                  Edit path
-                </SecondaryButton>
+                  {t("ui.settings.editPath")}</SecondaryButton>
               </div>
             </>
           )}
@@ -3811,8 +3793,7 @@ function ProviderAccountsSettings() {
                   className="flex shrink-0 items-center gap-1.5 rounded-md border border-content/10 px-2.5 py-1 text-[12px] text-content/70 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.97] disabled:cursor-default disabled:opacity-40"
                 >
                   <Plus className="size-3.5" strokeWidth={1.75} aria-hidden />
-                  Add account
-                </button>
+                  {t("ui.settings.addAccount")}</button>
               ) : null}
             </div>
             <div className="border-t border-content/5 bg-content/[0.015] pl-10">
@@ -3873,8 +3854,7 @@ function ProviderAccountsSettings() {
                     <div className="flex w-24 shrink-0 items-center justify-end gap-1">
                       {account.isDefault ? (
                         <span className="mr-1 text-[10px] font-medium uppercase tracking-wide text-content/30">
-                          Default
-                        </span>
+                          {t("ui.settings.default")}</span>
                       ) : null}
                       <button
                         type="button"
@@ -3948,6 +3928,7 @@ function ProviderAccountEditor({
   onCancel: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }) {
+  const t = useT();
   const adding = !editor.accountId;
   return (
     <form
@@ -3959,14 +3940,14 @@ function ProviderAccountEditor({
         className="flex items-center pr-1 h-8 min-w-0 flex-1 overflow-hidden rounded-md border border-content/10 bg-content/[0.04] focus-within:border-accent/45"
       >
         <label className="h-full min-w-0 flex-1">
-          <span className="sr-only">Account name</span>
+          <span className="sr-only">{t("ui.settings.accountName")}</span>
           <input
             autoFocus
             type="text"
             maxLength={48}
             value={editor.label}
             disabled={working}
-            placeholder="Work or Personal"
+            placeholder={t("ui.settings.workOrPersonal")}
             aria-label={`${adding ? "New" : "Rename"} ${HARNESS_TITLE[editor.provider]} account`}
             onChange={(event) => onLabel(event.target.value)}
             className="h-full w-full bg-transparent px-2.5 text-[12px] text-content outline-none placeholder:text-content/25 disabled:opacity-50"
@@ -3978,8 +3959,7 @@ function ProviderAccountEditor({
           onClick={onCancel}
           className="flex h-6 shrink-0 items-center rounded-[4.5px] bg-content/[0.05] px-2.5 text-[11px] text-content/45 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.97] disabled:opacity-40"
         >
-          Cancel
-        </button>
+          {t("ui.settings.cancel")}</button>
         <button
           type="submit"
           disabled={working || !editor.label.trim()}
@@ -4045,6 +4025,7 @@ function ProviderRow({
   onModelChange: (harness: HarnessId, model: string) => void;
   onPickerVisible: (visible: boolean) => void;
 }) {
+  const t = useT();
   const models = modelsFor(harness);
   const available = isHarnessAvailable(harness);
   const current =
@@ -4064,8 +4045,7 @@ function ProviderRow({
           <ProviderBinaryControl provider={harness} />
           {isDefault ? (
             <span className="rounded-full bg-content/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-content/60">
-              Default
-            </span>
+              {t("ui.settings.default")}</span>
           ) : null}
         </span>
       }
@@ -4177,8 +4157,7 @@ function ArchivePage({
       >
         {archivedProjects.length === 0 ? (
           <p className="px-4 py-3.5 text-[12px] text-content/45">
-            No archived projects.
-          </p>
+            {t("ui.settings.noArchivedProjects")}</p>
         ) : (
           archivedProjects.map((project) => (
             <div
@@ -4195,13 +4174,11 @@ function ArchivePage({
               </div>
               {onRestoreProject ? (
                 <SecondaryButton onClick={() => onRestoreProject(project.path)}>
-                  Restore
-                </SecondaryButton>
+                  {t("ui.settings.restore")}</SecondaryButton>
               ) : null}
               {onDeleteProject ? (
                 <SecondaryButton danger onClick={() => setDeleting(project)}>
-                  Delete
-                </SecondaryButton>
+                  {t("ui.settings.delete")}</SecondaryButton>
               ) : null}
             </div>
           ))
@@ -4228,12 +4205,10 @@ function ArchivePage({
         </Row>
         {!looksLikeProject(cwd) ? (
           <p className="px-4 py-3.5 text-[12px] text-content/45">
-            Open a project to see its archived conversations.
-          </p>
+            {t("ui.settings.openAProjectToSeeIts")}</p>
         ) : archived.length === 0 ? (
           <p className="px-4 py-3.5 text-[12px] text-content/45">
-            No archived conversations in this project.
-          </p>
+            {t("ui.settings.noArchivedConversationsInThisProject")}</p>
         ) : (
           archived.map((session) => (
             <div
@@ -4257,14 +4232,12 @@ function ArchivePage({
               <SecondaryButton
                 onClick={() => onArchiveSession(session.id, false)}
               >
-                Unarchive
-              </SecondaryButton>
+                {t("ui.settings.unarchive")}</SecondaryButton>
               <SecondaryButton
                 danger
                 onClick={() => onDeleteSession(session.id)}
               >
-                Delete
-              </SecondaryButton>
+                {t("ui.settings.delete")}</SecondaryButton>
             </div>
           ))
         )}
@@ -4359,8 +4332,7 @@ function MonosPage() {
           monos.map((mono) => <MonoRow key={mono.id} mono={mono} />)
         ) : (
           <p className="px-4 py-3.5 text-[12px] text-content/45">
-            No monos yet.
-          </p>
+            {t("ui.settings.noMonosYet")}</p>
         )}
       </Group>
     </>
@@ -4390,8 +4362,7 @@ function MonoRow({ mono }: { mono: Mono }) {
       }
     >
       <span className="text-[12px] leading-5 text-content/50">
-        Show Mono spawned session on the sidebar
-      </span>
+        {t("ui.settings.showMonoSpawnedSessionOnThe")}</span>
       <Toggle
         label={`Show sessions started by ${look.name} in sidebar`}
         on={mono.showStartedSessionsInSidebar === true}
@@ -4710,9 +4681,10 @@ function AccentColorPicker({
 
 /** macOS keeps the decision after the first prompt; only System Settings can flip it. Windows toasts are governed by Settings > Notifications. */
 function NotificationsBlocked() {
+  const t = useT();
   return (
     <span className="flex items-center gap-2 text-[12px] text-content/45">
-      Permission needed
+      {t("ui.settings.permissionNeeded")}{" "}
       {IS_MAC || IS_WIN ? (
         <button
           type="button"
@@ -4721,8 +4693,7 @@ function NotificationsBlocked() {
           }}
           className="rounded-md border border-content/10 px-2 py-1 text-content/70 hover:bg-content/10 hover:text-content"
         >
-          Open System Settings
-        </button>
+          {t("ui.settings.openSystemSettings")}</button>
       ) : null}
     </span>
   );

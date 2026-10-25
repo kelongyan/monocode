@@ -15,8 +15,10 @@ import {
   type JiraProject,
   type JiraStatus,
 } from "../../inbox/model/jira";
+import { useT } from "../../../shared/i18n";
 
 export function JiraSettings() {
+  const t = useT();
   const [status, setStatus] = useState<JiraStatus | null>(null);
   const [site, setSite] = useState("");
   const [email, setEmail] = useState("");
@@ -97,7 +99,7 @@ export function JiraSettings() {
   return (
     <div className="px-4 py-3.5">
       {checking ? (
-        <p className="text-[12px] text-content/45">Checking Jira connection…</p>
+        <p className="text-[12px] text-content/45">{t("ui.settings.checkingJiraConnection")}</p>
       ) : status?.connected ? (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0 text-[12px] text-content/65">
@@ -119,9 +121,7 @@ export function JiraSettings() {
           className="flex flex-col gap-3"
         >
           <p className="text-[12px] leading-relaxed text-content/45">
-            Connect your Jira Cloud site using your Atlassian email and an API
-            token without scopes. Disconnect deletes the saved credentials.
-          </p>
+            {t("ui.settings.connectYourJiraCloudSiteUsing")}</p>
           {(
             [
               {
@@ -182,8 +182,7 @@ export function JiraSettings() {
               }
               className="text-[12px] text-content/65 hover:text-content"
             >
-              Create API token
-            </button>
+              {t("ui.settings.createApiToken")}</button>
           </div>
         </form>
       )}
@@ -196,18 +195,15 @@ export function JiraSettings() {
         <div className="mt-4 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-[13px] font-medium text-content">
-              Projects
-            </span>
+              {t("ui.settings.projects")}</span>
             <SecondaryButton
               disabled={busy || checking}
               onClick={() => void loadProjects()}
             >
-              Refresh projects
-            </SecondaryButton>
+              {t("ui.settings.refreshProjects")}</SecondaryButton>
           </div>
           <p className="text-[12px] text-content/45">
-            Unchecked projects stay out of the inbox.
-          </p>
+            {t("ui.settings.uncheckedProjectsStayOutOfThe")}</p>
           {projects.map((project) => (
             <label
               key={project.id}
