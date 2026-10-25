@@ -429,7 +429,7 @@ CI 新增独立 job `i18n`（advisory）。**故意不放进三平台 `check` �
 
 ## 5.1 交付状态与遗留项
 
-阶段 0–6 全部完成，提交历史：
+阶段 0–6 与存量清理全部完成。
 
 ```
 阶段 0  i18n 地基 + 语言开关
@@ -438,20 +438,40 @@ CI 新增独立 job `i18n`（advisory）。**故意不放进三平台 `check` �
 阶段 3  转录/收件箱/变更/资源管理器/Monos/自动化
 阶段 4  应用内菜单栏 + Windows 托盘
 阶段 5  侧栏/标题栏/输入框/模型选择 + 格式化（locale 感知）
-阶段 6  AST 防回退检测（软告警）
+阶段 6  AST 防回退检测
+批次 1–9  清理全部 960 处存量文案
 ```
 
-**已翻译**：设置面板、菜单栏、托盘、侧栏、标题栏、输入框、模型选择、转录、收件箱、变更面板、资源管理器、Monos、自动化——共约 300 条词条，中英双词典。
+**最终状态**：`npm run check:i18n` **零报告**。整个渲染层的用户可见文案都经过 `t()`，中英双词典键集合一致（`tsc` 强制）。CI 已切换到 `check:i18n:strict` 硬门禁，并纳入 `check:web`。
+
+**词典规模**：约 850 条词条，分 17 个 `ui.*` 命名空间（sessions / sourceControl / shell / inbox / settings / connections / files / monos / projects / quickComposer / shared / notes / automations / skills / orchestration / workspace / notifications / providers / terminal / artifacts / search）+ 设置面板、菜单、时间短语等结构化命名空间。
 
 **遗留（按优先级）**：
 
 | 项 | 说明 |
 | --- | --- |
-| **约 960 处未翻译 UI 文案** | 分布在约 195 个 `.tsx`。`npm run check:i18n` 可列出全部位置。建议按 feature 模块分批，每批一个提交 |
 | **视觉回归** | 需真机启动中文界面，检查窄栏换行与字体度量。重点：`Sidebar` 分组标签、`TitleBar` 按钮提示、窄屏 `SettingsView` |
 | **NSIS 安装包语言** | `tauri.windows.conf.json` 的 `bundle.windows.nsis.languages`，需重新打包并在真机验证安装界面 |
 | **`menu.rs`（仅 macOS）** | 60 条菜单文案仍硬编码英文，不影响 Windows 构建。注入点已记录在阶段 4 说明中 |
-| **CI 硬门禁** | 存量清零后把 `check:i18n` 换成 `check:i18n:strict` |
+
+### 5.2 工具化流程（供后续维护参考）
+
+清理 960 处存量依赖四个脚本，均保留在 `scripts/`：
+
+| 脚本 | 用途 |
+| --- | --- |
+| `check-i18n.mjs` | AST 扫描未国际化文案；`--warn` 报告不失败，无参数则退出 1 |
+| `dump-i18n-batch.mjs` | 导出某目录的待翻译清单（JSON） |
+| `subset-i18n.mjs` | 从全量翻译表里裁出某目录实际使用的子集 |
+| `apply-i18n-batch.mjs` | 按 AST 精确替换 JSX 文本与可见属性，并插入 import 与 hook |
+| `merge-dict.mjs` | 把生成的词条并入两份词典的指定命名空间 |
+
+**四个必须记住的坑**（都实际踩过）：
+
+1. **不要替换裸单词**。`"Show"`、`"Reply"`、`"Activity"` 这类短词也会命中 `setShowAll`、`InboxReplyTarget`、`activityTimeline`，直接损坏类型声明。必须用完整行或属性作用域匹配。
+2. **相对 import 深度不能用斜杠数推算**。`src/app/App.tsx` 需要 `../shared/i18n`，而 `src/app/ui/ReleaseNotesSurface.tsx` 需要 `../../shared/i18n`。用 `path.relative` 计算。
+3. **拼接句必须改成占位符整句**。JSX 里 `文案 + {变量}` 的写法在替换后会丢空格（`Updated2 hours ago`），或让中文语序错乱。改为 `t("key", { value })`。工具会输出空格丢失警告。
+4. **英文词条必须与原文字节一致**，包括弯引号 `’`。写成直引号 `'` 会让依赖子串断言的测试失败。
 
 
 ## 6. 与删除方案的关系（重要）

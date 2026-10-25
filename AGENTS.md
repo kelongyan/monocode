@@ -10,7 +10,7 @@ MonoCode is a desktop GUI for external agent CLIs (Claude Code, Codex, Cursor, O
 - `npm run test:host` — builds `build/host/monocode-host.mjs` via `pretest:host`, then runs serially because suites launch real git/node processes.
 - Browser tests: `npx playwright install chromium webkit` once, then `npm run test:browser`. It starts its own Vite on :1435 (chromium + webkit, 1 worker) and is required for transcript, scroll, and layout changes — happy-dom unit tests cannot see real geometry. Specs share a few fixtures (`tests/browser/<name>.html` + `.tsx`, e.g. `workspace-performance.html` hosts most workspace specs) that render real components with a fake Tauri IPC (`window.__TAURI_INTERNALS__` or `tests/browser/tauriFixture.ts`); several throw on an unexpected command, so new Tauri calls made from rendered code need a fixture stub.
 - There is no ESLint or Prettier gate for the desktop app — `prettier` is a runtime dependency of the in-app editor. Don't reformat unrelated files.
-- `npm run check:i18n` lists user-visible English strings that bypass `t()` (advisory, exits 0). It uses the TypeScript AST to inspect JSX text and a whitelist of visible attributes, so class names and `data-*` never show up. `check:i18n:strict` fails instead; use it once the backlog reaches zero.
+- `npm run check:i18n` lists user-visible English strings that bypass `t()`. It uses the TypeScript AST to inspect JSX text and a whitelist of visible attributes, so class names and `data-*` never show up. The backlog is now zero, so `check:i18n:strict` runs as part of `check:web` and fails CI: new copy must go through `t()`, and `en`/`zh-CN` must define the same keys.
 
 ## Non-obvious rules
 
