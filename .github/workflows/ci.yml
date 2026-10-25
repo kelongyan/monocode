@@ -64,6 +64,24 @@ jobs:
       - run: npm run test:host
       - run: npm run host:package
 
+  i18n:
+    name: Untranslated UI copy (advisory)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # Advisory only while the ~960-string backlog from stages 0-5 is worked
+      # off. Switch to `npm run check:i18n:strict` once the count reaches zero.
+      - run: npm run check:i18n
+
   check:
     strategy:
       fail-fast: false
