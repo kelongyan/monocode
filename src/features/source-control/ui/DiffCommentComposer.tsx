@@ -5,6 +5,7 @@ import { diffCommentLocation, formatDiffComment } from "../model/diffComment";
 import { MOD } from "../../../platform/tauri/platform";
 import { requestAddToChat } from "../../sessions/model/quoteDraft";
 import type { UnifiedLine } from "../model/unifiedDiff";
+import { useT } from "../../../shared/i18n";
 
 export type DiffCommentComposerTarget = {
   line: UnifiedLine;
@@ -20,6 +21,7 @@ export function DiffCommentComposer({
   target: DiffCommentComposerTarget;
   onDismiss: () => void;
 }) {
+  const t = useT();
   const [comment, setComment] = useState("");
   const location = diffCommentLocation({ path, line: target.line });
   const addToChat = () => {
@@ -56,8 +58,8 @@ export function DiffCommentComposer({
           </span>
           <button
             type="button"
-            title="Cancel comment"
-            aria-label="Cancel comment"
+            title={t("ui.sourceControl.cancelComment")}
+            aria-label={t("ui.sourceControl.cancelComment")}
             onClick={onDismiss}
             className="grid size-5 shrink-0 place-items-center rounded text-content/45 hover:bg-content/10 hover:text-content"
           >
@@ -79,19 +81,18 @@ export function DiffCommentComposer({
               addToChat();
             }
           }}
-          placeholder="Leave a comment…"
+          placeholder={t("ui.sourceControl.leaveAComment")}
           className="max-h-40 min-h-18 w-full resize-y rounded-lg border border-content/10 bg-background-base/70 px-2.5 py-2 text-[13px] leading-5 text-content outline-none placeholder:text-content/35 focus:border-content/20"
         />
         <div className="mt-2 flex items-center justify-between gap-3">
-          <span className="text-[10px] text-content/35">{MOD}↩ to add</span>
+          <span className="text-[10px] text-content/35">{MOD}{t("ui.sourceControl.toAdd")}</span>
           <button
             type="submit"
             disabled={!comment.trim()}
             className="inline-flex h-7 items-center gap-1.5 rounded-md bg-content px-2.5 text-[12px] font-medium text-background-base hover:opacity-80 disabled:cursor-default disabled:opacity-40"
           >
             <MessageSquarePlus className="size-3.5" strokeWidth={1.75} />
-            Add to chat
-          </button>
+            {t("ui.sourceControl.addToChat")}</button>
         </div>
       </form>
     </Popover>

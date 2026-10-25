@@ -26,8 +26,19 @@ for (const file of files) {
     .join(eol);
 
   const marker = "  ui: {";
-  if (text.includes(marker)) {
-    // Append into the existing ui block, before its closing brace.
+  const nsMarker = `    ${JSON.stringify(namespace)}: {`;
+  if (text.includes(nsMarker)) {
+    // Namespace already present: add the new entries before its closing brace.
+    const nsStart = text.indexOf(nsMarker);
+    const nsClose = text.indexOf("\n    },", nsStart);
+    if (nsClose < 0) throw new Error(`unterminated ${namespace} block in ${file.path}`);
+    const insertAt = text.lastIndexOf("\n", nsClose);
+    writeFileSync(
+      file.path,
+      text.slice(0, insertAt) + `${eol}${body}` + text.slice(insertAt),
+    );
+  } else if (text.includes(marker)) {
+    // Append a new namespace into the existing ui block.
     const start = text.indexOf(marker);
     const close = text.indexOf("\n  },", start);
     if (close < 0) throw new Error(`unterminated ui block in ${file.path}`);

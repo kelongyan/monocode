@@ -16,6 +16,7 @@ import {
   Search,
   Settings,
 } from "../../../shared/ui/icons";
+import { useT } from "../../../shared/i18n";
 
 export function WorktreePicker({
   cwd,
@@ -38,6 +39,7 @@ export function WorktreePicker({
   onManage?: () => void;
   onClose?: () => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [branchPicker, setBranchPicker] = useState(false);
   const [creating, setCreating] = useState(false);
@@ -136,7 +138,7 @@ export function WorktreePicker({
             ? "Select a branch or worktree to continue this session"
             : `Working copy: ${prettyCwd(executionCwd)}`
         }
-        aria-label="Choose working copy"
+        aria-label={t("ui.sourceControl.chooseWorkingCopy")}
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => {
@@ -171,7 +173,7 @@ export function WorktreePicker({
             if (!busy) dismiss();
           }}
           role="dialog"
-          aria-label="Working copies"
+          aria-label={t("ui.sourceControl.workingCopies")}
           data-branch-picker
           className="flex flex-col overflow-hidden"
         >
@@ -179,8 +181,8 @@ export function WorktreePicker({
             <Search className="size-3.5 text-content/40" />
             <input
               ref={search}
-              aria-label="Search working copies"
-              placeholder="Search working copies…"
+              aria-label={t("ui.sourceControl.searchWorkingCopies")}
+              placeholder={t("ui.sourceControl.searchWorkingCopies2")}
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -208,25 +210,21 @@ export function WorktreePicker({
           </label>
           {worktreeRemoved && (
             <p className="shrink-0 px-3 pt-2 pb-1 text-[11px] text-content/50">
-              This session’s worktree was deleted. Select a working copy to
-              continue.
-            </p>
+              {t("ui.sourceControl.thisSessionsWorktreeWasDeletedSelect")}</p>
           )}
           {opensNewSession && !worktreeRemoved && (
             <p className="shrink-0 px-3 pt-2 pb-1 text-[11px] text-content/50">
-              Another working copy opens a new session.
-            </p>
+              {t("ui.sourceControl.anotherWorkingCopyOpensANew")}</p>
           )}
           <div
             className="min-h-0 overflow-y-auto p-1"
             role="listbox"
-            aria-label="Working copies"
+            aria-label={t("ui.sourceControl.workingCopies")}
           >
             {!data && !loadError && (
               <div className="flex items-center gap-2 p-2 text-[12px] text-content/50">
                 <Loader className="size-3.5 animate-spin" />
-                Loading working copies…
-              </div>
+                {t("ui.sourceControl.loadingWorkingCopies")}</div>
             )}
             {rows.map((tree, index) => (
               <button
@@ -266,8 +264,7 @@ export function WorktreePicker({
             ))}
             {data && !rows.length && (
               <p className="p-2 text-[12px] text-content/45">
-                No matching working copies
-              </p>
+                {t("ui.sourceControl.noMatchingWorkingCopies")}</p>
             )}
             {(error || loadError) && (
               <p role="alert" className="px-2 py-2 text-[11px] text-red-400">
@@ -286,8 +283,7 @@ export function WorktreePicker({
               className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left hover:bg-content/8"
             >
               <Plus className="size-3.5" />
-              Create worktree…
-            </button>
+              {t("ui.sourceControl.createWorktree2")}</button>
             <button
               type="button"
               disabled={busy || worktreeRemoved}
@@ -298,8 +294,7 @@ export function WorktreePicker({
               className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-content/55 hover:bg-content/8 disabled:opacity-40"
             >
               <GitBranch className="size-3.5" />
-              Switch branch in this working copy…
-            </button>
+              {t("ui.sourceControl.switchBranchInThisWorkingCopy")}</button>
             {onManage && (
               <button
                 type="button"
@@ -311,8 +306,7 @@ export function WorktreePicker({
                 className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-content/55 hover:bg-content/8"
               >
                 <Settings className="size-3.5" />
-                Manage worktrees…
-              </button>
+                {t("ui.sourceControl.manageWorktrees")}</button>
             )}
           </div>
         </Popover>

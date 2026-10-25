@@ -22,6 +22,7 @@ import { CreateBranchDialog } from "./CreateBranchDialog";
 import { GitPickerTrigger } from "./GitPickerTrigger";
 import { Popover } from "../../../shared/ui/Popover";
 import { SwitchBranchDialog } from "./SwitchBranchDialog";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   cwd: string;
@@ -61,6 +62,7 @@ export function BranchPicker({
   onOpenChange,
   popoverSide = "top",
 }: Props) {
+  const t = useT();
   const [open, setOpen] = useState(initialOpen);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -368,7 +370,7 @@ export function BranchPicker({
           maxHeight={MENU_MAX_HEIGHT}
           onDismiss={(reason) => dismiss(reason === "escape")}
           role="dialog"
-          aria-label="Branch picker"
+          aria-label={t("ui.sourceControl.branchPicker")}
           data-branch-picker
           className="flex flex-col overflow-hidden"
         >
@@ -378,8 +380,8 @@ export function BranchPicker({
               ref={search}
               type="text"
               value={query}
-              placeholder="Search or create a branch..."
-              aria-label="Search or create a branch"
+              placeholder={t("ui.sourceControl.searchOrCreateABranch")}
+              aria-label={t("ui.sourceControl.searchOrCreateABranch2")}
               spellCheck={false}
               autoComplete="off"
               autoCorrect="off"
@@ -446,6 +448,7 @@ function BranchList({
   onActive: (index: number) => void;
   onPick: (row: BranchRow) => void;
 }) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const activeRef = useRef<HTMLButtonElement>(null);
 
@@ -465,7 +468,7 @@ function BranchList({
     <div
       ref={lockOverscroll}
       role="listbox"
-      aria-label="Branches"
+      aria-label={t("ui.sourceControl.branches")}
       className="min-h-0 flex-1 overflow-y-auto overscroll-none px-1.5 py-1.5"
     >
       {rows.map((row, index) => {

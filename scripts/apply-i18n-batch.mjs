@@ -156,6 +156,8 @@ function ensureHooks(source, path) {
 
 let changedFiles = 0;
 let changedStrings = 0;
+/** Adjacent substitutions that lost the space between text and an expression. */
+const adjacencyWarnings = [];
 for (const entry of readdirSync(dir)) {
   if (!entry.endsWith(".tsx") || entry.includes(".test.")) continue;
   const path = join(dir, entry).split("\\").join("/");
@@ -168,6 +170,17 @@ for (const entry of readdirSync(dir)) {
   for (const edit of [...edits].sort((a, b) => b.start - a.start)) {
     next = next.slice(0, edit.start) + edit.text + next.slice(edit.end);
   }
+
+  // A JSX text node that used to end with a space and now sits next to an
+  // expression loses that space once it becomes `{t(…)}`. Warn so the caller
+  // can fold the neighbour into one placeholder message.
+  for (const edit of edits) {
+    const before = source.slice(edit.start, edit.end);
+    if (!/\s$/.test(before)) continue;
+    const after = source.slice(edit.end, edit.end + 40);
+    if (/^\s*\{/.test(after)) adjacencyWarnings.push(`${entry}: ${JSON.stringify(before.trim())}`);
+  }
+
   next = ensureHooks(next, path);
 
   writeFileSync(path, next);
@@ -177,6 +190,11 @@ for (const entry of readdirSync(dir)) {
 }
 
 console.log(`\n${changedStrings} strings in ${changedFiles} files`);
+
+if (adjacencyWarnings.length) {
+  console.log("\nReview these: text next to an expression lost its trailing space.");
+  for (const warning of adjacencyWarnings) console.log(`  ${warning}`);
+}
 
 // Emit the dictionary fragment for the caller to paste, and verify coverage.
 const missing = Object.keys(translations).filter(

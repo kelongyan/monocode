@@ -6,6 +6,7 @@ import { prettyCwd } from "../../../shared/lib/paths";
 import { Modal } from "../../../shared/ui/Modal";
 import { SearchableSelect } from "../../../shared/ui/SearchableSelect";
 import { Loader } from "../../../shared/ui/icons";
+import { useT } from "../../../shared/i18n";
 
 export function CreateWorktreeDialog({
   cwd,
@@ -20,6 +21,7 @@ export function CreateWorktreeDialog({
   onCreated: (tree: Worktree) => void | Promise<void>;
   onCancel: () => void;
 }) {
+  const t = useT();
   const { branches } = useProjectBranchesState(baseCwd, true);
   const [name, setName] = useState("");
   const [base, setBase] = useState("HEAD");
@@ -73,7 +75,7 @@ export function CreateWorktreeDialog({
     "h-9 rounded-md border border-content/10 bg-background-base px-2.5 text-[13px] outline-none focus:border-content/25 disabled:opacity-50";
   return (
     <Modal
-      title="Create worktree"
+      title={t("ui.sourceControl.createWorktree")}
       size="sm"
       onClose={() => {
         if (!busy) onCancel();
@@ -84,8 +86,7 @@ export function CreateWorktreeDialog({
         onSubmit={(e) => void submit(e)}
       >
         <p className="text-[12px] text-content/55">
-          An independent working copy of {prettyCwd(cwd)}. Existing uncommitted
-          changes stay in their current working copy.
+          {t("ui.sourceControl.worktreeIntro", { path: prettyCwd(cwd) })}
         </p>
         <div className="flex flex-col gap-1.5 text-[12px] text-content/70">
           <span>Branch</span>
@@ -164,16 +165,13 @@ export function CreateWorktreeDialog({
             onClick={onCancel}
             className="rounded-md px-3 py-1.5 text-[12px] hover:bg-content/8 active:scale-[0.97]"
           >
-            Cancel
-          </button>
+            {t("ui.sourceControl.cancel")}</button>
           <button
             type="submit"
             disabled={busy || !name.trim()}
             className="inline-flex items-center gap-1.5 rounded-md bg-content px-3 py-1.5 text-[12px] font-medium text-background-base disabled:opacity-40 active:scale-[0.97]"
           >
-            {busy && <Loader className="size-3.5 animate-spin" />}Create
-            worktree
-          </button>
+            {busy && <Loader className="size-3.5 animate-spin" />}{t("ui.sourceControl.createWorktree")}</button>
         </div>
       </form>
     </Modal>

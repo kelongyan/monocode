@@ -30,6 +30,7 @@ import {
   type GraphRef,
   type HistoryItemViewModel,
 } from "../model/gitGraph";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   cwd: string;
@@ -60,6 +61,7 @@ export function GitHistoryGraph({
   onToggleExpanded,
   onOpenCommit,
 }: Props) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const standalone = !onToggleExpanded;
   const { commits, loading, error, refresh } = useGitHistory(
@@ -108,8 +110,7 @@ export function GitHistoryGraph({
           }`}
         >
           <span className="text-[10px] font-semibold tracking-[0.04em] text-content/55 uppercase">
-            Graph
-          </span>
+            {t("ui.sourceControl.graph")}</span>
           {expanded ? (
             <ChevronDown
               className="ml-auto size-3.5 shrink-0 text-content/50"
@@ -141,8 +142,7 @@ export function GitHistoryGraph({
         >
           {!cwd || cwd === "~" ? (
             <p className="px-3 py-2 text-[12px] text-content/45">
-              No project folder
-            </p>
+              {t("ui.sourceControl.noProjectFolder")}</p>
           ) : error && commits.length === 0 ? (
             standalone ? null : (
               <p className="px-3 py-2 text-[12px] text-content/45">{error}</p>
@@ -153,8 +153,7 @@ export function GitHistoryGraph({
             </p>
           ) : items.length === 0 ? (
             <p className="px-3 py-4 text-center text-[12px] text-content/45">
-              No matching commits
-            </p>
+              {t("ui.sourceControl.noMatchingCommits")}</p>
           ) : (
             <ul className="min-w-0 max-w-full">
               {items.map(({ commit, row }) => (
@@ -193,6 +192,7 @@ function HistoryToolbar({
   query: string;
   onQueryChange: (query: string) => void;
 }) {
+  const t = useT();
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInput = useRef<HTMLInputElement>(null);
   const searchButton = useRef<HTMLButtonElement>(null);
@@ -212,15 +212,15 @@ function HistoryToolbar({
     "flex size-6 shrink-0 items-center justify-center rounded-md text-content/50 hover:bg-content/5 hover:text-content disabled:pointer-events-none disabled:opacity-40";
   return (
     <div className="shrink-0">
-      <PaneHeader compact role="toolbar" aria-label="History">
+      <PaneHeader compact role="toolbar" aria-label={t("ui.sourceControl.history")}>
         {searchOpen ? (
           <>
             <Search aria-hidden className="size-3.5 shrink-0 text-content/45" />
             <input
               ref={searchInput}
               type="text"
-              aria-label="Search commits"
-              placeholder="Search history…"
+              aria-label={t("ui.sourceControl.searchCommits")}
+              placeholder={t("ui.sourceControl.searchHistory")}
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
               onKeyDown={(event) => {
@@ -234,8 +234,8 @@ function HistoryToolbar({
             />
             <button
               type="button"
-              aria-label="Close history search"
-              title="Close search"
+              aria-label={t("ui.sourceControl.closeHistorySearch")}
+              title={t("ui.sourceControl.closeSearch")}
               className={actionClass}
               onClick={closeSearch}
             >
@@ -257,8 +257,8 @@ function HistoryToolbar({
               <button
                 ref={searchButton}
                 type="button"
-                aria-label="Search history"
-                title="Search history"
+                aria-label={t("ui.sourceControl.searchHistory2")}
+                title={t("ui.sourceControl.searchHistory2")}
                 className={actionClass}
                 onClick={() => setSearchOpen(true)}
               >
@@ -266,8 +266,8 @@ function HistoryToolbar({
               </button>
               <button
                 type="button"
-                aria-label="Refresh history"
-                title="Refresh history"
+                aria-label={t("ui.sourceControl.refreshHistory")}
+                title={t("ui.sourceControl.refreshHistory")}
                 disabled={!cwd || cwd === "~" || loading}
                 className={actionClass}
                 onClick={() => void onRefresh()}
@@ -551,6 +551,7 @@ export function GraphResizeSash({
   onHeightCommit: (height: number) => void;
   maxHeight: () => number;
 }) {
+  const t = useT();
   const drag = useRef<{ start: number; size: number } | null>(null);
   const [dragging, setDragging] = useState(false);
   const paintedRef = useRef(height);
@@ -617,7 +618,7 @@ export function GraphResizeSash({
     <div
       role="separator"
       aria-orientation="horizontal"
-      aria-label="Resize graph"
+      aria-label={t("ui.sourceControl.resizeGraph")}
       aria-valuenow={height}
       className={`z-10 h-1.5 shrink-0 cursor-row-resize touch-none ${
         dragging ? "bg-content/15" : "hover:bg-content/10"

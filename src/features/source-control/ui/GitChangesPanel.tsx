@@ -190,7 +190,7 @@ export function GitChangesPanel({
 
   if (!cwd || cwd === "~") {
     return (
-      <p className="px-3 py-2 text-[12px] text-content/50">No project folder</p>
+      <p className="px-3 py-2 text-[12px] text-content/50">{t("ui.sourceControl.noProjectFolder")}</p>
     );
   }
 
@@ -200,7 +200,7 @@ export function GitChangesPanel({
       className="flex h-full min-h-0 flex-1 flex-col overflow-hidden"
     >
       <PaneHeader compact={compactHeader} role="toolbar" aria-label={t("changes.title")}>
-        <span className="shrink-0">Changes</span>
+        <span className="shrink-0">{t("ui.sourceControl.changes")}</span>
         {status ? (
           <span
             role="status"
@@ -814,8 +814,7 @@ function ChangedFiles({
                 onClick={() => void commit(true, true)}
                 className="flex h-7 w-full items-center rounded-lg px-2 text-left text-[12px] text-content hover:bg-content/10 disabled:opacity-40"
               >
-                Commit, Push & Create PR
-              </button>
+                {t("ui.sourceControl.commitPushCreatePr")}</button>
               <div className="mx-1 my-1 border-t border-content/10" />
               <button
                 type="button"
@@ -824,8 +823,7 @@ function ChangedFiles({
                 onClick={() => void toggleAmend()}
                 className="flex h-7 w-full items-center justify-between gap-2 rounded-lg px-2 text-left text-[12px] text-content hover:bg-content/10"
               >
-                Amend Last Commit
-                <span className="grid size-3.5 shrink-0 place-items-center">
+                {t("ui.sourceControl.amendLastCommit")}<span className="grid size-3.5 shrink-0 place-items-center">
                   {amend ? (
                     <Check className="size-3.5" strokeWidth={2} />
                   ) : null}
@@ -1045,6 +1043,7 @@ export function GitSyncActions({
   onCreatePr: () => void;
   onViewPr: () => void;
 }) {
+  const t = useT();
   if (!hasRemote) return null;
   const ahead = index.ahead;
   const behind = index.behind;
@@ -1093,7 +1092,7 @@ export function GitSyncActions({
           ) : (
             <CloudUpload className="size-3.5 shrink-0" strokeWidth={1.75} />
           )}
-          <span className="min-w-0 truncate">Publish Branch</span>
+          <span className="min-w-0 truncate">{t("ui.sourceControl.publishBranch")}</span>
         </button>
       ) : canSync ? (
         <button
@@ -1107,7 +1106,7 @@ export function GitSyncActions({
             className={`size-3.5 shrink-0 ${syncing ? "animate-spin" : ""}`}
             strokeWidth={1.75}
           />
-          <span className="min-w-0 truncate">Sync Changes</span>
+          <span className="min-w-0 truncate">{t("ui.sourceControl.syncChanges")}</span>
           {behind > 0 ? (
             <span className="shrink-0 tabular-nums text-content/55">
               ↓{behind}
@@ -1136,8 +1135,7 @@ export function GitSyncActions({
           ) : (
             <GitPullRequest className="size-3.5 shrink-0" strokeWidth={1.75} />
           )}
-          Create PR
-        </button>
+          {t("ui.sourceControl.createPr")}</button>
       ) : null}
       {showViewPr ? (
         <button

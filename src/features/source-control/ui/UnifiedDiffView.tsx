@@ -49,6 +49,7 @@ import { useDiffViewport } from "../hooks/useDiffViewport";
 import "./unifiedDiff.css";
 
 export type { UnifiedDiffFileModel } from "../model/unifiedDiffDocument";
+import { useT } from "../../../shared/i18n";
 type InitialExpansion = "all" | "first" | "none";
 type Props = {
   files: UnifiedDiffFileModel[];
@@ -92,6 +93,7 @@ export function UnifiedDiffView({
   onDiscardFile,
   onStageHunk,
 }: Props) {
+  const t = useT();
   const previousFiles = useRef<UnifiedDiffFileModel[]>([]);
   const stableFiles = useMemo(() => {
     const stable = reuseUnchangedById(previousFiles.current, files);
@@ -391,7 +393,7 @@ export function UnifiedDiffView({
   };
   if (stableFiles.length === 0)
     return (
-      <p className="px-4 py-6 text-[13px] text-content/45">No file changes</p>
+      <p className="px-4 py-6 text-[13px] text-content/45">{t("ui.sourceControl.noFileChanges")}</p>
     );
 
   return (
@@ -431,14 +433,14 @@ export function UnifiedDiffView({
         }
       }}
     >
-      <PaneHeader compact role="toolbar" aria-label="Diff tools">
+      <PaneHeader compact role="toolbar" aria-label={t("ui.sourceControl.diffTools")}>
         <span className="shrink-0 text-content/65">
           {count === 1 ? "1 file" : `${count} files`}
         </span>
         <DiffCounts additions={additions} deletions={deletions} />
         <div className="ml-auto flex shrink-0 items-center gap-0.5">
           <IconButton
-            title="Previous hunk"
+            title={t("ui.sourceControl.previousHunk")}
             hint="Previous hunk (Alt+↑)"
             disabled={document.hunks.length === 0 || currentHunk <= 0}
             onClick={() => navigate(-1)}
@@ -447,14 +449,14 @@ export function UnifiedDiffView({
           </IconButton>
           <span
             className="min-w-9 select-none text-center text-[10px] font-normal tabular-nums text-content/40"
-            aria-label="Hunk position"
+            aria-label={t("ui.sourceControl.hunkPosition")}
           >
             {document.hunks.length
               ? `${currentHunk + 1}/${document.hunks.length}`
               : "0/0"}
           </span>
           <IconButton
-            title="Next hunk"
+            title={t("ui.sourceControl.nextHunk")}
             hint="Next hunk (Alt+↓)"
             disabled={
               document.hunks.length === 0 ||
@@ -466,13 +468,13 @@ export function UnifiedDiffView({
           </IconButton>
           <span className="mx-1 h-3 w-px bg-stroke" />
           <IconButton
-            title="Expand all files"
+            title={t("ui.sourceControl.expandAllFiles")}
             onClick={() => setOpen(new Set(stableFiles.map((file) => file.id)))}
           >
             <UnfoldVertical className="size-3.5" />
           </IconButton>
           <IconButton
-            title="Collapse all files"
+            title={t("ui.sourceControl.collapseAllFiles")}
             disabled={open.size === 0}
             onClick={() => setOpen(EMPTY_OPEN)}
           >
@@ -482,14 +484,13 @@ export function UnifiedDiffView({
       </PaneHeader>
       {truncated ? (
         <p className="border-b border-stroke px-3 py-2 text-[12px] text-content/45">
-          Diff is too large to display in full. Some patches are unavailable.
-        </p>
+          {t("ui.sourceControl.diffIsTooLargeToDisplay")}</p>
       ) : null}
       <div className={fill ? "relative min-h-0 flex-1" : "relative"}>
         <div
           ref={bindScroller}
           role="region"
-          aria-label="Unified diff"
+          aria-label={t("ui.sourceControl.unifiedDiff")}
           tabIndex={0}
           className={`unified-diff diff-review-scroll outline-none ${fill ? "h-full min-h-0 overflow-y-auto overflow-x-hidden overscroll-none" : "overflow-x-clip"}`}
         >
@@ -588,7 +589,7 @@ export function UnifiedDiffView({
         ref={bindHorizontalBar}
         className="diff-review-horizontal-scroll font-mono"
         role="region"
-        aria-label="Scroll diff horizontally"
+        aria-label={t("ui.sourceControl.scrollDiffHorizontally")}
         tabIndex={0}
         onScroll={(event) => syncHorizontal(event.currentTarget)}
       >
@@ -638,6 +639,7 @@ const ReviewRowView = memo(function ReviewRowView({
   stickyHeader: boolean;
   tokens?: SyntaxToken[];
 }) {
+  const t = useT();
   const style = { height: row.height };
   if (row.type === "gap")
     return <div className="diff-review-card-gap" style={style} />;
@@ -690,8 +692,8 @@ const ReviewRowView = memo(function ReviewRowView({
       >
         {lane === "gutter" ? (
           <span className="diff-review-hunk-columns select-none" aria-hidden>
-            <span>Old</span>
-            <span>New</span>
+            <span>{t("ui.sourceControl.old")}</span>
+            <span>{t("ui.sourceControl.new")}</span>
           </span>
         ) : (
           <span className="min-w-0 truncate px-3 font-mono text-[11px] text-content/50">
@@ -720,6 +722,7 @@ const FileHeader = memo(function FileHeader({
   discardable: boolean;
   sticky?: boolean;
 }) {
+  const t = useT();
   const name = basename(file.path);
   const directory = file.label.endsWith(name)
     ? file.label.slice(0, -name.length).replace(/\/$/, "")
@@ -753,7 +756,7 @@ const FileHeader = memo(function FileHeader({
       <DiffCounts additions={file.additions} deletions={file.deletions} />
       {file.canDiscard && discardable ? (
         <IconButton
-          title="Discard file"
+          title={t("ui.sourceControl.discardFile")}
           disabled={busy}
           onClick={() => actions.discard(file.id)}
         >
@@ -762,7 +765,7 @@ const FileHeader = memo(function FileHeader({
       ) : null}
       {file.canStage && stageable ? (
         <IconButton
-          title="Stage file"
+          title={t("ui.sourceControl.stageFile")}
           disabled={busy}
           onClick={() => actions.stage(file.id)}
         >
@@ -790,6 +793,7 @@ const CodeLine = memo(function CodeLine({
   busy: boolean;
   cards: boolean;
 }) {
+  const t = useT();
   const { line } = row;
   const added = line.kind === "add";
   const removed = line.kind === "del";
@@ -840,8 +844,8 @@ const CodeLine = memo(function CodeLine({
             {row.stagePos != null ? (
               <button
                 type="button"
-                aria-label="Stage hunk"
-                title="Stage hunk"
+                aria-label={t("ui.sourceControl.stageHunk")}
+                title={t("ui.sourceControl.stageHunk")}
                 disabled={busy}
                 onClick={() => actions.stageHunk(file.id, row.stagePos!)}
                 className="diff-review-line-action"

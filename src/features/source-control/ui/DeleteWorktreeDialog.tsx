@@ -16,6 +16,7 @@ import {
   Loader,
   MessageSquare,
 } from "../../../shared/ui/icons";
+import { useT } from "../../../shared/i18n";
 
 const TONE = {
   danger: "text-red-400",
@@ -60,6 +61,7 @@ export function DeleteWorktreeDialog({
   onClose: () => void;
   onDeleted: () => void;
 }) {
+  const t = useT();
   const [busy, setBusy] = useState(false);
   const [deleteSessions, setDeleteSessions] = useState(false);
   const [error, setError] = useState<string>();
@@ -126,22 +128,19 @@ export function DeleteWorktreeDialog({
               </Consequence>
             )}
             <Consequence icon={GitBranch}>
-              {tree.branch ? (
-                <>
-                  The{" "}
-                  <span className="font-medium text-content">
-                    {tree.branch}
-                  </span>{" "}
-                  branch and its commits are kept.
-                </>
-              ) : (
-                "The branch is kept."
-              )}
+              {tree.branch
+                ? t("ui.sourceControl.branchKeptNamed", { branch: tree.branch })
+                : t("ui.sourceControl.branchKept")}
             </Consequence>
             {!!tree.unpushed && (
               <Consequence icon={CloudUpload}>
-                {tree.unpushed} commit{tree.unpushed === 1 ? " is" : "s are"}{" "}
-                not on a remote. They stay on the branch.
+                {tree.unpushed === 1
+                  ? t("ui.sourceControl.unpushedCommitsOne", {
+                      count: tree.unpushed,
+                    })
+                  : t("ui.sourceControl.unpushedCommitsMany", {
+                      count: tree.unpushed,
+                    })}
               </Consequence>
             )}
           </ul>
@@ -181,8 +180,7 @@ export function DeleteWorktreeDialog({
             onClick={onClose}
             className="rounded-md px-3 py-1.5 hover:bg-content/8 active:scale-[0.97]"
           >
-            Cancel
-          </button>
+            {t("ui.sourceControl.cancel")}</button>
           <button
             type="submit"
             disabled={busy}

@@ -24,6 +24,7 @@ import { stageChunkText } from "../../files/editor/editorGit";
 import { LINE_DIFF_CONFIG } from "../model/lineDiff";
 import { UnifiedDiffView, type UnifiedDiffFileModel } from "./UnifiedDiffView";
 import { pruneMap } from "../model/stableDiff";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   cwd: string;
@@ -49,6 +50,7 @@ export function WorkingTreeDiff({
   focusKind,
   visible = true,
 }: Props) {
+  const t = useT();
   const [files, setFiles] = useState<GitChangedFile[] | null>(null);
   const [diffs, setDiffs] = useState<Map<string, LoadedDiff>>(new Map());
   const [error, setError] = useState<string | null>(null);
@@ -310,15 +312,14 @@ export function WorkingTreeDiff({
   if (!cwd || cwd === "~") {
     return (
       <p className="grid h-full place-items-center text-[13px] text-content/45">
-        No project folder
-      </p>
+        {t("ui.sourceControl.noProjectFolder")}</p>
     );
   }
   if (error) {
     return (
       <div className="grid h-full place-items-center p-6 text-center">
         <AlertCircle className="mx-auto mb-3 size-5 text-red-400" />
-        <p className="text-[13px] text-content">Couldn’t load changes</p>
+        <p className="text-[13px] text-content">{t("ui.sourceControl.couldntLoadChanges")}</p>
         <p className="mt-1 text-[12px] text-content/50">{error}</p>
       </div>
     );

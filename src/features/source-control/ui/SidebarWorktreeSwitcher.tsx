@@ -25,6 +25,7 @@ import {
   Settings,
   SlidersHorizontal,
 } from "../../../shared/ui/icons";
+import { useT } from "../../../shared/i18n";
 
 /** Clicks inside the project menu or its flyouts are not outside. */
 const PROJECT_MENU = "[data-project-menu]";
@@ -79,6 +80,7 @@ export function SidebarWorktreeSwitcher({
   /** Open tabs per worktree path key; hidden worktrees can still hold some. */
   tabStats?: ReadonlyMap<string, { tabs: number; busy: boolean }>;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -350,7 +352,7 @@ export function SidebarWorktreeSwitcher({
                 className="size-4 shrink-0 text-content/55"
                 strokeWidth={1.75}
               />
-              <span className="min-w-0 flex-1 truncate">Switch worktree</span>
+              <span className="min-w-0 flex-1 truncate">{t("ui.sourceControl.switchWorktree")}</span>
               <span className="min-w-0 max-w-24 shrink truncate text-[11px] text-content/40">
                 {focus
                   ? (focused?.branch ?? focus.branch ?? "detached")
@@ -401,7 +403,7 @@ export function SidebarWorktreeSwitcher({
                 className="size-4 shrink-0 text-content/55"
                 strokeWidth={1.75}
               />
-              <span className="min-w-0 flex-1 truncate">Switch project</span>
+              <span className="min-w-0 flex-1 truncate">{t("ui.sourceControl.switchProject")}</span>
               <ChevronRight
                 className="size-3.5 shrink-0 text-content/40"
                 strokeWidth={1.75}
@@ -432,8 +434,7 @@ export function SidebarWorktreeSwitcher({
                   strokeWidth={1.75}
                 />
                 <span className="min-w-0 flex-1 truncate">
-                  Project settings
-                </span>
+                  {t("ui.sourceControl.projectSettings")}</span>
                 <ChevronRight
                   className="size-3.5 shrink-0 text-content/40"
                   strokeWidth={1.75}
@@ -461,7 +462,7 @@ export function SidebarWorktreeSwitcher({
                   className="size-4 shrink-0 text-content/55"
                   strokeWidth={1.75}
                 />
-                <span className="min-w-0 flex-1 truncate">Settings</span>
+                <span className="min-w-0 flex-1 truncate">{t("ui.sourceControl.settings")}</span>
                 {project.settingsShortcut ? (
                   <span className="shrink-0 text-[11px] text-content/40">
                     {project.settingsShortcut}
@@ -485,7 +486,7 @@ export function SidebarWorktreeSwitcher({
           ref={anchor}
           type="button"
           data-tauri-drag-region="false"
-          aria-label="Switch working copy"
+          aria-label={t("ui.sourceControl.switchWorkingCopy")}
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-busy={pending || creating}
@@ -527,19 +528,19 @@ export function SidebarWorktreeSwitcher({
           }
           data-project-menu={project ? true : undefined}
           role="dialog"
-          aria-label="Working copies"
+          aria-label={t("ui.sourceControl.workingCopies")}
           className="flex flex-col overflow-hidden"
         >
           <label className="flex h-11 shrink-0 items-center gap-2.5 border-b border-stroke px-3 text-content/45 focus-within:text-content/70">
             <Search className="size-4 shrink-0" strokeWidth={1.75} />
-            <span className="sr-only">Search working copies</span>
+            <span className="sr-only">{t("ui.sourceControl.searchWorkingCopies")}</span>
             <input
               ref={search}
               value={query}
               disabled={creating}
               autoComplete="off"
               spellCheck={false}
-              placeholder="Search or create a worktree..."
+              placeholder={t("ui.sourceControl.searchOrCreateAWorktree")}
               onChange={(event) => {
                 setQuery(event.target.value);
                 setActive(0);
@@ -570,14 +571,13 @@ export function SidebarWorktreeSwitcher({
           </label>
           <div
             role="listbox"
-            aria-label="Working copies"
+            aria-label={t("ui.sourceControl.workingCopies")}
             className="min-h-0 flex-1 overflow-y-auto overscroll-none p-1.5"
           >
             {!data && !error ? (
               <div className="flex items-center gap-2 p-2 text-[12px] text-content/50">
                 <Loader className="size-3.5 animate-spin" />
-                Loading working copies…
-              </div>
+                {t("ui.sourceControl.loadingWorkingCopies")}</div>
             ) : null}
             {rows.map((tree, index) => {
               const selected = tree.isMain
@@ -620,8 +620,7 @@ export function SidebarWorktreeSwitcher({
             })}
             {data && rows.length === 0 ? (
               <p className="px-2.5 py-5 text-center text-[12px] text-content/45">
-                No matching working copies
-              </p>
+                {t("ui.sourceControl.noMatchingWorkingCopies")}</p>
             ) : null}
           </div>
           {creationError || switchError || error ? (
@@ -644,7 +643,9 @@ export function SidebarWorktreeSwitcher({
                   <Plus className="size-4 shrink-0" strokeWidth={1.75} />
                 )}
                 <span className="min-w-0 truncate">
-                  Create worktree {createName}
+                  {t("ui.sourceControl.createWorktreeNamed", {
+                    name: createName,
+                  })}
                 </span>
               </button>
             </div>
