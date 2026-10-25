@@ -76,8 +76,7 @@ describe("runtime mode copy follows the locale", () => {
   });
 });
 
-describe("settings page copy follows the locale", () => {
-  it("translates every section's page copy", () => {
+describe("settings page copy follows the locale", () => {  it("translates every section's page copy", () => {
     setLocale("zh-CN");
     const pages = messages().settings.pages;
     expect(pages.general.alertsTitle).toBe("提醒");
@@ -111,5 +110,19 @@ describe("settings page copy follows the locale", () => {
     expect(
       t("settings.pages.providers.invalidVersion", { provider: "Codex" }),
     ).toBe("Codex CLI 返回了无效的版本号。");
+  });
+});
+
+describe("menu copy follows the locale", () => {
+  it("translates the in-app menu bar and the tray menu", () => {
+    setLocale("zh-CN");
+    expect(t("menu.file")).toBe("文件");
+    expect(t("menu.newTab")).toBe("新建标签页");
+    expect(t("menu.showApp")).toBe("显示 MonoCode");
+    expect(t("menu.quitApp")).toBe("退出 MonoCode");
+
+    setLocale("en");
+    expect(t("menu.file")).toBe("File");
+    expect(t("menu.quitApp")).toBe("Quit MonoCode");
   });
 });

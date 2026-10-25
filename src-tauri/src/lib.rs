@@ -571,6 +571,8 @@ pub fn run() {
             menu::keybindings_set_overrides,
             #[cfg(target_os = "macos")]
             menu::autosave_set_enabled,
+            #[cfg(target_os = "windows")]
+            tray::tray_set_locale,
             open_new_window,
             window::hide_window,
             window::destroy_window,

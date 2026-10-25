@@ -442,7 +442,7 @@ import {
   useT,
   type Locale,
 } from "../../../shared/i18n";
-import { saveLocale } from "../model/locale";
+import { saveLocale, syncTrayLocale } from "../model/locale";
 
 /**
  * The `data-setting-id` Settings should reveal when it opens: one of the ids in
@@ -2024,6 +2024,7 @@ function useAppearanceSettings(
   const onLocaleChange = useCallback((next: Locale) => {
     saveLocale(next);
     setLocale(next);
+    void syncTrayLocale(next);
   }, []);
 
   const onAccentColor = useCallback((value: string | null) => {

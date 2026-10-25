@@ -323,10 +323,42 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 
 **删除 hook 比添加更危险**：我的"未使用则删除"逻辑一度误删了 `AutomationCard`、`HeaderIcon`、`InboxDetailTab` 里确实未使用的 hook（这些是正确删除），但也曾因组件识别失败而把 `FileTree` 主组件的 hook 判为孤立。最终改为「先扫全部 t() 调用定位所属组件，再对照是否已声明」的自洽算法，并用 66 处 hook 的全量合法性核查（都在组件内、且无前置 return）兜底。
 
-### 阶段 4：原生层（1 天）
+### 阶段 4：原生层（1 天）— ✅ 已完成
+
 - `menu.rs`：`build()` 已接收参数，加 `locale: &str` 查表；新增 command 在语言切换时**重建菜单**。
 - `tray.rs`：2 个字符串，同上。
 - `tauri.windows.conf.json` 增加 `bundle.windows.nsis.languages: ["SimpChinese", "English"]`。
+
+#### 实际落地（范围与原计划不同，先说结论）
+
+调查后确认了一件影响范围的事：**Windows 上没有原生菜单栏**。
+
+- `menu.rs` 的 `build()`、`install()` 以及全部 60 条菜单文案都在 `#[cfg(target_os = "macos")]` 下；`lib.rs` 调用 `menu::install()` 时，该函数在非 macOS 上直接返回 `Ok(())`。
+- Windows 的菜单是**前端自绘的** `src/app/shell/MenuBar.tsx`，由 `App.tsx` 里 `{!IS_MAC ? <MenuBar …/> : null}` 渲染。
+- Windows 唯一的原生界面是**托盘菜单**（`tray.rs`），2 条文案。
+
+因此阶段 4 的实际工作不是改 `menu.rs`，而是：
+
+| 改动 | 说明 |
+| --- | --- |
+| `src/app/shell/MenuBar.tsx` | 25 条菜单文案 → `menu.*`（Windows 用户真正看到的菜单） |
+| `src-tauri/src/tray.rs` | 重写：`Locale` 枚举（`En`/`ZhCn`）、静态 `Mutex<Locale>`、`tray_set_locale` command，从 `install()` 拆出 `build_menu()` |
+| `src-tauri/src/lib.rs` | 注册 `tray::tray_set_locale`（`#[cfg(target_os = "windows")]`） |
+| `src/features/settings/model/locale.ts` | 新增 `syncTrayLocale()`：`isTauri()` 守卫 + 失败吞掉，不让原生同步阻塞 UI |
+| `src/main.tsx` | 首屏前 `syncTrayLocale(loadLocale())` |
+| `SettingsView.tsx` | `onLocaleChange` 里一并 `syncTrayLocale(next)` |
+
+`tray.rs` 的关键设计：语言切换时若托盘已存在，用 `app.tray_by_id("main")` + `set_menu()` **只换菜单**而非重建图标，避免图标闪烁、丢失点击处理器。首次 `install()` 才走完整构建。
+
+**未做 `menu.rs`**：它的 60 条文案仍硬编码英文，但只影响 macOS 构建。本 fork 保留跨平台代码以吸收上游修复，改它只增加合并冲突而无 Windows 收益。若将来需要，注入点已明确：`build()` 加 `locale: &str`，`menu_item()` 的 `text` 参数改为查表。
+
+**未做 NSIS 安装包语言**（`bundle.windows.nsis.languages`）：需重新打包并在真机验证安装界面，属发布环节，见「遗留项」。
+
+#### 验证
+
+`tsc` 通过；`cargo check --workspace --all-targets` 无警告；`cargo clippy -- -D warnings` 通过；`cargo fmt --check` 通过；`vitest` 5550 通过（仅剩 1 条预存时区失败）。
+
+`settingsLocale.test.ts` 增至 10 条，新增菜单双语断言（`menu.file` → 文件 / File、`menu.quitApp` → 退出 MonoCode / Quit MonoCode）。
 
 ### 阶段 5：格式化与细节（1 天）
 - `numbers.ts` 的 `en-US` → 跟随 locale（中文千分位规则相同，风险低）。

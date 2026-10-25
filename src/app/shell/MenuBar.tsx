@@ -14,6 +14,7 @@ import {
   subscribeAutosave,
   subscribeKeybindings,
 } from "../../features/settings/model/settings";
+import { useT } from "../../shared/i18n";
 
 type MenuKey = "file" | "view" | "terminal";
 
@@ -58,6 +59,7 @@ export function MenuBar({
   onZoomOut,
   onZoomReset,
 }: Props) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [menuAnchor, setMenuAnchor] = useState<{ x: number; y: number } | null>(
@@ -239,77 +241,77 @@ export function MenuBar({
           {
             kind: "item",
             id: "new_tab",
-            label: "New Tab",
+            label: t("menu.newTab"),
             shortcut: shortcut("Tab: New", `${MOD}T`),
           },
           {
             kind: "item",
             id: "new_terminal",
-            label: "New Terminal",
+            label: t("menu.newTerminal"),
             shortcut: shortcut("Terminal: New", `${MOD}\``),
           },
           {
             kind: "item",
             id: "new_window",
-            label: "New Window",
+            label: t("menu.newWindow"),
             shortcut: shortcut("App: New Window", `${MOD}${SHIFT}N`),
           },
           { kind: "sep" },
           {
             kind: "item",
             id: "toggle_autosave",
-            label: "Autosave",
+            label: t("menu.autosave"),
             checked: autosave,
           },
           { kind: "sep" },
           {
             kind: "item",
             id: "open_project",
-            label: "Open Project…",
+            label: t("menu.openProject"),
             shortcut: shortcut("App: Open Project", `${MOD}O`),
           },
           {
             kind: "item",
             id: "open_search",
-            label: "Search…",
+            label: t("menu.search"),
             shortcut: shortcut("App: Search", `${MOD}K`),
           },
           {
             kind: "item",
             id: "go_to_file",
-            label: "Go to File…",
+            label: t("menu.goToFile"),
             shortcut: shortcut("App: Go to File", `${MOD}P`),
           },
           {
             kind: "item",
             id: "find_in_project",
-            label: "Find in Files…",
+            label: t("menu.findInFiles"),
             shortcut: shortcut("App: Find in Files", `${MOD}${SHIFT}F`),
           },
           { kind: "sep" },
           {
             kind: "item",
             id: "close_tab",
-            label: "Close Pane",
+            label: t("menu.closePane"),
             shortcut: shortcut("Pane: Close", `${MOD}W`),
           },
           {
             kind: "item",
             id: "close_other_tabs",
-            label: "Close Other Tabs",
+            label: t("menu.closeOtherTabs"),
             shortcut: shortcut("Tab: Close Others", `${MOD}${ALT}T`),
           },
           {
             kind: "item",
             id: "close_all_tabs",
-            label: "Close All Tabs",
+            label: t("menu.closeAllTabs"),
             shortcut: shortcut("Tab: Close All", `${MOD}${SHIFT}W`),
           },
           { kind: "sep" },
           {
             kind: "item",
             id: "check_for_updates",
-            label: "Check for Updates…",
+            label: t("menu.checkForUpdates"),
           },
         ];
       case "view":
@@ -317,52 +319,52 @@ export function MenuBar({
           {
             kind: "item",
             id: "toggle_sidebar",
-            label: "Toggle Sidebar",
+            label: t("menu.toggleSidebar"),
             shortcut: shortcut("App: Toggle Sidebar", `${MOD}B`),
           },
           {
             kind: "item",
             id: "toggle_session_sidebar",
-            label: "Toggle Session Sidebar",
+            label: t("menu.toggleSessionSidebar"),
             shortcut: shortcut(
               "App: Toggle Session Sidebar",
               `${MOD}${SHIFT}B`,
             ),
           },
-          { kind: "item", id: "open_inbox", label: "Inbox" },
+          { kind: "item", id: "open_inbox", label: t("menu.inbox") },
           ...(onOpenNotes
-            ? [{ kind: "item" as const, id: "open_notes", label: "Notes" }]
+            ? [{ kind: "item" as const, id: "open_notes", label: t("menu.notes") }]
             : []),
           {
             kind: "item",
             id: "toggle_terminal",
-            label: "Toggle Terminal",
+            label: t("menu.toggleTerminal"),
             shortcut: shortcut("Terminal: Toggle Dock", `${MOD}J`),
           },
           {
             kind: "item",
             id: "open_model_picker",
-            label: "Switch Model…",
+            label: t("menu.switchModel"),
             shortcut: shortcut("App: Switch Model", `${MOD}.`),
           },
-          { kind: "item", id: "toggle_diff", label: "Toggle Changes" },
+          { kind: "item", id: "toggle_diff", label: t("menu.toggleChanges") },
           { kind: "sep" },
           {
             kind: "item",
             id: "zoom_in",
-            label: "Zoom In",
+            label: t("menu.zoomIn"),
             shortcut: shortcut("View: Zoom In", `${MOD}+`),
           },
           {
             kind: "item",
             id: "zoom_out",
-            label: "Zoom Out",
+            label: t("menu.zoomOut"),
             shortcut: shortcut("View: Zoom Out", `${MOD}-`),
           },
           {
             kind: "item",
             id: "zoom_reset",
-            label: "Reset Zoom",
+            label: t("menu.resetZoom"),
             shortcut: shortcut("View: Reset Zoom", `${MOD}0`),
           },
         ];
@@ -371,13 +373,13 @@ export function MenuBar({
           {
             kind: "item",
             id: "new_terminal",
-            label: "New Terminal",
+            label: t("menu.newTerminal"),
             shortcut: shortcut("Terminal: New", `${MOD}\``),
           },
           {
             kind: "item",
             id: "toggle_terminal",
-            label: "Toggle Terminal",
+            label: t("menu.toggleTerminal"),
             shortcut: shortcut("Terminal: Toggle Dock", `${MOD}J`),
           },
         ];
@@ -389,9 +391,9 @@ export function MenuBar({
   }
 
   const MENUS: { key: MenuKey; label: string }[] = [
-    { key: "file", label: "File" },
-    { key: "view", label: "View" },
-    { key: "terminal", label: "Terminal" },
+    { key: "file", label: t("menu.file") },
+    { key: "view", label: t("menu.view") },
+    { key: "terminal", label: t("menu.terminal") },
   ];
 
   return (
