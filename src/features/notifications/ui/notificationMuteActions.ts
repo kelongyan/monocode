@@ -3,6 +3,7 @@ import {
   NOTIFICATION_MUTE_HOURS,
   type ProjectNotificationPreference,
 } from "../model/notificationPreferences";
+import { t } from "../../../shared/i18n";
 
 /** A single status label for the project rail, menus, and mute controls. */
 export function notificationMuteStatus(
@@ -11,7 +12,12 @@ export function notificationMuteStatus(
   if (!preference || !isProjectMuted(preference)) return null;
   return preference.mutedUntil === null
     ? "Muted until resumed"
-    : `Muted until ${new Date(preference.mutedUntil!).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}`;
+    : t("time.mutedUntil", {
+        when: new Date(preference.mutedUntil!).toLocaleString(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }),
+      });
 }
 
 /** The same preset IDs and durations are used by project and Inbox menus. */

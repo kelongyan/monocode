@@ -360,10 +360,43 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 
 `settingsLocale.test.ts` 增至 10 条，新增菜单双语断言（`menu.file` → 文件 / File、`menu.quitApp` → 退出 MonoCode / Quit MonoCode）。
 
-### 阶段 5：格式化与细节（1 天）
+### 阶段 5：格式化与细节（1 天）— ✅ 已完成
+
 - `numbers.ts` 的 `en-US` → 跟随 locale（中文千分位规则相同，风险低）。
 - 39 处 `toLocale*`：区分「日期时间」（跟随 locale）与「文件大小/百分比」（保留）。
 - 视觉回归：中文更短但可能换行异常，重点看 `Sidebar`、`TitleBar`、窄屏 `SettingsView`。
+
+#### 实际落地
+
+**文案**（实测 58 条，远小于按字符串总数的预估）：
+
+| 文件 | 条数 | 命名空间 |
+| --- | --- | --- |
+| `TitleBar.tsx` | 8 | `shell.*` |
+| `Sidebar.tsx` | 37 | `shell.*` |
+| `Composer.tsx` | 5 | `composer.*` |
+| `ModelPicker.tsx` | 8 | `composer.*` |
+
+**格式化**：
+
+| 改动 | 说明 |
+| --- | --- |
+| `src/shared/lib/intlLocale.ts`（新增） | `intlLocale()`：把 `Locale` 映射为 BCP 47 tag，供 `Intl` / `toLocale*` 使用 |
+| `numbers.ts` | 去掉硬编码 `en-US`，改为按 `intlLocale()` 缓存 formatter，语言切换时重建 |
+| `automations.ts` 的 `formatClock` | `toLocaleTimeString(undefined, …)` → `toLocaleTimeString(intlLocale(), …)` |
+
+**关于那 39 处 `toLocale*`**：核查后发现**绝大多数本来就传 `undefined`**（跟随系统区域），所以原计划里「区分日期时间与文件大小」并不必要——真正的问题只有一处硬编码（`numbers.ts` 的 `en-US`）和一处该跟随界面语言却没跟随的（`formatClock`）。其余保留 `undefined`：它们服务于「用户本机时间」这类语义，跟随操作系统区域反而更符合预期。
+
+**修掉了一条长期存在的测试失败**。`agentAppMemory.test.ts` 里的 `'Weekdays at 9:00'` vs `'Weekdays at 9:00 AM'` 从阶段 0 之前就红着，根因正是 `formatClock` 用 `undefined` 跟随系统区域（本机 `zh-CN` 输出 9:00）。改为 `intlLocale()` 后，测试环境固定 `en`，输出恢复 `9:00 AM`。**全量测试现在 5554 通过、0 失败。**
+
+**新增时间词条**：`time.*`（下次运行 / 今天 / 已静音直到 / 现在重置 / N 后重置 / 已启动 N 个会话），带占位符插值。
+
+**按「禁止翻译」清单保留英文的一处**：`useMonoHabits.ts` 的 `"Started a session."` —— 它是 `host.post()` 发给 Mono 的报告正文，属 AI 交互层，不是 UI 文案。
+
+**验证**：`tsc` 通过；`vitest` **5554 通过 / 0 失败**；`cargo fmt --check` 通过；四个目标文件已无残留英文可见文案；82 处 `useT()` 合法性核查 0 违规。
+
+**仍未做**：中文下的视觉回归（需启动应用目视检查窄栏换行）。中文通常更短，但 `Sidebar` 的分组标签和 `TitleBar` 的按钮提示可能因字体度量差异换行异常。这需要真机截图，代码层面无法验证。
+
 
 ### 阶段 6：防回退（0.5 天）
 脚本/测试扫描 `src/**/*.tsx`：JSX 文本节点出现中英混合字面量且不在豁免名单则告警。建议先软告警跑一周再转硬失败。

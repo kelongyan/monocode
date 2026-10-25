@@ -126,3 +126,30 @@ describe("menu copy follows the locale", () => {
     expect(t("menu.quitApp")).toBe("Quit MonoCode");
   });
 });
+
+describe("shell and composer copy follows the locale", () => {
+  it("translates the sidebar, title bar and pickers", () => {
+    setLocale("zh-CN");
+    expect(t("shell.searchConversations")).toBe("搜索对话...");
+    expect(t("shell.folders")).toBe("文件夹");
+    expect(t("shell.startedByAutomation")).toBe("由自动化启动");
+    expect(t("composer.models")).toBe("模型");
+    expect(t("composer.searchModels")).toBe("搜索模型");
+
+    setLocale("en");
+    expect(t("shell.folders")).toBe("Folders");
+    expect(t("composer.models")).toBe("Models");
+  });
+
+  it("interpolates the time phrases", () => {
+    setLocale("zh-CN");
+    expect(t("time.resetsIn", { duration: "5m" })).toBe("5m 后重置");
+    expect(t("time.resetsNow")).toBe("现在重置");
+    expect(t("time.mutedUntil", { when: "tomorrow" })).toBe(
+      "已静音直到 tomorrow",
+    );
+
+    setLocale("en");
+    expect(t("time.resetsIn", { duration: "5m" })).toBe("Resets in 5m");
+  });
+});

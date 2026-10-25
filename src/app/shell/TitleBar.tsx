@@ -67,6 +67,7 @@ import {
   APP_VIEW_LABELS,
   type AppView,
 } from "../../features/workspace/model/appViewTabs";
+import { useT } from "../../shared/i18n";
 
 const APP_VIEW_ICONS = {
   search: Search,
@@ -354,6 +355,7 @@ function TitleTabItem({
   onContextMenu: (id: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   itemRef?: (el: HTMLDivElement | null) => void;
 }) {
+  const t = useT();
   const { headline, meta, tooltip } = tabCopy(tab);
   const fileIcon = tab.files[0];
   const AppViewIcon = tab.appView ? APP_VIEW_ICONS[tab.appView] : null;
@@ -457,8 +459,8 @@ function TitleTabItem({
             {tab.dirty ? (
               <span
                 className="size-1.5 shrink-0 rounded-full bg-content/70"
-                title="Unsaved changes"
-                aria-label="Unsaved changes"
+                title={t("shell.unsavedChanges")}
+                aria-label={t("shell.unsavedChanges")}
               />
             ) : null}
           </span>
@@ -472,7 +474,7 @@ function TitleTabItem({
       {closable ? (
         <button
           type="button"
-          title="Close Tab"
+          title={t("shell.closeTab")}
           aria-label={`Close ${headline}`}
           data-no-drag
           data-tauri-drag-region="false"
@@ -589,10 +591,11 @@ export function IconButton({
 }
 
 export function DevModeLabel() {
+  const t = useT();
   if (!import.meta.env.DEV) return null;
   return (
     <span
-      title="Development build"
+      title={t("shell.developmentBuild")}
       className="mr-1 min-w-0 truncate rounded-md bg-skill/15 px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-skill"
     >
       Development
@@ -602,11 +605,12 @@ export function DevModeLabel() {
 
 /** The Development badge as an icon, for the inset title bar. */
 export function DevModeIcon() {
+  const t = useT();
   if (!import.meta.env.DEV) return null;
   return (
     <span
-      title="Development build"
-      aria-label="Development build"
+      title={t("shell.developmentBuild")}
+      aria-label={t("shell.developmentBuild")}
       role="img"
       className="grid size-6 shrink-0 place-items-center text-skill"
     >
@@ -781,6 +785,7 @@ function TitleBarComponent({
   recents = [],
   onSelectProject,
 }: Props) {
+  const t = useT();
   const trafficLightsVisible = useTrafficLightsVisible();
   const tabIds = tabs.map((tab) => tab.id);
   const { displayed, tabNodeRef, finishMotion } = useTabCloseMotion(tabs);
@@ -1099,12 +1104,12 @@ function TitleBarComponent({
         {showTrailingActions ? (
           <div className="flex items-center gap-0.5 px-2">
             {projectless && railClosed && onOpenInbox ? (
-              <IconButton label="Inbox" onClick={onOpenInbox}>
+              <IconButton label={t("menu.inbox")} onClick={onOpenInbox}>
                 <Inbox className="size-3.5" strokeWidth={1.75} />
               </IconButton>
             ) : null}
             {projectless && railClosed && onOpenNotes ? (
-              <IconButton label="Notes" onClick={onOpenNotes}>
+              <IconButton label={t("menu.notes")} onClick={onOpenNotes}>
                 <StickyNote className="size-3.5" strokeWidth={1.75} />
               </IconButton>
             ) : null}

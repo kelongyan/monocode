@@ -1,5 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { t } from "../../../shared/i18n";
+import { intlLocale } from "../../../shared/lib/intlLocale";
 import type { HarnessId, RuntimeMode } from "../../sessions/model/session";
 
 export const AUTOMATIONS_CHANGED = "monocode:automations-changed";
@@ -288,7 +290,7 @@ export function nextRunPreview(at: number): string {
       .formatToParts(date)
       .find((part) => part.type === "timeZoneName")?.value ??
     gmtOffsetLabel(date);
-  return `Next run ${day}, ${time} ${zone}`;
+  return t("time.nextRun", { day, time, zone });
 }
 
 export function nextAutomationRunAt(
@@ -605,7 +607,9 @@ function clamp(value: number, min: number, max: number): number {
 
 function formatClock(value: string): string {
   const [hour, minute] = parseTime(value);
-  return new Date(2000, 0, 1, hour, minute).toLocaleTimeString(undefined, {
+  // Follow the interface language: an English machine showing the Chinese UI
+  // should still print "9:00" with the Chinese locale's formatting.
+  return new Date(2000, 0, 1, hour, minute).toLocaleTimeString(intlLocale(), {
     hour: "numeric",
     minute: "2-digit",
   });

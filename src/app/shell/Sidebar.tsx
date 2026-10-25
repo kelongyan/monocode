@@ -244,6 +244,7 @@ import {
   remotePath,
   remoteProjectFor,
 } from "../../features/connections/model/remoteProjects";
+import { useT } from "../../shared/i18n";
 
 const MIN_WIDTH = 260;
 /** The inset sidebar's one-line rows stay legible narrower. */
@@ -511,6 +512,7 @@ function SidebarComponent({
   monos,
   monoViewActive = false,
 }: Props) {
+  const t = useT();
   const trafficLightsVisible = useTrafficLightsVisible();
   const remoteProject = isRemoteProjectPath(cwd);
   const tab: SidebarTabId = requestedTab;
@@ -2025,8 +2027,8 @@ function SidebarComponent({
       ref={searchInputRef}
       type="text"
       value={searchQuery}
-      placeholder="Search conversations..."
-      aria-label="Search conversations"
+      placeholder={t("shell.searchConversations")}
+      aria-label={t("shell.searchConversations")}
       spellCheck={false}
       autoComplete="off"
       autoCorrect="off"
@@ -2417,7 +2419,7 @@ function SidebarComponent({
   // carries the filter the search row holds elsewhere.
   const sessionsFilterButton = (
     <SessionsHeaderButton
-      label="Filter sessions"
+      label={t("shell.filterSessions")}
       active={filtersActive}
       open={!!filterMenu}
       hasPopup
@@ -2429,7 +2431,7 @@ function SidebarComponent({
   // Stands in for the date labels when no loose session is listed, so the
   // filter stays reachable.
   const sessionsLabel = inset ? (
-    <SidebarSectionLabel label="Sessions">
+    <SidebarSectionLabel label={t("shell.sessions")}>
       {sessionsFilterButton}
     </SidebarSectionLabel>
   ) : null;
@@ -2537,7 +2539,7 @@ function SidebarComponent({
   const graphPane = paneHost && paneTab === "graph" ? (
     <div
       role="tabpanel"
-      aria-label="History"
+      aria-label={t("shell.history")}
       className="flex min-h-0 flex-1 flex-col overflow-hidden"
     >
       <GitHistoryGraph
@@ -2569,7 +2571,7 @@ function SidebarComponent({
           {inset ? null : (
             <div
               role="tablist"
-              aria-label="Workspace"
+              aria-label={t("shell.workspace")}
               className="flex h-9 shrink-0 items-center gap-px border-b border-stroke px-2"
             >
               {workspaceTabItems}
@@ -2621,7 +2623,7 @@ function SidebarComponent({
           {!compactRailVisible ? (
             <div
               role="tablist"
-              aria-label="Workspace"
+              aria-label={t("shell.workspace")}
               className="flex h-9 shrink-0 items-center gap-px overflow-visible border-b border-stroke px-2"
             >
               {workspaceTabItems}
@@ -2638,7 +2640,7 @@ function SidebarComponent({
               {sessionSearchInput}
             </div>
             <SessionsHeaderButton
-              label="Filter sessions"
+              label={t("shell.filterSessions")}
               active={filtersActive}
               open={!!filterMenu}
               hasPopup
@@ -2836,7 +2838,7 @@ function SidebarComponent({
                       return inset && index === firstGroupIndex ? (
                         <Fragment key={`${entry.kind}-sessions`}>
                           <li className="list-none">
-                            <SidebarSectionLabel label="Folders" />
+                            <SidebarSectionLabel label={t("shell.folders")} />
                           </li>
                           {groupItem}
                         </Fragment>
@@ -2999,8 +3001,8 @@ function SidebarComponent({
                                       type="button"
                                       data-no-drag
                                       data-tauri-drag-region="false"
-                                      title="New session"
-                                      aria-label="New session"
+                                      title={t("shell.newSession")}
+                                      aria-label={t("shell.newSession")}
                                       onClick={() =>
                                         onNewInFolder(entry.folder.id)
                                       }
@@ -3025,7 +3027,7 @@ function SidebarComponent({
                       return inset && index === firstGroupIndex ? (
                         <Fragment key={entry.folder.id}>
                           <li className="list-none">
-                            <SidebarSectionLabel label="Folders" />
+                            <SidebarSectionLabel label={t("shell.folders")} />
                           </li>
                           {folderItem}
                         </Fragment>
@@ -3097,7 +3099,7 @@ function SidebarComponent({
               {/* Without a project, the inset header has no Settings menu. */}
               {(inset ? !inProject : !compactProjectRail) ? (
                 <RailAction
-                  label="Settings"
+                  label={t("shell.settings")}
                   icon={Settings}
                   onClick={onOpenSettings}
                   shortcut={`${MOD},`}
@@ -3147,7 +3149,7 @@ function SidebarComponent({
           x={folderMenu.x}
           y={folderMenu.y}
           items={folderMenuItems}
-          ariaLabel="Folder actions"
+          ariaLabel={t("shell.folderActions")}
           width={260}
           header={
             <FolderColorSwatches
@@ -3188,7 +3190,7 @@ function SidebarComponent({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize sidebar"
+        aria-label={t("shell.resizeSidebar")}
         aria-valuenow={resize.width}
         aria-valuemin={minWidth}
         aria-valuemax={MAX_WIDTH}
@@ -3435,6 +3437,7 @@ function SidebarProjectPicker({
   automationsActive?: boolean;
   inboxUnseen?: boolean;
 }) {
+  const t = useT();
   const [inboxMenu, setInboxMenu] = useState<{ x: number; y: number } | null>(
     null,
   );
@@ -3494,13 +3497,13 @@ function SidebarProjectPicker({
           </IconButton>
         ) : null}
         {onOpenNotes ? (
-          <IconButton label="Notes" active={notesActive} onClick={onOpenNotes}>
+          <IconButton label={t("menu.notes")} active={notesActive} onClick={onOpenNotes}>
             <StickyNote className="size-3.5" strokeWidth={1.75} />
           </IconButton>
         ) : null}
         {onOpenAutomations ? (
           <IconButton
-            label="Automations"
+            label={t("shell.automations")}
             active={automationsActive}
             onClick={onOpenAutomations}
           >
@@ -3591,6 +3594,7 @@ function CompactProjectRail({
   /** A Mono fills the main area: no workspace tab is the current one. */
   monoViewActive?: boolean;
 }) {
+  const t = useT();
   const monosSnap = useSyncExternalStore(subscribeMonos, monosSnapshot);
   const monosPinned = useRailMonosPinned();
   const monoItems = useMemo(() => {
@@ -3632,7 +3636,7 @@ function CompactProjectRail({
 
   return (
     <nav
-      aria-label="Project shortcuts"
+      aria-label={t("shell.projectShortcuts")}
       data-compact-project-rail
       {...railTooltip.handlers}
       className="sidebar-glass relative flex h-full w-12 shrink-0 flex-col items-center"
@@ -3655,7 +3659,7 @@ function CompactProjectRail({
         className="flex w-full shrink-0 flex-col items-center gap-1.5 py-1.5"
       >
         <CompactRailAction
-          label="Expand projects"
+          label={t("shell.expandProjects")}
           tooltip={false}
           icon={PanelLeft}
           onClick={onTogglePanel}
@@ -3664,7 +3668,7 @@ function CompactProjectRail({
           <>
             <div
               role="group"
-              aria-label="Monos"
+              aria-label={t("monos.title")}
               data-compact-rail-monos
               className="flex flex-col items-center gap-1.5"
             >
@@ -3708,7 +3712,7 @@ function CompactProjectRail({
         ) : null}
         <div
           role="tablist"
-          aria-label="Workspace"
+          aria-label={t("shell.workspace")}
           aria-orientation="vertical"
           className="flex flex-col items-center gap-1.5"
         >
@@ -3740,7 +3744,7 @@ function CompactProjectRail({
           ))}
         </div>
         <CompactRailAction
-          label="Search"
+          label={t("shell.search")}
           shortcut={`${MOD}K`}
           icon={Search}
           active={searchActive}
@@ -3762,14 +3766,14 @@ function CompactProjectRail({
         />
         {onOpenNotes ? (
           <CompactRailAction
-            label="Notes"
+            label={t("menu.notes")}
             icon={StickyNote}
             active={notesActive}
             onClick={action(notesActive, onOpenNotes)}
           />
         ) : null}
         <CompactRailAction
-          label="Automations"
+          label={t("shell.automations")}
           icon={Zap}
           active={automationsActive}
           onClick={action(automationsActive, onOpenAutomations)}
@@ -3778,7 +3782,7 @@ function CompactProjectRail({
       <div className="min-h-2 flex-1" />
       <div className="flex w-full flex-col items-center gap-1 py-1.5">
         <CompactRailAction
-          label="Settings"
+          label={t("shell.settings")}
           shortcut={`${MOD},`}
           tooltip={false}
           icon={Settings}
@@ -3966,6 +3970,7 @@ function ProjectSpacesBar({
     trigger: HTMLElement,
   ) => void;
 }) {
+  const t = useT();
   const projectTooltip = useRailTooltip("top");
   const shortcuts = useSyncExternalStore(subscribeKeybindings, () =>
     [
@@ -4048,7 +4053,7 @@ function ProjectSpacesBar({
         <div
           ref={rowRef}
           role="tablist"
-          aria-label="Projects"
+          aria-label={t("shell.projects")}
           className="flex w-full items-center gap-1"
         >
           {visible.map((path) => (
@@ -4159,12 +4164,13 @@ function RightPanel({
   onTabChange: (tab: RightPanelTab) => void;
   children: ReactNode;
 }) {
+  const t = useT();
   const sortable = useAnimatedReorder(tabs, onReorder);
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
       <div
         role="tablist"
-        aria-label="Project"
+        aria-label={t("shell.project")}
         className="flex h-9 shrink-0 items-center gap-px border-b border-stroke px-2"
       >
         {tabs.map((itemId) => {
@@ -4313,11 +4319,12 @@ function SidebarNavList({
   search?: { active: boolean; onClick: () => void };
   items: readonly (SidebarNavItem | false | undefined)[];
 }) {
+  const t = useT();
   const shown = items.filter((item): item is SidebarNavItem => !!item);
   if (!search && !shown.length) return null;
   return (
     <nav
-      aria-label="Views"
+      aria-label={t("shell.views")}
       className="flex shrink-0 flex-col gap-px px-2 pb-3 pt-1"
     >
       {/* The project rail's search and rows, so the two layouts read the
@@ -4325,7 +4332,7 @@ function SidebarNavList({
       {search ? (
         <>
           <RailSearch
-            label="Search"
+            label={t("shell.search")}
             icon={Search}
             onClick={search.onClick}
             active={search.active}
@@ -4878,6 +4885,7 @@ export const SessionCard = memo(function SessionCard({
   onRename?: (sessionId: string) => void;
   onDelete?: (sessionId: string) => void;
 }) {
+  const t = useT();
   const skipClickUntil = useRef(0);
   const prefetchTimer = useRef<number | null>(null);
   const previewAnchor = useRef<HTMLDivElement>(null);
@@ -5006,7 +5014,7 @@ export const SessionCard = memo(function SessionCard({
   const linkedUpdateDot = linkedUpdate ? (
     <span
       title={`Linked ${linkedWorkItem?.kind === "pr" ? "PR" : "issue"} updated since this session`}
-      aria-label="Linked work item updated"
+      aria-label={t("shell.linkedItemUpdated")}
       className="size-1.5 shrink-0 rounded-full bg-accent"
     />
   ) : null;
@@ -5309,7 +5317,7 @@ export const SessionCard = memo(function SessionCard({
                     className={`grid size-4 shrink-0 place-items-center${markHover}`}
                   >
                     <TerminalSpinner
-                      aria-label="Working"
+                      aria-label={t("shell.working")}
                       className="inline-block w-3.5 select-none text-center text-[11px] leading-none text-accent"
                     />
                   </span>
@@ -5319,7 +5327,7 @@ export const SessionCard = memo(function SessionCard({
                   >
                     <Check
                       role="img"
-                      aria-label="Done"
+                      aria-label={t("shell.done")}
                       className="size-3.5 text-emerald-400"
                       strokeWidth={2.25}
                     />
@@ -5356,8 +5364,8 @@ export const SessionCard = memo(function SessionCard({
                     <span
                       data-automation-icon
                       role="img"
-                      title="Started by an automation"
-                      aria-label="Started by an automation"
+                      title={t("shell.startedByAutomation")}
+                      aria-label={t("shell.startedByAutomation")}
                       className="grid size-4 shrink-0 place-items-center text-amber-400"
                     >
                       <Zap className="size-3" strokeWidth={1.75} />
@@ -5403,7 +5411,7 @@ export const SessionCard = memo(function SessionCard({
                     ) : draft ? (
                       <CircleDashed
                         role="img"
-                        aria-label="Draft"
+                        aria-label={t("shell.draft")}
                         className="size-3.5"
                         strokeWidth={1.75}
                       />
@@ -5528,8 +5536,8 @@ export const SessionCard = memo(function SessionCard({
                   <span
                     data-automation-icon
                     role="img"
-                    title="Started by an automation"
-                    aria-label="Started by an automation"
+                    title={t("shell.startedByAutomation")}
+                    aria-label={t("shell.startedByAutomation")}
                     className="grid size-5 -mr-1 shrink-0 place-items-center text-amber-400"
                   >
                     <Zap className="size-3" strokeWidth={1.75} />

@@ -204,6 +204,7 @@ import {
   loadInsetLayout,
   subscribeInsetLayout,
 } from "../../settings/model/appearance";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   enabled?: boolean;
@@ -419,6 +420,7 @@ export function Composer({
   onEditingLastTurnChange,
   children,
 }: Props) {
+  const t = useT();
   const ref = useRef<HTMLTextAreaElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const plusRef = useRef<HTMLDivElement>(null);
@@ -2175,7 +2177,7 @@ export function Composer({
               className={compact ? "hidden" : "relative shrink-0"}
             >
               <ToolButton
-                label="Add files or choose a mode"
+                label={t("composer.addFilesOrMode")}
                 active={plusOpen}
                 onClick={() => setPlusOpen((open) => !open)}
               >
@@ -2436,8 +2438,8 @@ export function Composer({
             {resendEdited ? (
               <button
                 type="button"
-                title="Stop editing last message"
-                aria-label="Stop editing last message"
+                title={t("composer.stopEditingLast")}
+                aria-label={t("composer.stopEditingLast")}
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={exitEditMode}
                 className="edit-last-turn-button flex h-6.5 shrink-0 items-center gap-1 rounded-md border border-current/20 px-2 text-[11px] font-medium transition-[background-color,color,border-color] hover:border-current/35 hover:bg-content/15 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
@@ -2599,6 +2601,7 @@ export function ComposerAction({
   onSend: () => void;
   onStop: () => void;
 }) {
+  const t = useT();
   if (disabled) {
     return (
       <button
@@ -2626,8 +2629,8 @@ export function ComposerAction({
     ) : (
       <button
         type="button"
-        title="Stop"
-        aria-label="Stop"
+        title={t("composer.stop")}
+        aria-label={t("composer.stop")}
         onClick={onStop}
         className="grid size-6.5 place-items-center rounded-md bg-white text-black hover:bg-white/90"
       >

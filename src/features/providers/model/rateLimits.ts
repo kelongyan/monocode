@@ -1,4 +1,5 @@
 import { asRecord } from "../../../integrations/harness/providers/codex/codexProtocol";
+import { t } from "../../../shared/i18n";
 
 export type RateLimitProvider = "claude" | "codex" | "opencode" | "devin";
 
@@ -189,7 +190,9 @@ export function formatResetDuration(ms: number): string {
 
 export function formatResetCountdown(ms: number): string {
   const duration = formatResetDuration(ms);
-  return duration === "now" ? "Resets now" : `Resets in ${duration}`;
+  return duration === "now"
+    ? t("time.resetsNow")
+    : t("time.resetsIn", { duration });
 }
 
 /**
