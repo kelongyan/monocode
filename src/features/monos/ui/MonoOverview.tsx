@@ -321,8 +321,7 @@ export function MonoOverview({
           {tab === "activity" ? (
             (activity ?? (
               <EmptyState icon={ListBullet}>
-                Select the activity on one of {agent.name}&apos;s messages to
-                see each step it took.
+                {t("ui.monos.selectActivity", { name: agent.name })}
               </EmptyState>
             ))
           ) : tab === "sessions" ? (
@@ -342,8 +341,7 @@ export function MonoOverview({
               </div>
             ) : (
               <EmptyState icon={MessageMultiple}>
-                Ask {agent.name} to start a session on one of your projects,
-                like a bug fix or a review, and it shows up here.
+                {t("ui.monos.askForSession", { name: agent.name })}
               </EmptyState>
             )
           ) : tab === "habits" ? (
@@ -353,8 +351,7 @@ export function MonoOverview({
               onOpen={(id) => push({ kind: "habit", id })}
               empty={
                 <EmptyState icon={Clock}>
-                  Ask {agent.name} to put recurring work on a schedule, like a
-                  morning digest or a weekly report.
+                  {t("ui.monos.askForHabit", { name: agent.name })}
                 </EmptyState>
               }
             />
@@ -368,8 +365,7 @@ export function MonoOverview({
             </ul>
           ) : (
             <EmptyState icon={File}>
-              Ask {agent.name} to write something up, like a plan or a summary,
-              and it shows up here.
+              {t("ui.monos.askForDocument", { name: agent.name })}
             </EmptyState>
           )}
         </div>

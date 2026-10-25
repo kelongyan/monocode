@@ -385,6 +385,7 @@ function FloatingConversation({
   action: (action: FloatingMonoAction) => Promise<boolean>;
   onOpenArtifact: (id: string) => void;
 }) {
+  const t = useT();
   const transcript = useMonoTranscript(session, true);
   return (
     <div
@@ -409,7 +410,7 @@ function FloatingConversation({
               className="size-12"
             />
             <p className="text-[13px] leading-6 text-content/45">
-              Say hello to {mono.name}, ask a question, or hand over some work.
+              {t("ui.monos.sayHelloTo", { name: mono.name })}
             </p>
           </div>
         ) : null}
@@ -468,13 +469,13 @@ function FloatingConversation({
       ) : null}
       {session.usageLimit ? (
         <div className="shrink-0 px-3 pb-2 text-[12px] text-content/60">
-          <p>The provider’s usage limit was reached.</p>
+          <p>{t("ui.monos.usageLimitReached")}</p>
           <button
             type="button"
             className="mt-1 text-accent hover:underline"
             onClick={() => void action({ kind: "resume" })}
           >
-            Try again
+            {t("ui.monos.tryAgain")}
           </button>
           <span className="mx-2 text-content/25">·</span>
           <button
@@ -482,7 +483,7 @@ function FloatingConversation({
             className="text-accent hover:underline"
             onClick={() => void action({ kind: "reveal" })}
           >
-            Change model in MonoCode
+            {t("ui.monos.changeModelInMonoCode")}
           </button>
         </div>
       ) : null}
@@ -621,7 +622,7 @@ function ArtifactSheet({
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pt-1 pb-5">
           {!loaded ? (
             <p role="status" className="text-[13px] text-content/50">
-              Loading document…
+              {t("ui.monos.loadingDocument")}
             </p>
           ) : !artifact ? (
             <p role="alert" className="text-[13px] text-content/60">

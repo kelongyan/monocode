@@ -170,7 +170,7 @@ export function InboxComments({
       <div className="flex items-center gap-2 text-[12px] text-content/50">
         {thread.commits ? (
           <>
-            <h2 className="text-content/70">Activity</h2>
+            <h2 className="text-content/70">{t("ui.inbox.activity")}</h2>
             <span>
               {label}
               {commitCount > 0 ? ` · ${commitLabel}` : ""}
@@ -250,6 +250,7 @@ export function InboxCommentForm({
   onCancelReply: () => void;
   onSubmit: (body: string) => Promise<void>;
 }) {
+  const t = useT();
   const [draft, setDraft] = useState("");
   const field = useRef<HTMLTextAreaElement>(null);
   const canPost = draft.trim().length > 0 && !posting;
@@ -296,12 +297,12 @@ export function InboxCommentForm({
       {replyTo ? (
         <div className="flex items-center gap-2 text-[12px] text-content/50">
           <span className="min-w-0 truncate">
-            Replying to {replyTo.author || "comment"}
+            {t("ui.inbox.replyingTo", { author: replyTo.author || t("ui.inbox.comment") })}
           </span>
           <button
             type="button"
-            title="Cancel reply"
-            aria-label="Cancel reply"
+            title={t("ui.inbox.cancelReply")}
+            aria-label={t("ui.inbox.cancelReply")}
             onClick={onCancelReply}
             className="grid size-5 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
           >
@@ -338,10 +339,11 @@ export function InboxCommentForm({
 }
 
 function CommentsPending() {
+  const t = useT();
   return (
     <div className="flex items-center gap-2 border-t border-stroke pt-5 text-[12px] text-content/45">
       <LoaderCircle className="size-3.5 animate-spin" strokeWidth={1.75} />
-      Loading comments
+      {t("ui.inbox.loadingComments")}
     </div>
   );
 }
@@ -364,6 +366,7 @@ function InboxComment({
   replyMode?: "thread" | "parent";
   onReply?: (target: InboxReplyTarget) => void;
 }) {
+  const t = useT();
   const time = formatRelativeTime(comment.createdAt);
   const review = githubReviewStateLabel(comment.state);
   const location = commentLocation(comment);
@@ -452,7 +455,7 @@ function InboxComment({
               }
               className="hover:text-content"
             >
-              Reply
+              {t("ui.inbox.reply")}
             </button>
           </span>
         ) : null}

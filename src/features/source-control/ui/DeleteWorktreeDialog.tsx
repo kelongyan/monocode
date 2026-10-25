@@ -83,7 +83,7 @@ export function DeleteWorktreeDialog({
   };
   return (
     <Modal
-      title="Delete worktree?"
+      title={t("ui.sourceControl.deleteWorktreeTitle")}
       size="sm"
       onClose={() => {
         if (!busy) onClose();
@@ -94,7 +94,7 @@ export function DeleteWorktreeDialog({
         onSubmit={(e) => void submit(e)}
       >
         <p className="text-content/75">
-          This permanently deletes the working copy and everything inside it.
+          {t("ui.sourceControl.deleteWorktreeBody")}
         </p>
         <div className="rounded-lg border border-content/10 bg-content/5 p-3">
           <p className="flex items-start gap-2.5 text-[12px] text-content/55">
@@ -118,13 +118,12 @@ export function DeleteWorktreeDialog({
             )}
             {tree.dirty && (
               <Consequence icon={FileDiff} tone="warn">
-                All uncommitted and untracked changes here are discarded.
+                {t("ui.sourceControl.deleteWorktreeDiscard")}
               </Consequence>
             )}
             {tree.dirty == null && (
               <Consequence icon={CircleAlert} tone="warn">
-                Changes could not be checked. Anything uncommitted here is
-                discarded.
+                {t("ui.sourceControl.deleteWorktreeUnchecked")}
               </Consequence>
             )}
             <Consequence icon={GitBranch}>
@@ -151,7 +150,7 @@ export function DeleteWorktreeDialog({
               id="delete-worktree-sessions-label"
               className="text-[12.5px] text-content/75"
             >
-              Also delete associated sessions
+              {t("ui.sourceControl.alsoDeleteSessions")}
             </span>
             <button
               type="button"

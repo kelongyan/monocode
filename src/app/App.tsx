@@ -838,6 +838,7 @@ import {
   setQuitWorkspace,
   type ResumedWorkspace,
 } from "./model/appLifecycle";
+import { useT } from "../shared/i18n";
 
 const SearchView = lazySurface(
   async () => {
@@ -1111,6 +1112,7 @@ function Workspace({
   history: bootHistory = [],
   historyCwd: bootHistoryCwd = null,
 }: AppProps) {
+  const t = useT();
   const [projectCwd, setProjectCwd] = useState(
     () =>
       windowTransfer?.projectCwd ??
@@ -14529,13 +14531,13 @@ function Workspace({
                   >
                     <div
                       ref={setRightPanelHost}
-                      aria-label="Project tools"
+                      aria-label={t("ui.shell.projectTools")}
                       className="flex min-h-0 flex-1 flex-col"
                     />
                     <div
                       role="separator"
                       aria-orientation="vertical"
-                      aria-label="Resize right sidebar"
+                      aria-label={t("ui.shell.resizeRightSidebar")}
                       aria-valuenow={rightPanelResize.width}
                       aria-valuemin={RIGHT_PANEL_WIDTH_MIN}
                       aria-valuemax={RIGHT_PANEL_WIDTH_MAX}

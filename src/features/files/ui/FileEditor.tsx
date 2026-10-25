@@ -432,7 +432,7 @@ export function FileEditor({
         <div className="max-w-md text-center">
           <AlertCircle className="mx-auto mb-3 size-5 text-red-400" />
           <p className="text-[13px] text-content">
-            Couldn’t open {basename(path)}
+            {t("ui.files.couldNotOpen")} {basename(path)}
           </p>
           <p className="mt-1 text-[12px] leading-5 text-content/50">
             {loadState.message}
@@ -537,9 +537,9 @@ export function FileEditor({
           {relativePath}
         </span>
         {saveState.status === "saving" ? (
-          <span>Saving…</span>
+          <span>{t("ui.files.saving")}</span>
         ) : saveState.status === "saved" ? (
-          <span>Saved</span>
+          <span>{t("ui.files.saved")}</span>
         ) : saveState.status === "error" ? (
           <span
             className="max-w-64 truncate text-red-400"
@@ -1089,18 +1089,19 @@ function DiffChunkNav({
   onPrev: () => void;
   onNext: () => void;
 }) {
+  const t = useT();
   return (
     <header
       className="flex h-8 shrink-0 items-center justify-between gap-3 border-b border-stroke px-3 pr-1"
       role="toolbar"
-      aria-label="Jump between changes"
+      aria-label={t("ui.files.jumpBetweenChanges")}
     >
       <DiffChunkStat additions={additions} deletions={deletions} />
       <div className="flex items-center gap-0.5">
         <button
           type="button"
-          title="Previous change"
-          aria-label="Previous change"
+          title={t("ui.files.previousChange")}
+          aria-label={t("ui.files.previousChange")}
           disabled={total === 0 || index <= 0}
           onMouseDown={(event) => event.preventDefault()}
           onClick={onPrev}
@@ -1113,8 +1114,8 @@ function DiffChunkNav({
         </span>
         <button
           type="button"
-          title="Next change"
-          aria-label="Next change"
+          title={t("ui.files.nextChange")}
+          aria-label={t("ui.files.nextChange")}
           disabled={total === 0 || index >= total - 1}
           onMouseDown={(event) => event.preventDefault()}
           onClick={onNext}

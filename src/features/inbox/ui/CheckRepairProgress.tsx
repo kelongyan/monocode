@@ -377,7 +377,7 @@ function RepairCard({
             onClick={() => onShowCheck?.(single.check)}
             className="shrink-0 rounded-md px-2 py-1.5 text-[11px] text-content/70 hover:bg-selection hover:text-content focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/50"
           >
-            Show check
+            {t("ui.inbox.showCheck")}
           </button>
         ) : null}
         {repair.onOpenSession ? (
@@ -387,7 +387,7 @@ function RepairCard({
             className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-stroke px-2.5 py-1.5 text-[11px] text-content/70 hover:bg-selection hover:text-content focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/50"
           >
             <MessageSquare aria-hidden="true" className="size-3.5" />
-            Open conversation
+            {t("ui.inbox.openConversation")}
           </button>
         ) : null}
       </div>
@@ -396,7 +396,7 @@ function RepairCard({
           id={detailsId}
           className="space-y-2 border-t border-stroke px-3 py-2.5 text-[11px] text-content/55"
         >
-          <p>Included checks</p>
+          <p>{t("ui.inbox.includedChecks")}</p>
           <ul className="flex max-h-36 flex-wrap gap-1.5 overflow-y-auto">
             {group.items.map(({ check }) => (
               <li
@@ -432,10 +432,11 @@ export function CheckRepairProgress({
   view: GithubPrChecksView;
   onShowCheck?: (check: RepairItem["check"]) => void;
 }) {
+  const t = useT();
   const groups = useCheckRepairs(cwd, repo, repair.number, view);
   if (!groups.length) return null;
   return (
-    <div className="space-y-2" aria-label="Repair progress">
+    <div className="space-y-2" aria-label={t("ui.inbox.repairProgress")}>
       {groups.map((group) => (
         <RepairCard
           key={group.sessionId}

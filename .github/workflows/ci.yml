@@ -65,7 +65,7 @@ jobs:
       - run: npm run host:package
 
   i18n:
-    name: Untranslated UI copy (advisory)
+    name: Untranslated UI copy
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -78,9 +78,9 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      # Advisory only while the ~960-string backlog from stages 0-5 is worked
-      # off. Switch to `npm run check:i18n:strict` once the count reaches zero.
-      - run: npm run check:i18n
+      # Hard gate: the backlog reached zero, so any new user-visible English
+      # string that bypasses t() now fails CI.
+      - run: npm run check:i18n:strict
 
   check:
     strategy:

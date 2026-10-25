@@ -89,9 +89,9 @@ export function CreateWorktreeDialog({
           {t("ui.sourceControl.worktreeIntro", { path: prettyCwd(cwd) })}
         </p>
         <div className="flex flex-col gap-1.5 text-[12px] text-content/70">
-          <span>Branch</span>
+          <span>{t("ui.sourceControl.branchLabel")}</span>
           <SearchableSelect
-            label="Branch type"
+            label={t("ui.sourceControl.branchType")}
             disabled={busy}
             value={existing ? "existing" : "new"}
             options={[
@@ -110,20 +110,20 @@ export function CreateWorktreeDialog({
           <span>{existing ? "Existing branch" : "New branch name"}</span>
           {existing ? (
             <SearchableSelect
-              label="Existing branch"
+              label={t("ui.sourceControl.existingBranch")}
               value={name}
               disabled={busy}
               options={localBranches}
               onChange={setName}
-              placeholder="Choose a branch…"
+              placeholder={t("ui.sourceControl.chooseBranch")}
               searchPlaceholder="Search local branches…"
-              emptyLabel="No matching local branches"
+              emptyLabel={t("ui.sourceControl.noMatchingLocalBranches")}
               layer={LAYER.dialogPopover}
             />
           ) : (
             <input
               ref={input}
-              aria-label="New branch name"
+              aria-label={t("ui.sourceControl.newBranchName")}
               className={field}
               value={name}
               disabled={busy}
@@ -136,9 +136,9 @@ export function CreateWorktreeDialog({
         </div>
         {!existing && (
           <div className="flex flex-col gap-1.5 text-[12px] text-content/70">
-            <span>Start from</span>
+            <span>{t("ui.sourceControl.startFrom")}</span>
             <SearchableSelect
-              label="Start from"
+              label={t("ui.sourceControl.startFrom")}
               value={base}
               disabled={busy}
               options={baseOptions}
@@ -150,7 +150,7 @@ export function CreateWorktreeDialog({
         )}
         {defaultRoot && (
           <p className="break-all text-[11px] text-content/40">
-            Created in {prettyCwd(defaultRoot)}
+            {t("ui.sourceControl.createdIn")} {prettyCwd(defaultRoot)}
           </p>
         )}
         {error && (

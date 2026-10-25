@@ -76,6 +76,7 @@ export function MonoChangesView({
   /** Projects given to the Mono; each has a tab even before it has changes. */
   attachedProjects: readonly string[];
 }) {
+  const t = useT();
   const { projects, outside, loaded, error } = useSessionProjects(
     sessionId,
     cwd,
@@ -177,7 +178,7 @@ export function MonoChangesView({
       )}
       {error ? (
         <p role="alert" className="shrink-0 border-t border-stroke px-4 py-2 text-[12px] text-red-400">
-          Couldn’t load repositories: {error}
+          {t("ui.monos.couldNotLoadRepositories")} {error}
         </p>
       ) : null}
     </div>
