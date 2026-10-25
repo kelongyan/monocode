@@ -58,6 +58,7 @@ import {
   type RemoteMachine,
   type RemoteProvider,
 } from "../model/protocol";
+import { useT } from "../../../shared/i18n";
 
 export type RemoteSessionOverrides = Partial<SessionPaneProps> & {
   remoteSession: boolean;
@@ -132,6 +133,7 @@ export function RemoteSession({
   onOpenPlan: SessionPaneProps["onOpenPlan"];
   render: (overrides: RemoteSessionOverrides) => ReactNode;
 }) {
+  const t = useT();
   const project = remoteProjectFor(shell.cwd);
   const { machines, loaded } = useRemoteMachines(!!project);
   const machine = project
@@ -155,8 +157,7 @@ export function RemoteSession({
               window.dispatchEvent(new Event(OPEN_CONNECTIONS_EVENT))
             }
           >
-            Manage machines
-          </button>
+            {t("ui.connections.manageMachines")}</button>
         ) : null}
       </div>
     );
