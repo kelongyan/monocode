@@ -58,3 +58,10 @@ Desktop.ini
 
 # Local document preview mockup
 /work/mono-document-preview.html
+
+# i18n batch working files
+batch-*.json
+dict-*.json
+tr.json
+todo.json
+seed.json
