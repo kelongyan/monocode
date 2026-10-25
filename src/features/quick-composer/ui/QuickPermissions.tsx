@@ -8,10 +8,11 @@ import {
 } from "../../../shared/ui/icons";
 import {
   RUNTIME_MODES,
-  RUNTIME_MODE_HINT,
-  RUNTIME_MODE_LABEL,
+  runtimeModeHint,
+  runtimeModeLabel,
   type RuntimeMode,
 } from "../../sessions/model/session";
+import { useLocale } from "../../../shared/i18n";
 
 const ICONS = {
   supervised: Lock,
@@ -45,6 +46,7 @@ export function QuickPermissions({
   onChange: (mode: RuntimeMode) => void;
   onClose: () => void;
 }) {
+  useLocale();
   const root = useRef<HTMLDivElement>(null);
   const id = useId();
   const [active, setActive] = useState(RUNTIME_MODES.indexOf(value));
@@ -101,10 +103,10 @@ export function QuickPermissions({
           <QuickPermissionIcon mode={mode} className="size-4 shrink-0" />
           <span className="min-w-0 flex-1">
             <span className="block text-[13px] font-medium">
-              {RUNTIME_MODE_LABEL[mode]}
+              {runtimeModeLabel(mode)}
             </span>
             <span className="mt-0.5 block text-[11px] text-content/45">
-              {RUNTIME_MODE_HINT[mode]}
+              {runtimeModeHint(mode)}
             </span>
           </span>
           {value === mode ? (

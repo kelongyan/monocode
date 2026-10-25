@@ -19,6 +19,7 @@ import {
   settingsSectionsByGroup,
   type SettingsSectionId,
 } from "../../features/settings/model/settings";
+import { useLocale } from "../../shared/i18n";
 
 const SECTION_ICONS: Record<SettingsSectionId, IconComponent> = {
   general: SlidersHorizontal,
@@ -43,6 +44,9 @@ type Props = {
 
 /** Body of the project rail while settings are open. */
 export function SettingsNav({ section, onSelect, onClose }: Props) {
+  // Section labels come from the dictionary, so this has to re-render on a
+  // language change.
+  useLocale();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
 
   return (

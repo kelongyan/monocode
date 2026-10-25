@@ -12,12 +12,13 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import {
-  RUNTIME_MODE_HINT,
-  RUNTIME_MODE_LABEL,
+  runtimeModeHint,
+  runtimeModeLabel,
   RUNTIME_MODES,
   type RuntimeMode,
 } from "../model/session";
 import { Popover } from "../../../shared/ui/Popover";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   value: RuntimeMode;
@@ -45,6 +46,8 @@ export function AccessPicker({
   side = "top",
   variant = "pill",
 }: Props) {
+  // Subscribes so the mode labels follow a language change.
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(() =>
     Math.max(0, RUNTIME_MODES.indexOf(value)),
@@ -92,8 +95,8 @@ export function AccessPicker({
       <button
         type="button"
         data-access-picker-trigger
-        title={`${RUNTIME_MODE_HINT[value]}${busy ? " Changes apply to the next turn." : ""}`}
-        aria-label={RUNTIME_MODE_LABEL[value]}
+        title={`${runtimeModeHint(value)}${busy ? ` ${t("accessPicker.busyTitle")}` : ""}`}
+        aria-label={runtimeModeLabel(value)}
         aria-expanded={open}
         aria-haspopup="listbox"
         onMouseDown={(e) => e.preventDefault()}
@@ -123,7 +126,7 @@ export function AccessPicker({
         <span
           className={`min-w-0 truncate ${variant === "plain" ? "" : "text-[11px]"}`}
         >
-          {RUNTIME_MODE_LABEL[value]}
+          {runtimeModeLabel(value)}
         </span>
         <ChevronDown
           className={`size-3 shrink-0 text-content/50 ${open ? "rotate-180" : ""}`}
@@ -169,10 +172,10 @@ export function AccessPicker({
                 />
                 <span className="min-w-0">
                   <span className="block text-[13px] font-medium leading-5">
-                    {RUNTIME_MODE_LABEL[mode]}
+                    {runtimeModeLabel(mode)}
                   </span>
                   <span className="mt-0.5 block text-[11px] leading-4 text-content/50">
-                    {RUNTIME_MODE_HINT[mode]}
+                    {runtimeModeHint(mode)}
                   </span>
                 </span>
               </button>
@@ -180,8 +183,7 @@ export function AccessPicker({
           })}
           {busy ? (
             <p className="px-2 py-1.5 text-[11px] leading-4 text-content/50">
-              Access changes apply to the next turn. Stop and resend to apply
-              them now.
+              {t("accessPicker.busyHint")}
             </p>
           ) : null}
         </Popover>

@@ -3,7 +3,7 @@ import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import {
-  RUNTIME_MODE_LABEL,
+  runtimeModeLabel,
   RUNTIME_MODES,
   type RuntimeMode,
 } from "../../sessions/model/session";
@@ -188,7 +188,7 @@ it("lets the user choose every permission mode and reflects the saved choice", a
     expect(onRuntimeModeChange).toHaveBeenLastCalledWith(mode);
     expect(document.querySelector("[data-access-picker]")).toBeNull();
     await render(mode);
-    expect(trigger().textContent).toBe(RUNTIME_MODE_LABEL[mode]);
+    expect(trigger().textContent).toBe(runtimeModeLabel(mode));
   }
 });
 

@@ -14,6 +14,7 @@ import {
   resolveModel,
 } from "./models";
 import { loadProjectProviderSettings } from "./projectProviders";
+import { messages } from "../../../shared/i18n";
 
 export type HarnessId =
   | "claude"
@@ -423,20 +424,19 @@ export const RUNTIME_MODES: RuntimeMode[] = [
 
 export const DEFAULT_RUNTIME_MODE: RuntimeMode = "supervised";
 
-export const RUNTIME_MODE_LABEL: Record<RuntimeMode, string> = {
-  supervised: "Supervised",
-  "auto-accept-edits": "Auto-accept edits",
-  auto: "Auto",
-  "full-access": "Full access",
-};
+/**
+ * Labels and hints for the permission modes, in the active locale.
+ *
+ * Functions rather than constants: the text must be read at render time so a
+ * language switch updates the picker instead of keeping the boot-time copy.
+ */
+export function runtimeModeLabel(mode: RuntimeMode): string {
+  return messages().runtimeMode[mode].label;
+}
 
-export const RUNTIME_MODE_HINT: Record<RuntimeMode, string> = {
-  supervised: "Ask before commands and file changes.",
-  "auto-accept-edits": "Auto-approve edits, ask before other actions.",
-  auto: "An AI reviewer can approve or deny actions.",
-  "full-access":
-    "Allow commands, edits, and supported MCP confirmations in non-plan turns without prompts.",
-};
+export function runtimeModeHint(mode: RuntimeMode): string {
+  return messages().runtimeMode[mode].hint;
+}
 
 export type WorkspaceMode = "current" | "worktree";
 

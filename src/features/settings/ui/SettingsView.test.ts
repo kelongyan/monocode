@@ -7,10 +7,10 @@ import { ask } from "@tauri-apps/plugin-dialog";
 import { SettingsView } from "./SettingsView";
 import { rememberNotificationProjects } from "../../notifications/model/notificationProjects";
 import {
-  SETTINGS_INDEX,
+  settingsIndex,
   CLASSIC_LAYOUT_HIDDEN_SETTINGS,
   INSET_LAYOUT_HIDDEN_SETTINGS,
-  SETTINGS_SECTIONS,
+  settingsSections,
   type SettingsSectionId,
 } from "../model/settings";
 import { loadInsetLayout } from "../model/appearance";
@@ -650,12 +650,12 @@ describe("settings pages", () => {
   });
 
   it("gives every section a rail group", () => {
-    const groups = new Set(SETTINGS_SECTIONS.map((section) => section.group));
+    const groups = new Set(settingsSections().map((section) => section.group));
     expect([...groups]).toEqual(["app", "agents", "workspace"]);
   });
 
   it("indexes each setting once", () => {
-    const ids = SETTINGS_INDEX.map((entry) => entry.id);
+    const ids = settingsIndex().map((entry) => entry.id);
     expect(ids).toEqual([...new Set(ids)]);
   });
 
@@ -762,7 +762,7 @@ describe("settings pages", () => {
 
   // The search index is hand-maintained; this is what keeps it honest.
   it.each(
-    [...new Set(SETTINGS_INDEX.map((entry) => entry.section))].map(
+    [...new Set(settingsIndex().map((entry) => entry.section))].map(
       (section) => ({ section }),
     ),
   )(
@@ -772,7 +772,7 @@ describe("settings pages", () => {
       const hidden = loadInsetLayout()
         ? INSET_LAYOUT_HIDDEN_SETTINGS
         : CLASSIC_LAYOUT_HIDDEN_SETTINGS;
-      const expected = SETTINGS_INDEX.filter(
+      const expected = settingsIndex().filter(
         (entry) => entry.section === section && !hidden.has(entry.id),
       ).map((entry) => entry.id);
       expect(renderedSettingIds().sort()).toEqual(expected.sort());
@@ -836,12 +836,12 @@ describe("settings pages", () => {
   });
 
   it("only tags rows that search can find", async () => {
-    for (const section of SETTINGS_SECTIONS.map((item) => item.id)) {
+    for (const section of settingsSections().map((item) => item.id)) {
       if (section === "skills") continue;
       await render(section);
       for (const id of renderedSettingIds()) {
         expect(
-          SETTINGS_INDEX.some((entry) => entry.id === id),
+          settingsIndex().some((entry) => entry.id === id),
           `${section}: ${id}`,
         ).toBe(true);
       }

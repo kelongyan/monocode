@@ -41,7 +41,7 @@ import {
 import {
   DEFAULT_RUNTIME_MODE,
   HARNESS_TITLE,
-  RUNTIME_MODE_LABEL,
+  runtimeModeLabel,
   type HarnessId,
   type RuntimeMode,
   harnessSupportsAttachments,
@@ -681,7 +681,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
               mode={runtimeMode}
               className="size-3.5 shrink-0"
             />
-            <span className="truncate">{RUNTIME_MODE_LABEL[runtimeMode]}</span>
+            <span className="truncate">{runtimeModeLabel(runtimeMode)}</span>
             <ChevronDown className="size-3 shrink-0 opacity-60" />
           </button>
         ) : null}

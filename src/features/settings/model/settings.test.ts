@@ -6,7 +6,7 @@ import {
   searchSettings,
   CLASSIC_LAYOUT_HIDDEN_SETTINGS,
   INSET_LAYOUT_HIDDEN_SETTINGS,
-  SETTINGS_INDEX,
+  settingsIndex,
   settingsSectionsByGroup,
   MODEL_CONTROLS_DEFAULT,
   DIFF_VIEWER_DEFAULT,
@@ -641,7 +641,7 @@ describe("settings navigation", () => {
         group.sections.map((section) => section.id),
       ),
     );
-    for (const entry of SETTINGS_INDEX) {
+    for (const entry of settingsIndex()) {
       expect(sections.has(entry.section), entry.id).toBe(true);
     }
   });

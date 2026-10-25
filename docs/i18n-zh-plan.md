@@ -210,11 +210,50 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 1. **`SETTINGS_INDEX` 双向校验**：`SettingsView.test.ts` 的 `renders every indexed setting on the $section page` 与 `only tags rows that search can find` 互为反向断言——新增任何带 `id` 的 `<Row>` 必须同时在 `SETTINGS_INDEX` 登记，否则两条都红。
 2. **`en` 不能加 `as const`**：这会把 `"Close"` 变成字面量类型，使 `zhCN: Dictionary` 无法赋 `"关闭"`。用普通对象字面量，让 `Dictionary = typeof en` 推导为 `string`。
 
-### 阶段 1：结构改造 + 骨架文案（2 天）
+### 阶段 1：结构改造 + 骨架文案（2 天）— ✅ 已完成
+
 1. `SETTINGS_SECTIONS` / `SETTINGS_INDEX` / `RUNTIME_MODE_*` 函数化（3.5），同步修 18 处测试引用。
 2. 翻译：`app/shell/`（`TitleBar`、`Sidebar`、`WindowControls`）、`sessions/ui/Composer.tsx`、`ModelPicker.tsx`。
 
 **验收**：主界面、侧栏、输入框、模式选择为中文；测试全绿。
+
+#### 实际落地
+
+结构改造（3.5 节的三项全部完成）：
+
+| 原常量 | 现形式 | 说明 |
+| --- | --- | --- |
+| `SETTINGS_GROUPS` | `SETTINGS_GROUP_IDS` + `settingsGroups()` | 文本来自 `settings.groups` |
+| `SETTINGS_SECTIONS` | `SETTINGS_SECTION_ROWS` + `settingsSections()` | 文本来自 `settings.sections` |
+| `SETTINGS_INDEX` | `SETTINGS_ENTRY_ROWS` + `settingsIndex()` | 文本来自 `settings.entries`，**键名即设置 id** |
+| `RUNTIME_MODE_LABEL` / `_HINT` | `runtimeModeLabel()` / `runtimeModeHint()` | 文本来自 `runtimeMode.<mode>` |
+
+配套改动：
+- `searchSettings()`、`settingsSectionLabel()`、`settingsSectionDescription()` 改为调用上述函数；`isSettingsSectionId()` 改用静态的 `SETTINGS_SECTION_ROWS`（不依赖 locale）。
+- 新增 `messages(): Dictionary`（`src/shared/i18n/index.ts`），用于按闭合联合索引结构化文本，避免拼 key 字符串后需要断言。
+- 词典的 `settings.entries` 键直接用 kebab-case 设置 id（如 `"format-on-save"`），索引可直接 `entries[row.id]` 取值，不需要第二套命名映射。
+
+新增的中文覆盖：
+
+| 文件 | 内容 |
+| --- | --- |
+| `locales/*/index.ts` | `settings.groups`(3) + `settings.sections`(12) + `settings.entries`(55) + `runtimeMode`(4) + `window`(7) + `accessPicker`(2) |
+| `WindowControls.tsx` | 最小化/最大化/还原/关闭的 title 与 aria-label |
+| `AccessPicker.tsx` | 权限模式标签、提示、"更改将在下个回合生效" |
+| `SettingsRail.tsx` | 订阅 locale，章节名随语言切换 |
+| `QuickPermissions.tsx` / `QuickComposer.tsx` | 权限模式标签 |
+| `settingsLocale.test.ts` | 6 条中文断言，覆盖章节/条目/搜索/模式 |
+
+**验证**：`tsc` 通过；`vitest` 5547 通过（仅剩 1 条预存时区失败）；`cargo fmt --check` 通过。
+
+**三个实施要点**：
+
+1. **所有 `entries` 的 `keywords` 必须中英并列**。中文界面下用户输入「毛玻璃」「快捷键」要能命中，同时保留 `prettier`、`glass` 等英文原词。`settingsLocale.test.ts` 对这两种输入都有断言。
+2. **组件必须订阅 locale**。`settingsSections()` 等函数只在调用时读词典，若组件不订阅就不会重渲染。`SettingsRail`、`AccessPicker`、`QuickPermissions` 都加了 `useLocale()`/`useT()`；`SettingsView` 通过 `useAppearanceSettings` 内的 `useLocale()` 间接订阅。
+3. **`SETTINGS_ENTRY_ROWS` 的类型要写成具名 `SettingsEntryRow`**。若把 `keyof Dictionary["settings"]["entries"]` 内联并配合 `...(IS_MAC ? [...] : [])` 条件展开，TS 会把 `row.id` 拓宽成 `string`，导致 `entries[row.id]` 索引报错。
+
+**未做**：`TitleBar.tsx`(187 串)、`Sidebar.tsx`(616 串)、`Composer.tsx`(161 串)、`ModelPicker.tsx`(322 串) 的正文文案。这四文件合计约 1,286 处字符串，其中大量是 CSS 类名、`data-*` 与图标名，需要逐条甄别；按方案 5 节的分批策略留到阶段 2/3，与设置面板一起推进，避免单次提交过大。
+
 
 ### 阶段 2：设置面板（3 天）
 按 section 拆成多个 PR：general / appearance / providers / accounts / keysbindings / chat / monos / inbox / worktrees / archive。

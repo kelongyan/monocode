@@ -9,8 +9,8 @@ import {
 } from "../../sessions/model/models";
 import {
   HARNESSES,
-  RUNTIME_MODE_HINT,
-  RUNTIME_MODE_LABEL,
+  runtimeModeHint,
+  runtimeModeLabel,
   RUNTIME_MODES,
   type HarnessId,
   type Session,
@@ -976,8 +976,8 @@ export async function handleAgentApp(
       return {
         runtimeModes: RUNTIME_MODES.map((id) => ({
           id,
-          label: RUNTIME_MODE_LABEL[id],
-          description: RUNTIME_MODE_HINT[id],
+          label: runtimeModeLabel(id),
+          description: runtimeModeHint(id),
         })),
         harnesses: HARNESSES.map((harness) => ({
           id: harness,

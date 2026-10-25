@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { DICTIONARIES, type MessageKey } from "./dictionary";
+import { DICTIONARIES, type Dictionary, type MessageKey } from "./dictionary";
 import { currentLocale, setLocale, subscribeLocale } from "./store";
 import type { Locale } from "./types";
 
@@ -36,6 +36,18 @@ export function t(key: MessageKey, vars?: MessageVars): string {
   return fallback === undefined ? key : interpolate(fallback, vars);
 }
 
+/**
+ * The active locale's dictionary, typed as `Dictionary`.
+ *
+ * Use this for structured text that is indexed by a closed union (settings
+ * sections and rows, runtime modes) instead of building key strings with
+ * template literals: `messages().settings.sections[id].label` stays type-safe
+ * and needs no cast. Read it during render so a locale change is picked up.
+ */
+export function messages(): Dictionary {
+  return DICTIONARIES[currentLocale()];
+}
+
 /** Re-renders the component when the locale changes, then returns `t`. */
 export function useT(): typeof t {
   useSyncExternalStore(subscribeLocale, currentLocale, () => "en");
@@ -47,6 +59,6 @@ export function useLocale(): Locale {
   return useSyncExternalStore(subscribeLocale, currentLocale, () => "en");
 }
 
-export type { Locale, MessageKey };
+export type { Locale, MessageKey, Dictionary };
 export { setLocale, currentLocale };
 export { LOCALES, LOCALE_LABEL, isLocale } from "./types";
