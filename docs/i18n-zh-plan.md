@@ -255,9 +255,44 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 **未做**：`TitleBar.tsx`(187 串)、`Sidebar.tsx`(616 串)、`Composer.tsx`(161 串)、`ModelPicker.tsx`(322 串) 的正文文案。这四文件合计约 1,286 处字符串，其中大量是 CSS 类名、`data-*` 与图标名，需要逐条甄别；按方案 5 节的分批策略留到阶段 2/3，与设置面板一起推进，避免单次提交过大。
 
 
-### 阶段 2：设置面板（3 天）
+### 阶段 2：设置面板（3 天）— ✅ 已完成
+
 按 section 拆成多个 PR：general / appearance / providers / accounts / keysbindings / chat / monos / inbox / worktrees / archive。
 `SettingsView.tsx` 有 4,680 行，**禁止一次性改完**，否则 review 与冲突都不可控。
+
+#### 实际落地
+
+`SettingsView.tsx` 的**全部可见文案**已改为 `t()` 查表：
+
+| 页面 / 组件 | 键命名空间 |
+| --- | --- |
+| GeneralPage | `settings.pages.general.*` |
+| ChatPage | `settings.pages.chat.*` |
+| AppearancePage | `settings.pages.appearance.*` |
+| InboxPage + GitHub/GitLab/Azure/Linear | `settings.pages.inbox.*` |
+| UpdateRow | `settings.pages.inbox.*`（更新检查） |
+| KeybindingsPage | `settings.pages.keybindings.*` |
+| ProvidersPage / UsageDisplaySettings / ProviderAccountsSettings | `settings.pages.providers.*` |
+| ArchivePage | `settings.pages.archive.*` |
+| MonosPage / MonoRow | `settings.pages.monos.*` |
+| ChatBackgroundCard | `settings.pages.chatBackground.*` |
+| SettingsSearch | `settings.search.*` |
+| 共用状态词 | `settings.status.*`（已连接 / 需要登录 / 未安装 / 保存中 / 连接） |
+| 共用选项词 | `settings.options.*`（跟随系统 / 深色 / 浅色 / 默认 / 色盲友好 / 高对比度） |
+
+**故意保留英文的 5 处**：`https://gitlab.com`、`glpat-…`、`https://dev.azure.com/myorg`、`lin_api_…`、`Work or Personal`。前四个是 URL / 令牌格式示例，最后一个是账号命名示例，翻译反而会误导。
+
+`binaryInspectionError()` 是纯函数（无组件上下文），改用直接导入的 `t()` 而非 `useT()`，因此新增 `settings.pages.providers.invalidVersion` 与 `tooOld` 两条带占位符的错误文案。
+
+**验证**：`tsc` 通过；`vitest` 5550 通过（仅剩 1 条预存时区失败）；`cargo fmt --check` 通过。
+
+`settingsLocale.test.ts` 扩到 9 条，新增两条关键断言：
+
+1. **逐键比对中英差异**——遍历 `settings.pages` 所有叶子，中文值必须与英文不同，防止"复制英文当翻译"。
+2. **占位符插值**——`invalidVersion` 传 `{provider: "Codex"}` 必须得到 `Codex CLI 返回了无效的版本号。`
+
+**一个实施要点**：`SettingsView.tsx` 内有 15+ 个独立组件，每个用 `t()` 的组件都要有自己的 `useT()` / `useLocale()`；它们不在同一渲染分支，父组件重渲染不会带动它们。脚本批量插入 hook 时要注意：`function X({` 后是解构参数，hook 必须插在签名闭合的 `) {` 之后，不能紧跟函数名——在 `InboxPage` 上踩过一次，`tsc` 报 `':' expected`。
+
 
 ### 阶段 3：核心工作流（3 天）
 `AgentTranscript.tsx`、`InboxView.tsx`、`GitChangesPanel.tsx`、`FileTree.tsx`、`Monos` 系列、`AutomationsView.tsx`。

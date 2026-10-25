@@ -21,6 +21,8 @@ export const zhCN: Dictionary = {
       agents: "代理",
       workspace: "工作区",
     },
+    /** The Settings window title. */
+    title: "设置",
     sections: {
       general: {
         label: "通用",
@@ -324,6 +326,234 @@ export const zhCN: Dictionary = {
       label: "语言",
       description: "MonoCode 界面使用的语言。",
       hint: "应用于整个应用。",
+    },
+    options: {
+      system: "跟随系统",
+      dark: "深色",
+      light: "浅色",
+      default: "默认",
+      colorblind: "色盲友好",
+      highContrast: "高对比度",
+    },
+    status: {
+      connected: "已连接",
+      signInRequired: "需要登录",
+      notInstalled: "未安装",
+      saving: "保存中",
+      connect: "连接",
+    },
+    search: {
+      placeholder: "搜索设置",
+      clear: "清除设置搜索",
+      results: "设置搜索结果",
+      filter: "筛选",
+    },
+    pages: {
+      general: {
+        alertsTitle: "提醒",
+        alertsDescription: "当你在别处工作时，MonoCode 如何通知你。",
+        soundsLabel: "声音",
+        soundsDescription:
+          "项目活动、回合结束和可用更新时的短提示音。在收件箱设置中选择项目通知类别。切换开关和复制完成的回合时也会播放。",
+        notificationsLabel: "通知",
+        notificationsDescription:
+          "当提醒到期，或代理在另一个会话中完成、需要输入，或 MonoCode 处于后台时发出通知。点击通知可打开该会话。",
+        workspaceTitle: "工作区",
+        workspaceDescription: "项目导航和工作区标签页的行为。",
+        fileTabsLabel: "文件标签页",
+        fileTabsDescription:
+          "在当前对话旁打开文件，或在顶部标签栏中为每个文件分配普通标签页。顶部标签栏的文件仍可合并为分屏。",
+        tabAnimationsLabel: "标签页动画",
+        tabAnimationsDescription:
+          "标签页打开和关闭时播放动画。关闭后标签页立即切换。",
+        notesLabel: "便签",
+        notesDescription:
+          "位于项目栏的全局 Markdown 笔记本。可从对话记录中保存已完成的回合，之后用 @note 提及或加入对话。",
+        quickComposerLabel: "快捷输入",
+        workingAgentsLabel: "工作中的代理",
+        workingAgentsDescription:
+          "当有两个或更多对话正在进行时，项目栏上的卡片会列出它们，方便你跨项目跳转。已完成的回合会保留，直到你打开该会话。",
+        closeToTrayLabel: "关闭到托盘",
+        closeToTrayDescription:
+          "关闭窗口时将其隐藏到系统托盘而不是退出，让运行中的代理继续工作。可从托盘图标重新打开，并从其菜单真正退出。关闭此项后，关闭将结束窗口。",
+        aboutTitle: "关于",
+      },
+      chat: {
+        transcriptTitle: "对话记录",
+        transcriptDescription: "对话在增长过程中的呈现方式。",
+        transcriptLayoutLabel: "对话记录布局",
+        transcriptLayoutDescription:
+          "全宽模式将用户提示显示为横跨整行的卡片。对话模式将其右对齐并限制最大宽度，类似消息应用。",
+        anchorPromptsLabel: "提示固定在顶部",
+        anchorPromptsDescription:
+          "发送时，新提示位于对话记录顶部，回复在其下方空间展开。关闭后保持经典布局，最新消息停留在输入框上方。",
+        pacedRevealLabel: "平滑文字显示",
+        pacedRevealDescription:
+          "逐步显示收到的文字。关闭后立即显示已接收的文本。这只改变显示节奏，不影响处理速度。",
+        composerTitle: "输入框",
+        composerDescription: "输入框如何处理你输入的内容。",
+        followUpLabel: "追问行为",
+        followUpDescription:
+          "将追问排队，等当前回合结束后发送；或立即插话到当前回合。",
+        modelControlsLabel: "模型控件",
+        modelControlsDescription: "在选择器旁显示模型选项，而不是放在模型菜单里。",
+        autocorrectLabel: "自动更正",
+        autocorrectDescription:
+          "会话和 Mono 输入框中的拼写检查与自动更正提示。关闭后文本保持原样。",
+        editorTitle: "编辑器",
+        editorDescription: "在工作区编辑器中保存文件时的行为。",
+        formatOnSaveLabel: "保存时格式化",
+        formatOnSaveDescription:
+          "写入前对受支持的文件运行 Prettier。关闭后保留你输入的文本，包括引号风格。",
+        reviewTitle: "代码审阅",
+        reviewDescription: "查看回合变更时，它们在何处打开。",
+        diffViewLabel: "差异视图",
+        diffViewDescription:
+          "编辑器模式在工作树中保留文件改动。统一模式将所有改动文件堆叠在一次审阅中，带固定表头并折叠未改动行。",
+        extrasTitle: "附加",
+        extrasDescription: "空闲动画，仅此而已。两者都关闭可获得静止的工作区。",
+        composerMascotLabel: "输入框吉祥物",
+        composerMascotDescription:
+          "回合运行时，项目吉祥物沿输入框跑动，第一次会撞到「滚动到最新」按钮，然后跳过它，有时还会抓取金币。",
+        emptySessionGamesLabel: "空会话小游戏",
+        emptySessionGamesDescription:
+          "吃豆人和贪吃蛇在空会话网格上待机。悬停在区域上可操控当前显示的那一个。关闭后该面板保持静止。",
+      },
+      appearance: {
+        themeTitle: "主题",
+        themeDescriptionInset: "每个工作区主题都有自己的深色和浅色调色板。",
+        themeDescriptionClassic:
+          "深色和浅色共用同一色调，因此下方的颜色设置对两者都生效。",
+        themeHint: "跟随系统则使用操作系统外观。",
+        workspaceThemeDescription:
+          "内嵌工作区外壳、卡片、文字和强调色所用的颜色。每个主题都有深色和浅色调色板。",
+        insetGlassLinux: "窗口在 Linux 上保持不透明。",
+        insetGlassLight: "浅色模式保持窗口不透明。你的深色模式选择会被记住。",
+        insetGlassHint: "透过窗口显示桌面。关闭后窗口保持不透明。",
+        accentColorDescription: "用于输入框的发送按钮和你的消息气泡。",
+        diffColorsDescription:
+          "新增和删除行的颜色。色盲友好和高对比度使用蓝色与橙色代替绿色与红色；高对比度会加强着色和文字对比。",
+        colorTitle: "颜色",
+        colorDescription:
+          "色相和饱和度影响所有界面。亮度只作用于深色主题。",
+        hueDescription: "强调色和着色界面的基础色相。",
+        saturationDescription: "色相对界面的着色强度。设为零则保持中性。",
+        translucencyTitle: "半透明",
+        sidebarOpacityDescription: "作用于项目栏和其他毛玻璃面板。",
+        blurDescription: "窗口背后的背景模糊。",
+        mainPaneGlassDescription:
+          "将会话和编辑器背后的主面板也应用半透明效果。",
+        layoutTitle: "布局",
+        insetLayoutDescription:
+          "使用重新设计的侧栏、项目切换器、工作区标签页和右侧面板。关闭可返回经典布局。",
+        collapsedRailDescription:
+          "将项目导航保留为紧凑的图标栏，或完全隐藏该栏。",
+        interfaceScaleDescription:
+          "缩放整个界面。也可使用 Ctrl+=、Ctrl+- 和 Ctrl+0（macOS 上为 Cmd）。",
+        showExcludedFilesDescription:
+          "在资源管理器中显示 Git 排除的文件和文件夹，例如构建产物和依赖。",
+      },
+      inbox: {
+        githubDescription: "通过 GitHub CLI 读取的拉取请求、审阅和工单。",
+        gitlabDescription: "来自 GitLab.com 或自建实例的合并请求。",
+        azureDescription: "来自你的 ADO 组织的拉取请求和 Boards 工作项。",
+        jiraDescription: "来自你所选项目的 Jira Cloud 工单。",
+        linearDescription: "来自你所选团队、指派给你的工单。",
+        githubReady:
+          "GitHub CLI 已安装并已认证。MonoCode 使用它读取 GitHub 收件箱条目。",
+        githubNeedsLogin:
+          "在终端运行 gh auth login，完成登录流程后再次检查。",
+        githubMissing:
+          "从 cli.github.com 安装 GitHub CLI，在终端运行 gh auth login，然后再次检查。",
+        gitlabConnectDescription:
+          "连接 GitLab.com 或自建 GitLab 实例。请使用具有 API 访问权限的个人访问令牌；令牌保存在本地，「断开连接」会将其删除。",
+        azureConnectDescription:
+          "使用个人访问令牌连接你的 ADO 组织（Boards + Repos 读写以支持评论）。令牌保存在本地，「断开连接」会将其删除。",
+        linearConnectDescription:
+          "在 Linear → Settings → Security & Access 中创建个人 API 密钥。「断开连接」会将其删除。",
+        connectionLabel: "连接",
+        apiKeyLabel: "API 密钥",
+        gitlabUrlLabel: "GitLab 地址",
+        gitlabTokenLabel: "GitLab 访问令牌",
+        azureUrlLabel: "Azure DevOps 组织地址",
+        azureTokenLabel: "Azure DevOps 个人访问令牌",
+        linearKeyLabel: "Linear API 密钥",
+        checkingForUpdates: "正在检查更新…",
+        updateCheckFailed: "检查更新失败。",
+        updateFeedHint: "MonoCode 从发布源自行更新。",
+        download: "下载",
+        checkForUpdates: "检查更新",
+      },
+      keybindings: {
+        groupTitle: "快捷键",
+        groupDescription: "点击快捷键可录制新的按键。录制时按 Delete 可将其禁用。",
+        filterLabel: "筛选快捷键",
+        commandColumn: "命令",
+        bindingOne: "项绑定",
+        bindingOther: "项绑定",
+      },
+      providers: {
+        agentClisTitle: "代理 CLI",
+        defaultsScopeLabel: "服务提供方默认值范围",
+        advancedTitle: "高级",
+        idleAgentsLabel: "保持空闲代理就绪",
+        idleAgentsDescription:
+          "已完成的对话会让其代理 CLI 继续运行几分钟，以便追问立即开始。每个进程可能占用几百 MB 内存。超过此数量时，空闲最久的会提前停止；下次发消息时经短暂重启后恢复。内存紧张的机器请选择「无」。",
+        claudeHooksLabel: "Claude Code 钩子",
+        claudeHooksDescription:
+          "运行 settings.json 中配置的钩子——PreToolUse 命令重写、拦截、通知等——与 Claude Code CLI 的行为一致。若某个钩子行为异常且你需要取回会话，请关闭此项。下个回合生效。",
+        usageTitle: "用量与隐私",
+        showRemainingUsageLabel: "显示剩余用量",
+        showRemainingUsageDescription:
+          "用量条以每个限额的剩余量填充，而不是已用量。",
+        maskEmailsLabel: "遮蔽账号邮箱",
+        maskEmailsDescription:
+          "在设置和用量弹层中模糊账号邮箱，点击后才显示，避免出现在截图里。",
+        accountsTitle: "账号",
+        accountsDescription:
+          "为支持账号配置的服务提供方创建独立的登录。仍可从页脚的用量控件切换账号。",
+        renameAccountTitle: "重命名账号",
+        removeAccountTitle: "移除账号",
+        invalidVersion: "{provider} CLI 返回了无效的版本号。",
+        tooOld: "OpenCode v{version} 版本过旧，请升级到 v{minimum} 或更高版本。",
+      },
+      archive: {
+        title: "已归档项目",
+        description: "从项目栏归档项目，可保留其对话而不在侧栏中列出。",
+        showArchivedLabel: "在侧栏显示归档",
+        showArchivedDescription: "让已归档的对话与活动对话一起列出。",
+      },
+      monos: {
+        groupTitle: "Mono",
+        enabledLabel: "显示 Mono",
+        enabledDescription:
+          "位于项目栏上属于你的代理。每个 Mono 在你指定的项目上工作，记住重要信息，并会自主执行习惯任务。关闭此项可隐藏它们。",
+        pinnedLabel: "将 Mono 固定到图标栏",
+        pinnedDescription:
+          "当项目栏折叠为图标时，将每个 Mono 显示在栏顶部（分隔线之上），而不是放在项目选择器里。",
+        menuBarLabel: "菜单栏图标",
+        menuBarDescription:
+          "从 macOS 菜单栏与 Mono 对话或打开快捷输入。关闭此项可隐藏该图标。",
+        listTitle: "你的 Mono",
+        listDescription:
+          "选择每个 Mono 启动的新会话是否显示在侧栏。隐藏的会话仍会保存，可从该 Mono 的对话中打开。使用项目栏上的加号添加 Mono，并在其详情中选择项目。",
+        resetLabel: "重置 Mono",
+        resetDefaultsTitle: "重置为默认值",
+      },
+      chatBackground: {
+        title: "对话背景",
+        description: "对话面板背后的图片。仅保存在本设备。",
+        effectLabel: "背景效果",
+        showOnLabel: "显示于",
+        showOnDescription: "仅空会话，或所有对话。",
+        showBackgroundOnLabel: "背景显示于",
+        emptyVisibilityLabel: "空会话可见度",
+        emptyVisibilityDescription: "对话尚无消息时的背景强度。",
+        emptyBackgroundVisibilityLabel: "空会话背景可见度",
+        sessionVisibilityLabel: "会话可见度",
+        sessionVisibilityDescription: "对话已有消息后的背景强度。",
+        sessionBackgroundVisibilityLabel: "会话背景可见度",
+      },
     },
   },
   window: {

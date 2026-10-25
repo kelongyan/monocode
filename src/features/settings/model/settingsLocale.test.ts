@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from "vitest";
-import { setLocale } from "../../../shared/i18n";
+import { messages, setLocale, t } from "../../../shared/i18n";
 import {
   searchSettings,
   settingsIndex,
@@ -73,5 +73,43 @@ describe("runtime mode copy follows the locale", () => {
     expect(runtimeModeHint("supervised")).toContain("询问");
     setLocale("en");
     expect(runtimeModeLabel("supervised")).toBe("Supervised");
+  });
+});
+
+describe("settings page copy follows the locale", () => {
+  it("translates every section's page copy", () => {
+    setLocale("zh-CN");
+    const pages = messages().settings.pages;
+    expect(pages.general.alertsTitle).toBe("提醒");
+    expect(pages.chat.composerTitle).toBe("输入框");
+    expect(pages.appearance.colorTitle).toBe("颜色");
+    expect(pages.inbox.githubDescription).toContain("GitHub");
+    expect(pages.keybindings.groupTitle).toBe("快捷键");
+    expect(pages.providers.advancedTitle).toBe("高级");
+    expect(pages.archive.title).toBe("已归档项目");
+    expect(pages.monos.enabledLabel).toBe("显示 Mono");
+  });
+
+  it("keeps every settings.pages key translatable, not copied from English", () => {
+    setLocale("zh-CN");
+    const zh = messages().settings.pages;
+    setLocale("en");
+    const en = messages().settings.pages;
+    for (const section of Object.keys(en) as (keyof typeof en)[]) {
+      for (const key of Object.keys(en[section]) as (keyof (typeof en)[typeof section])[]) {
+        const value = String(zh[section][key]);
+        const original = String(en[section][key]);
+        // Chinese copy must actually differ; brand names may legitimately match.
+        if (!/^[A-Za-z .&+-]+$/.test(original))
+          expect(value, `${section}.${String(key)}`).not.toBe(original);
+      }
+    }
+  });
+
+  it("interpolates the provider name into the version error", () => {
+    setLocale("zh-CN");
+    expect(
+      t("settings.pages.providers.invalidVersion", { provider: "Codex" }),
+    ).toBe("Codex CLI 返回了无效的版本号。");
   });
 });

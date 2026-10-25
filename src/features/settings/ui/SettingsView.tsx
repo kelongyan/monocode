@@ -437,6 +437,7 @@ import {
   LOCALES,
   isLocale,
   setLocale,
+  t,
   useLocale,
   useT,
   type Locale,
@@ -605,7 +606,7 @@ export function SettingsView({
   return (
     <div
       role="region"
-      aria-label="Settings"
+      aria-label={t("settings.title")}
       data-app-settings
       className="flex min-h-0 min-w-0 flex-1 flex-col text-content"
     >
@@ -713,6 +714,7 @@ function SettingsSearch({
 }: {
   onReveal: (section: SettingsSectionId, settingId: string | null) => void;
 }) {
+  const t = useT();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const root = useRef<HTMLDivElement>(null);
@@ -772,8 +774,8 @@ function SettingsSearch({
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={onKeyDown}
-          placeholder="Search settings"
-          aria-label="Search settings"
+          placeholder={t("settings.search.placeholder")}
+          aria-label={t("settings.search.placeholder")}
           aria-expanded={open}
           aria-controls={listId}
           spellCheck={false}
@@ -783,7 +785,7 @@ function SettingsSearch({
         {query ? (
           <button
             type="button"
-            aria-label="Clear settings search"
+            aria-label={t("settings.search.clear")}
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => {
               setQuery("");
@@ -808,7 +810,7 @@ function SettingsSearch({
           }}
           id={listId}
           role="listbox"
-          aria-label="Settings search results"
+          aria-label={t("settings.search.results")}
           className="overflow-y-auto overscroll-contain p-1"
         >
           {results.length === 0 ? (
@@ -849,6 +851,7 @@ function GeneralPage({
 }: {
   onOpenWhatsNew: (version: string) => void;
 }) {
+  const t = useT();
   const [soundsEnabled, setSoundsEnabled] = useState(loadSoundsEnabled);
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     loadNotificationsEnabled,
@@ -934,24 +937,24 @@ function GeneralPage({
   return (
     <>
       <Group
-        title="Alerts"
-        description="How MonoCode reaches you while you are looking somewhere else."
+        title={t("settings.pages.general.alertsTitle")}
+        description={t("settings.pages.general.alertsDescription")}
       >
         <Row
           id="sounds"
-          label="Sounds"
-          description="Short cues for project activity, finished turns, and available updates. Choose project notification categories in Inbox settings. Switches and Copy on a finished turn also play."
+          label={t("settings.entries.sounds.label")}
+          description={t("settings.pages.general.soundsDescription")}
         >
           <Toggle
-            label="Sounds"
+            label={t("settings.entries.sounds.label")}
             on={soundsEnabled}
             onChange={onSoundsEnabled}
           />
         </Row>
         <Row
           id="notifications"
-          label="Notifications"
-          description="Notify when a reminder is due, or when an agent finishes or needs input in another session or while MonoCode is in the background. Click the notification to open that session."
+          label={t("settings.entries.notifications.label")}
+          description={t("settings.pages.general.notificationsDescription")}
         >
           {notificationsEnabled && notificationPermission === "denied" ? (
             <NotificationsBlocked />
@@ -962,7 +965,7 @@ function GeneralPage({
             </span>
           ) : null}
           <Toggle
-            label="Notifications"
+            label={t("settings.entries.notifications.label")}
             on={notificationsEnabled}
             onChange={onNotificationsEnabled}
           />
@@ -970,16 +973,16 @@ function GeneralPage({
       </Group>
 
       <Group
-        title="Workspace"
-        description="How project navigation and workspace tabs behave."
+        title={t("settings.pages.general.workspaceTitle")}
+        description={t("settings.pages.general.workspaceDescription")}
       >
         <Row
           id="file-tabs"
-          label="File tabs"
-          description="Open files beside the active chat, or give each file a normal tab in the top bar. Top-bar files can still be combined into split panes."
+          label={t("settings.entries.file-tabs.label")}
+          description={t("settings.pages.general.fileTabsDescription")}
         >
           <Segmented
-            label="File tabs"
+            label={t("settings.entries.file-tabs.label")}
             value={fileTabMode}
             options={[
               { value: "pane", label: "Beside chat" },
@@ -990,26 +993,26 @@ function GeneralPage({
         </Row>
         <Row
           id="tab-animations"
-          label="Tab animations"
-          description="Animate tabs as they open and close. Turn this off for instant tab changes."
+          label={t("settings.pages.general.tabAnimationsLabel")}
+          description={t("settings.pages.general.tabAnimationsDescription")}
         >
           <Toggle
-            label="Tab animations"
+            label={t("settings.pages.general.tabAnimationsLabel")}
             on={tabAnimationsEnabled}
             onChange={onTabAnimationsEnabled}
           />
         </Row>
         <Row
           id="notes"
-          label="Notes"
-          description="A global markdown notebook on the project rail. Save a finished turn from the transcript, then mention it later with @note or add it to chat."
+          label={t("settings.entries.notes.label")}
+          description={t("settings.pages.general.notesDescription")}
         >
-          <Toggle label="Notes" on={notesEnabled} onChange={onNotesEnabled} />
+          <Toggle label={t("settings.entries.notes.label")} on={notesEnabled} onChange={onNotesEnabled} />
         </Row>
         {IS_MAC && (
           <Row
             id="quick-composer"
-            label="Quick composer"
+            label={t("settings.entries.quick-composer.label")}
             description={`Press ${quickComposerShortcutLabel(loadQuickComposerShortcut())} in any app to float a prompt over it and start a session without switching to MonoCode. Change the shortcut in Keybindings. Return starts it in the background; ⌘Return starts it and brings the session forward.`}
           >
             {quickComposerError ? (
@@ -1018,7 +1021,7 @@ function GeneralPage({
               </span>
             ) : null}
             <Toggle
-              label="Quick composer"
+              label={t("settings.entries.quick-composer.label")}
               on={quickComposerEnabled}
               onChange={onQuickComposerEnabled}
             />
@@ -1026,11 +1029,11 @@ function GeneralPage({
         )}
         <Row
           id="working-agents"
-          label="Working agents"
-          description="When two or more chats are in flight, a card on the project rail lists them so you can jump across projects. Finished turns stay until you open that session."
+          label={t("settings.entries.working-agents.label")}
+          description={t("settings.pages.general.workingAgentsDescription")}
         >
           <Toggle
-            label="Working agents"
+            label={t("settings.entries.working-agents.label")}
             on={liveAgentsEnabled}
             onChange={onLiveAgentsEnabled}
           />
@@ -1038,11 +1041,11 @@ function GeneralPage({
         {IS_WIN && (
           <Row
             id="close-to-tray"
-            label="Close to tray"
-            description="Closing a window hides it to the system tray instead of quitting, so running agents keep going. Reopen from the tray icon, and quit for real from its menu. Turn this off to have close end the window."
+            label={t("settings.entries.close-to-tray.label")}
+            description={t("settings.pages.general.closeToTrayDescription")}
           >
             <Toggle
-              label="Close to tray"
+              label={t("settings.entries.close-to-tray.label")}
               on={closeToTray}
               onChange={onCloseToTray}
             />
@@ -1050,7 +1053,7 @@ function GeneralPage({
         )}
       </Group>
 
-      <Group title="About">
+      <Group title={t("settings.pages.general.aboutTitle")}>
         <UpdateRow onOpenWhatsNew={onOpenWhatsNew} />
       </Group>
     </>
@@ -1058,6 +1061,7 @@ function GeneralPage({
 }
 
 function ChatPage() {
+  const t = useT();
   const pacedReveal = usePacedReveal();
   const [transcriptLayout, setTranscriptLayout] =
     useState<TranscriptLayout>(loadTranscriptLayout);
@@ -1128,16 +1132,16 @@ function ChatPage() {
   return (
     <>
       <Group
-        title="Transcript"
-        description="How a conversation reads as it grows."
+        title={t("settings.pages.chat.transcriptTitle")}
+        description={t("settings.pages.chat.transcriptDescription")}
       >
         <Row
           id="transcript-layout"
-          label="Transcript layout"
-          description="Full width keeps user prompts as a spanning card. Chat aligns them to the right with a max width, like a messaging app."
+          label={t("settings.pages.chat.transcriptLayoutLabel")}
+          description={t("settings.pages.chat.transcriptLayoutDescription")}
         >
           <Segmented
-            label="Transcript layout"
+            label={t("settings.pages.chat.transcriptLayoutLabel")}
             value={transcriptLayout}
             options={[
               { value: "full", label: "Full width" },
@@ -1148,22 +1152,22 @@ function ChatPage() {
         </Row>
         <Row
           id="anchor-prompts"
-          label="Anchor prompts to top"
-          description="When you send, the new prompt sits at the top of the transcript and the reply grows into the space below. Turn this off to keep the classic layout, with the latest message resting on the composer."
+          label={t("settings.pages.chat.anchorPromptsLabel")}
+          description={t("settings.pages.chat.anchorPromptsDescription")}
         >
           <Toggle
-            label="Anchor prompts to top"
+            label={t("settings.pages.chat.anchorPromptsLabel")}
             on={transcriptAnchor}
             onChange={onTranscriptAnchor}
           />
         </Row>
         <Row
           id="paced-reveal"
-          label="Smooth text reveal"
-          description="Reveal incoming bursts gradually. Turn this off to show received text immediately. This changes presentation timing, not processing speed."
+          label={t("settings.pages.chat.pacedRevealLabel")}
+          description={t("settings.pages.chat.pacedRevealDescription")}
         >
           <Toggle
-            label="Smooth text reveal"
+            label={t("settings.pages.chat.pacedRevealLabel")}
             on={pacedReveal}
             onChange={savePacedReveal}
           />
@@ -1171,16 +1175,16 @@ function ChatPage() {
       </Group>
 
       <Group
-        title="Composer"
-        description="What the composer does with what you type."
+        title={t("settings.pages.chat.composerTitle")}
+        description={t("settings.pages.chat.composerDescription")}
       >
         <Row
           id="follow-up"
-          label="Follow-up behavior"
-          description="Queue follow-ups until the active turn finishes, or steer the active turn immediately."
+          label={t("settings.pages.chat.followUpLabel")}
+          description={t("settings.pages.chat.followUpDescription")}
         >
           <Segmented
-            label="Follow-up behavior"
+            label={t("settings.pages.chat.followUpLabel")}
             value={followUpBehavior}
             options={[
               { value: "queue", label: "Queue" },
@@ -1191,11 +1195,11 @@ function ChatPage() {
         </Row>
         <Row
           id="model-controls"
-          label="Model controls"
-          description="Show model options beside the picker instead of inside the model menu."
+          label={t("settings.pages.chat.modelControlsLabel")}
+          description={t("settings.pages.chat.modelControlsDescription")}
         >
           <Segmented
-            label="Model controls"
+            label={t("settings.pages.chat.modelControlsLabel")}
             value={modelControls}
             options={[
               { value: "menu", label: "Menu" },
@@ -1206,11 +1210,11 @@ function ChatPage() {
         </Row>
         <Row
           id="composer-autocorrect"
-          label="Autocorrect"
-          description="Spell check and autocorrect prompts in session and mono composers. Turn this off to keep the text exactly as typed."
+          label={t("settings.pages.chat.autocorrectLabel")}
+          description={t("settings.pages.chat.autocorrectDescription")}
         >
           <Toggle
-            label="Autocorrect"
+            label={t("settings.pages.chat.autocorrectLabel")}
             on={composerAutocorrect}
             onChange={saveComposerAutocorrect}
           />
@@ -1218,16 +1222,16 @@ function ChatPage() {
       </Group>
 
       <Group
-        title="Editor"
-        description="What happens when you save a file in the workspace editor."
+        title={t("settings.pages.chat.editorTitle")}
+        description={t("settings.pages.chat.editorDescription")}
       >
         <Row
           id="format-on-save"
-          label="Format on save"
-          description="Run Prettier on supported files before writing. Off keeps the text you typed, including quote style."
+          label={t("settings.pages.chat.formatOnSaveLabel")}
+          description={t("settings.pages.chat.formatOnSaveDescription")}
         >
           <Toggle
-            label="Format on save"
+            label={t("settings.pages.chat.formatOnSaveLabel")}
             on={formatOnSave}
             onChange={onFormatOnSave}
           />
@@ -1235,16 +1239,16 @@ function ChatPage() {
       </Group>
 
       <Group
-        title="Code review"
-        description="Where a turn's changes open when you go to read them."
+        title={t("settings.pages.chat.reviewTitle")}
+        description={t("settings.pages.chat.reviewDescription")}
       >
         <Row
           id="diff-view"
-          label="Diff view"
-          description="Editor keeps working-tree changes in the file. Unified stacks every changed file in one review, with sticky headers and collapsed unchanged lines."
+          label={t("settings.pages.chat.diffViewLabel")}
+          description={t("settings.pages.chat.diffViewDescription")}
         >
           <Segmented
-            label="Diff view"
+            label={t("settings.pages.chat.diffViewLabel")}
             value={diffViewer}
             options={[
               { value: "editor", label: "Editor" },
@@ -1256,27 +1260,27 @@ function ChatPage() {
       </Group>
 
       <Group
-        title="Extras"
-        description="Idle animation, and nothing else. Turn both off for a still workspace."
+        title={t("settings.pages.chat.extrasTitle")}
+        description={t("settings.pages.chat.extrasDescription")}
       >
         <Row
           id="composer-mascot"
-          label="Composer mascot"
-          description="When a turn is running, the project mascot runs along the composer, bonks the scroll-to-latest button the first time, then jumps it, and sometimes grabs a coin."
+          label={t("settings.pages.chat.composerMascotLabel")}
+          description={t("settings.pages.chat.composerMascotDescription")}
         >
           <Toggle
-            label="Composer mascot"
+            label={t("settings.pages.chat.composerMascotLabel")}
             on={composerRunner}
             onChange={onComposerRunner}
           />
         </Row>
         <Row
           id="empty-session-games"
-          label="Empty session games"
-          description="Pac-man and snake idle on the empty-session grid. Hover the band to take control of whichever is on screen. Turn this off to keep the pane still."
+          label={t("settings.pages.chat.emptySessionGamesLabel")}
+          description={t("settings.pages.chat.emptySessionGamesDescription")}
         >
           <Toggle
-            label="Empty session games"
+            label={t("settings.pages.chat.emptySessionGamesLabel")}
             on={gridArcadeEnabled}
             onChange={onGridArcadeEnabled}
           />
@@ -1297,6 +1301,7 @@ function InboxPage({
   notificationProjectPath?: string | null;
   notificationSettingsRequest?: number;
 }) {
+  const t = useT();
   const revealed = useContext(RevealedSetting);
   return (
     <>
@@ -1320,7 +1325,7 @@ function InboxPage({
             GitHub
           </span>
         }
-        description="Pull requests, reviews, and issues, read through the GitHub CLI."
+        description={t("settings.pages.inbox.githubDescription")}
       >
         <GithubSettings />
       </Group>
@@ -1333,7 +1338,7 @@ function InboxPage({
             GitLab
           </span>
         }
-        description="Merge requests from GitLab.com or a self-managed instance."
+        description={t("settings.pages.inbox.gitlabDescription")}
       >
         <GitlabSettings />
       </Group>
@@ -1349,7 +1354,7 @@ function InboxPage({
             ADO
           </span>
         }
-        description="Pull requests and Boards work items from your ADO organization."
+        description={t("settings.pages.inbox.azureDescription")}
       >
         <AzureDevOpsSettings />
       </Group>
@@ -1362,7 +1367,7 @@ function InboxPage({
             Jira
           </span>
         }
-        description="Jira Cloud issues from the projects you pick."
+        description={t("settings.pages.inbox.jiraDescription")}
       >
         <JiraSettings />
       </Group>
@@ -1375,7 +1380,7 @@ function InboxPage({
             Linear
           </span>
         }
-        description="Issues assigned to you, from the teams you pick."
+        description={t("settings.pages.inbox.linearDescription")}
       >
         <LinearSettings />
       </Group>
@@ -1384,6 +1389,7 @@ function InboxPage({
 }
 
 function GithubSettings() {
+  const t = useT();
   const [status, setStatus] = useState<GithubStatus | null>(null);
   const [checking, setChecking] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1413,21 +1419,21 @@ function GithubSettings() {
   }, [checkStatus]);
 
   const description = status?.connected
-    ? "GitHub CLI is installed and authenticated. MonoCode uses it for GitHub inbox items."
+    ? t("settings.pages.inbox.githubReady")
     : status?.installed
-      ? "Run gh auth login in a terminal, complete the sign-in flow, then check again."
-      : "Install GitHub CLI from cli.github.com, run gh auth login in a terminal, then check again.";
+      ? t("settings.pages.inbox.githubNeedsLogin")
+      : t("settings.pages.inbox.githubMissing");
   const label = checking
     ? "Checking"
     : status?.connected
-      ? "Connected"
+      ? t("settings.status.connected")
       : status?.installed
-        ? "Sign in required"
-        : "Not installed";
+        ? t("settings.status.signInRequired")
+        : t("settings.status.notInstalled");
 
   return (
     <>
-      <Row label="Connection" description={description}>
+      <Row label={t("settings.pages.inbox.connectionLabel")} description={description}>
         <span className="text-[12px] text-content/50">{label}</span>
         {!checking && !status?.installed ? (
           <SecondaryButton
@@ -1452,6 +1458,7 @@ function GithubSettings() {
 }
 
 function GitlabSettings() {
+  const t = useT();
   const [url, setUrl] = useState("https://gitlab.com");
   const [token, setToken] = useState("");
   const [connected, setConnected] = useState(false);
@@ -1512,8 +1519,8 @@ function GitlabSettings() {
   return (
     <>
       <Row
-        label="Connection"
-        description="Connect GitLab.com or a self-managed GitLab instance. Use a personal access token with API access; the token is stored locally and Disconnect deletes it."
+        label={t("settings.pages.inbox.connectionLabel")}
+        description={t("settings.pages.inbox.gitlabConnectDescription")}
       >
         {connected ? (
           <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
@@ -1535,7 +1542,7 @@ function GitlabSettings() {
                 value={url}
                 onChange={(event) => setUrl(event.target.value)}
                 placeholder="https://gitlab.com"
-                aria-label="GitLab URL"
+                aria-label={t("settings.pages.inbox.gitlabUrlLabel")}
                 autoComplete="url"
                 spellCheck={false}
                 className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -1550,7 +1557,7 @@ function GitlabSettings() {
                   if (event.key === "Enter") void onSave();
                 }}
                 placeholder="glpat-…"
-                aria-label="GitLab access token"
+                aria-label={t("settings.pages.inbox.gitlabTokenLabel")}
                 autoComplete="off"
                 spellCheck={false}
                 className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -1560,7 +1567,7 @@ function GitlabSettings() {
               onClick={() => void onSave()}
               disabled={busy || !token.trim()}
             >
-              {busy ? "Saving" : "Connect"}
+              {busy ? t("settings.status.saving") : t("settings.status.connect")}
             </SecondaryButton>
           </div>
         )}
@@ -1575,6 +1582,7 @@ function GitlabSettings() {
 }
 
 function AzureDevOpsSettings() {
+  const t = useT();
   const [url, setUrl] = useState("https://dev.azure.com/myorg");
   const [token, setToken] = useState("");
   const [connected, setConnected] = useState(false);
@@ -1635,8 +1643,8 @@ function AzureDevOpsSettings() {
   return (
     <>
       <Row
-        label="Connection"
-        description="Connect your ADO organization with a personal access token (Boards + Repos read & write for comments). The token is stored locally and Disconnect deletes it."
+        label={t("settings.pages.inbox.connectionLabel")}
+        description={t("settings.pages.inbox.azureConnectDescription")}
       >
         {connected ? (
           <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
@@ -1658,7 +1666,7 @@ function AzureDevOpsSettings() {
                 value={url}
                 onChange={(event) => setUrl(event.target.value)}
                 placeholder="https://dev.azure.com/myorg"
-                aria-label="Azure DevOps organization URL"
+                aria-label={t("settings.pages.inbox.azureUrlLabel")}
                 autoComplete="url"
                 spellCheck={false}
                 className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -1673,7 +1681,7 @@ function AzureDevOpsSettings() {
                   if (event.key === "Enter") void onSave();
                 }}
                 placeholder="PAT…"
-                aria-label="Azure DevOps personal access token"
+                aria-label={t("settings.pages.inbox.azureTokenLabel")}
                 autoComplete="off"
                 spellCheck={false}
                 className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -1683,7 +1691,7 @@ function AzureDevOpsSettings() {
               onClick={() => void onSave()}
               disabled={busy || !token.trim()}
             >
-              {busy ? "Saving" : "Connect"}
+              {busy ? t("settings.status.saving") : t("settings.status.connect")}
             </SecondaryButton>
           </div>
         )}
@@ -1698,6 +1706,7 @@ function AzureDevOpsSettings() {
 }
 
 function LinearSettings() {
+  const t = useT();
   const [token, setToken] = useState("");
   const [connected, setConnected] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -1786,8 +1795,8 @@ function LinearSettings() {
   return (
     <>
       <Row
-        label="API key"
-        description="Create a personal API key in Linear → Settings → Security & Access. Disconnect deletes it."
+        label={t("settings.pages.inbox.apiKeyLabel")}
+        description={t("settings.pages.inbox.linearConnectDescription")}
       >
         {connected ? (
           <SecondaryButton onClick={() => void onDisconnect()} disabled={busy}>
@@ -1804,7 +1813,7 @@ function LinearSettings() {
                   if (event.key === "Enter") void onSave();
                 }}
                 placeholder="lin_api_…"
-                aria-label="Linear API key"
+                aria-label={t("settings.pages.inbox.linearKeyLabel")}
                 autoComplete="off"
                 spellCheck={false}
                 className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -1814,7 +1823,7 @@ function LinearSettings() {
               onClick={() => void onSave()}
               disabled={busy || !token.trim()}
             >
-              {busy ? "Saving" : "Connect"}
+              {busy ? t("settings.status.saving") : t("settings.status.connect")}
             </SecondaryButton>
           </div>
         )}
@@ -1864,6 +1873,7 @@ function UpdateRow({
 }: {
   onOpenWhatsNew: (version: string) => void;
 }) {
+  const t = useT();
   const [snapshot, setSnapshot] = useState<UpdaterSnapshot>({
     phase: "idle",
     currentVersion: "…",
@@ -1905,14 +1915,14 @@ function UpdateRow({
       : snapshot.phase === "downloading"
         ? `Downloading${snapshot.progress != null ? ` ${snapshot.progress}%` : "…"}`
         : snapshot.phase === "checking"
-          ? "Checking for updates…"
+          ? t("settings.pages.inbox.checkingForUpdates")
           : snapshot.phase === "current"
             ? "You're on the latest version."
             : snapshot.phase === "error"
-              ? (snapshot.error ?? "Update check failed.")
+              ? (snapshot.error ?? t("settings.pages.inbox.updateCheckFailed"))
               : snapshot.packageManaged
                 ? packageManagerHint(snapshot.packageManaged)
-                : "MonoCode updates itself from the release feed.";
+                : t("settings.pages.inbox.updateFeedHint");
 
   return (
     <Row
@@ -1942,7 +1952,7 @@ function UpdateRow({
           ) : (
             <RefreshCw className="size-3.5" strokeWidth={1.75} aria-hidden />
           )}
-          {hasUpdate ? "Download" : "Check for updates"}
+          {hasUpdate ? t("settings.pages.inbox.download") : t("settings.pages.inbox.checkForUpdates")}
         </SecondaryButton>
       </div>
     </Row>
@@ -2290,25 +2300,25 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         </Row>
       </Group>
       <Group
-        title="Theme"
+        title={t("settings.pages.appearance.themeTitle")}
         description={
           inset
-            ? "Each workspace theme has its own dark and light palette."
-            : "Dark and light share the same tint, so the color settings below apply to both."
+            ? t("settings.pages.appearance.themeDescriptionInset")
+            : t("settings.pages.appearance.themeDescriptionClassic")
         }
       >
         <Row
           id="theme"
-          label="Theme"
-          description="System follows the OS appearance."
+          label={t("settings.entries.theme.label")}
+          description={t("settings.pages.appearance.themeHint")}
         >
           <Segmented
-            label="Theme"
+            label={t("settings.entries.theme.label")}
             value={appearance.themePreference}
             options={[
-              { value: "system", label: "System" },
-              { value: "dark", label: "Dark" },
-              { value: "light", label: "Light" },
+              { value: "system", label: t("settings.options.system") },
+              { value: "dark", label: t("settings.options.dark") },
+              { value: "light", label: t("settings.options.light") },
             ]}
             onChange={appearance.onThemePreference}
           />
@@ -2316,12 +2326,12 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         {inset ? (
           <Row
             id="workspace-theme"
-            label="Workspace theme"
-            description="Colors for the inset workspace's shell, card, text and accent. Each theme has a dark and a light palette."
+            label={t("settings.entries.workspace-theme.label")}
+            description={t("settings.pages.appearance.workspaceThemeDescription")}
           >
             <div className="w-48">
               <Select
-                label="Workspace theme"
+                label={t("settings.entries.workspace-theme.label")}
                 value={appearance.workspaceTheme}
                 options={WORKSPACE_THEMES.map((theme) => ({
                   value: theme.id,
@@ -2343,17 +2353,17 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         {inset ? (
           <Row
             id="inset-glass"
-            label="Transparent window"
+            label={t("settings.entries.inset-glass.label")}
             description={
               IS_LINUX
-                ? "The window stays opaque on Linux."
+                ? t("settings.pages.appearance.insetGlassLinux")
                 : glassDisabled
-                  ? "Light mode keeps the window opaque. Your dark-mode choice is remembered."
-                  : "Show the desktop through the window. Turn off to keep the window opaque."
+                  ? t("settings.pages.appearance.insetGlassLight")
+                  : t("settings.pages.appearance.insetGlassHint")
             }
           >
             <Toggle
-              label="Transparent window"
+              label={t("settings.entries.inset-glass.label")}
               on={appearance.insetGlass}
               onChange={appearance.onInsetGlass}
               disabled={glassDisabled || IS_LINUX}
@@ -2362,8 +2372,8 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         ) : null}
         <Row
           id="accent-color"
-          label="Accent color"
-          description="Used for the composer send button and your message bubbles."
+          label={t("settings.entries.accent-color.label")}
+          description={t("settings.pages.appearance.accentColorDescription")}
         >
           <AccentColorPicker
             value={appearance.accentColor}
@@ -2372,16 +2382,16 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         </Row>
         <Row
           id="diff-colors"
-          label="Diff colors"
-          description="Colors for added and removed lines. Colorblind and High contrast use blue and orange instead of green and red; High contrast adds stronger tints and text."
+          label={t("settings.entries.diff-colors.label")}
+          description={t("settings.pages.appearance.diffColorsDescription")}
         >
           <Segmented
-            label="Diff colors"
+            label={t("settings.entries.diff-colors.label")}
             value={appearance.diffPalette}
             options={[
-              { value: "default", label: "Default" },
-              { value: "colorblind", label: "Colorblind" },
-              { value: "high-contrast", label: "High contrast" },
+              { value: "default", label: t("settings.options.default") },
+              { value: "colorblind", label: t("settings.options.colorblind") },
+              { value: "high-contrast", label: t("settings.options.highContrast") },
             ]}
             onChange={appearance.onDiffPalette}
           />
@@ -2391,16 +2401,16 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
       {inset ? null : (
         <>
           <Group
-            title="Color"
-            description="Hue and saturation tint every surface. Lightness only moves the dark theme."
+            title={t("settings.pages.appearance.colorTitle")}
+            description={t("settings.pages.appearance.colorDescription")}
           >
             <Row
               id="hue"
-              label="Hue"
-              description="Base hue for accents and tinted surfaces."
+              label={t("settings.entries.hue.label")}
+              description={t("settings.pages.appearance.hueDescription")}
             >
               <Slider
-                label="Hue"
+                label={t("settings.entries.hue.label")}
                 value={appearance.themeHue}
                 display={`${appearance.themeHue}°`}
                 min={THEME_HUE_MIN}
@@ -2412,11 +2422,11 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
             </Row>
             <Row
               id="saturation"
-              label="Saturation"
-              description="How strongly the hue tints the interface. Zero keeps it neutral."
+              label={t("settings.entries.saturation.label")}
+              description={t("settings.pages.appearance.saturationDescription")}
             >
               <Slider
-                label="Saturation"
+                label={t("settings.entries.saturation.label")}
                 value={appearance.themeSaturation}
                 display={`${appearance.themeSaturation}%`}
                 min={THEME_SATURATION_MIN}
@@ -2428,7 +2438,7 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
             </Row>
             <Row
               id="dark-lightness"
-              label="Dark-mode lightness"
+              label={t("settings.entries.dark-lightness.label")}
               description={
                 glassDisabled
                   ? "This only affects dark mode. Your dark-mode value is preserved."
@@ -2436,7 +2446,7 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
               }
             >
               <Slider
-                label="Dark-mode lightness"
+                label={t("settings.entries.dark-lightness.label")}
                 value={appearance.themeDarkLightness}
                 display={`${appearance.themeDarkLightness}%`}
                 min={THEME_DARK_LIGHTNESS_MIN}
@@ -2448,7 +2458,7 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
           </Group>
 
           <Group
-            title="Translucency"
+            title={t("settings.pages.appearance.translucencyTitle")}
             description={
               glassDisabled
                 ? "Light mode always uses an opaque window, so these are off. Your dark-mode values are preserved."
@@ -2457,11 +2467,11 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
           >
             <Row
               id="sidebar-opacity"
-              label="Sidebar opacity"
-              description="Applies to the project rail and the other glass panes."
+              label={t("settings.entries.sidebar-opacity.label")}
+              description={t("settings.pages.appearance.sidebarOpacityDescription")}
             >
               <Slider
-                label="Sidebar opacity"
+                label={t("settings.entries.sidebar-opacity.label")}
                 value={percent}
                 display={`${percent}%`}
                 min={Math.round(SIDEBAR_OPACITY_MIN * 100)}
@@ -2472,11 +2482,11 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
             </Row>
             <Row
               id="blur"
-              label="Blur radius"
-              description="Background blur behind the window."
+              label={t("settings.entries.blur.label")}
+              description={t("settings.pages.appearance.blurDescription")}
             >
               <Slider
-                label="Blur radius"
+                label={t("settings.entries.blur.label")}
                 value={appearance.blur}
                 display={String(appearance.blur)}
                 min={SIDEBAR_BLUR_MIN}
@@ -2487,11 +2497,11 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
             </Row>
             <Row
               id="main-pane-glass"
-              label="Main pane glass"
-              description="Extend the translucent treatment to the main pane behind sessions and editors."
+              label={t("settings.entries.main-pane-glass.label")}
+              description={t("settings.pages.appearance.mainPaneGlassDescription")}
             >
               <Toggle
-                label="Main pane glass"
+                label={t("settings.entries.main-pane-glass.label")}
                 on={appearance.bodyGlass}
                 onChange={appearance.onBodyGlass}
                 disabled={glassDisabled}
@@ -2503,25 +2513,25 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
 
       <ChatBackgroundCard appearance={appearance} />
 
-      <Group title="Layout">
+      <Group title={t("settings.pages.appearance.layoutTitle")}>
         <Row
           id="inset-layout"
-          label="New layout"
-          description="Use the redesigned sidebar, project switcher, workspace tabs and right panel. Turn off to return to the classic layout."
+          label={t("settings.entries.inset-layout.label")}
+          description={t("settings.pages.appearance.insetLayoutDescription")}
         >
           <Toggle
-            label="New layout"
+            label={t("settings.entries.inset-layout.label")}
             on={appearance.insetLayout}
             onChange={appearance.onInsetLayout}
           />
         </Row>
         <Row
           id="collapsed-project-rail"
-          label="Collapsed project rail"
-          description="Keep project navigation available as a compact icon rail, or hide the rail completely."
+          label={t("settings.entries.collapsed-project-rail.label")}
+          description={t("settings.pages.appearance.collapsedRailDescription")}
         >
           <Segmented
-            label="Collapsed project rail"
+            label={t("settings.entries.collapsed-project-rail.label")}
             value={appearance.collapsedProjectRailMode}
             options={[
               { value: "compact", label: "Icon rail" },
@@ -2532,11 +2542,11 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         </Row>
         <Row
           id="interface-scale"
-          label="Interface scale"
-          description="Zoom the whole interface. You can also use Ctrl+=, Ctrl+-, and Ctrl+0 (Cmd on macOS)."
+          label={t("settings.entries.interface-scale.label")}
+          description={t("settings.pages.appearance.interfaceScaleDescription")}
         >
           <Select
-            label="Interface scale"
+            label={t("settings.entries.interface-scale.label")}
             value={String(Math.round(appearance.uiScale * 100))}
             options={UI_SCALE_PERCENTS.map((percent) => ({
               value: String(percent),
@@ -2547,11 +2557,11 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
         </Row>
         <Row
           id="show-excluded-files"
-          label="Show excluded files"
-          description="Show files and folders Git excludes, such as build output and dependencies, in the explorer."
+          label={t("settings.entries.show-excluded-files.label")}
+          description={t("settings.pages.appearance.showExcludedFilesDescription")}
         >
           <Toggle
-            label="Show excluded files"
+            label={t("settings.entries.show-excluded-files.label")}
             on={appearance.showExcludedFiles}
             onChange={appearance.onShowExcludedFiles}
           />
@@ -2566,6 +2576,7 @@ function ChatBackgroundCard({
 }: {
   appearance: AppearanceSettings;
 }) {
+  const t = useT();
   const src = chatBackgroundSrc(appearance.chatBackgroundPath);
   const hasImage = Boolean(appearance.chatBackgroundPath && src);
   const emptyVisibility = Math.round(
@@ -2579,8 +2590,8 @@ function ChatBackgroundCard({
   return (
     <Group
       id="chat-background"
-      title="Chat background"
-      description="An image behind your chat panes. It stays on this device."
+      title={t("settings.pages.chatBackground.title")}
+      description={t("settings.pages.chatBackground.description")}
     >
       <div className="border-b border-content/5 p-4 last:border-b-0">
         <div className="overflow-hidden rounded-lg border border-content/10">
@@ -2652,7 +2663,7 @@ function ChatBackgroundCard({
       {hasImage ? (
         <>
           <Row
-            label="Background effect"
+            label={t("settings.pages.chatBackground.effectLabel")}
             description={
               NEW_THREAD_BACKGROUND_EFFECT_DESCRIPTIONS[
                 appearance.newThreadBackgroundEffect
@@ -2660,7 +2671,7 @@ function ChatBackgroundCard({
             }
           >
             <Segmented
-              label="Background effect"
+              label={t("settings.pages.chatBackground.effectLabel")}
               value={appearance.newThreadBackgroundEffect}
               options={NEW_THREAD_BACKGROUND_EFFECTS.map((effect) => ({
                 value: effect,
@@ -2671,11 +2682,11 @@ function ChatBackgroundCard({
             />
           </Row>
           <Row
-            label="Show on"
-            description="Empty sessions only, or every conversation."
+            label={t("settings.pages.chatBackground.showOnLabel")}
+            description={t("settings.pages.chatBackground.showOnDescription")}
           >
             <Segmented
-              label="Show background on"
+              label={t("settings.pages.chatBackground.showBackgroundOnLabel")}
               value={appearance.chatBackgroundScope}
               options={[
                 { value: "empty", label: "Empty only" },
@@ -2685,11 +2696,11 @@ function ChatBackgroundCard({
             />
           </Row>
           <Row
-            label="Empty chat visibility"
-            description="Background strength before a chat has messages."
+            label={t("settings.pages.chatBackground.emptyVisibilityLabel")}
+            description={t("settings.pages.chatBackground.emptyVisibilityDescription")}
           >
             <Slider
-              label="Empty chat background visibility"
+              label={t("settings.pages.chatBackground.emptyBackgroundVisibilityLabel")}
               value={emptyVisibility}
               display={`${emptyVisibility}%`}
               min={Math.round(CHAT_BACKGROUND_OPACITY_MIN * 100)}
@@ -2698,11 +2709,11 @@ function ChatBackgroundCard({
             />
           </Row>
           <Row
-            label="Session visibility"
-            description="Background strength once the conversation has messages."
+            label={t("settings.pages.chatBackground.sessionVisibilityLabel")}
+            description={t("settings.pages.chatBackground.sessionVisibilityDescription")}
           >
             <Slider
-              label="Session background visibility"
+              label={t("settings.pages.chatBackground.sessionBackgroundVisibilityLabel")}
               value={sessionVisibility}
               display={`${sessionVisibility}%`}
               min={Math.round(CHAT_BACKGROUND_OPACITY_MIN * 100)}
@@ -2969,6 +2980,7 @@ function KeybindingShortcutEditor({
 }
 
 function KeybindingsPage() {
+  const t = useT();
   const [query, setQuery] = useState("");
   const [overrides, setOverrides] = useState(loadKeybindingOverrides);
   useEffect(
@@ -2987,20 +2999,20 @@ function KeybindingsPage() {
 
   return (
     <Group
-      title="Shortcuts"
-      description="Click a shortcut to record new keys. Press Delete while recording to disable it."
+      title={t("settings.pages.keybindings.groupTitle")}
+      description={t("settings.pages.keybindings.groupDescription")}
       action={
         <div className="flex items-center gap-3">
           <span className="shrink-0 text-[12px] text-content/40 tabular-nums">
-            {rows.length} {rows.length === 1 ? "binding" : "bindings"}
+            {rows.length} {rows.length === 1 ? t("settings.pages.keybindings.bindingOne") : t("settings.pages.keybindings.bindingOther")}
           </span>
           <label className="flex h-7 w-44 shrink-0 items-center gap-2 rounded-md border border-content/10 px-2 text-content/45 focus-within:border-content/20">
             <Search className="size-3.5 shrink-0" strokeWidth={1.75} />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Filter"
-              aria-label="Filter keybindings"
+              placeholder={t("settings.search.filter")}
+              aria-label={t("settings.pages.keybindings.filterLabel")}
               spellCheck={false}
               autoComplete="off"
               className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -3010,7 +3022,7 @@ function KeybindingsPage() {
       }
     >
       <div className="flex items-center border-b border-stroke bg-content/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-content/40">
-        <span className="min-w-0 flex-1">Command</span>
+        <span className="min-w-0 flex-1">{t("settings.pages.keybindings.commandColumn")}</span>
         <span className="w-40 shrink-0">Keybinding</span>
         <span className="w-28 shrink-0">When</span>
       </div>
@@ -3070,13 +3082,17 @@ function binaryInspectionError(
     provider === "codex" &&
     !/^codex-cli\s+\d+\.\d+\.\d+/.test(inspection.version ?? "")
   ) {
-    return "Codex CLI returned an invalid version.";
+    return t("settings.pages.providers.invalidVersion", { provider: "Codex" });
   }
   if (provider === "opencode") {
     const version = parseOpenCodeVersion(inspection.version ?? "");
-    if (!version) return "OpenCode CLI returned an invalid version.";
+    if (!version)
+      return t("settings.pages.providers.invalidVersion", { provider: "OpenCode" });
     if (compareSemver(version, MINIMUM_OPENCODE_VERSION) < 0) {
-      return `OpenCode v${version} is too old. Upgrade to v${MINIMUM_OPENCODE_VERSION} or newer.`;
+      return t("settings.pages.providers.tooOld", {
+        version,
+        minimum: MINIMUM_OPENCODE_VERSION,
+      });
     }
   }
   return null;
@@ -3405,6 +3421,7 @@ function ProvidersPage({
   cwd?: string;
   recents?: RecentProject[];
 }) {
+  const t = useT();
   useSyncExternalStore(subscribeModels, getModelSnapshot, getModelSnapshot);
   useSyncExternalStore(
     subscribeHarnessAvailability,
@@ -3533,10 +3550,10 @@ function ProvidersPage({
 
       <Group
         id="agent-clis"
-        title="Agent CLIs"
+        title={t("settings.pages.providers.agentClisTitle")}
         action={
           <Select
-            label="Provider defaults scope"
+            label={t("settings.pages.providers.defaultsScopeLabel")}
             value={scope}
             options={scopeOptions}
             onChange={setScope}
@@ -3589,14 +3606,14 @@ function ProvidersPage({
         })}
       </Group>
 
-      <Group title="Advanced">
+      <Group title={t("settings.pages.providers.advancedTitle")}>
         <Row
           id="idle-agents"
-          label="Keep idle agents ready"
-          description="A finished conversation keeps its agent CLI running for a few minutes, so a follow-up starts instantly. Each one can hold a few hundred MB of memory. Past this many, the one idle longest stops early; it resumes on your next message after a short restart. Choose None on a machine short on memory."
+          label={t("settings.pages.providers.idleAgentsLabel")}
+          description={t("settings.pages.providers.idleAgentsDescription")}
         >
           <Segmented
-            label="Keep idle agents ready"
+            label={t("settings.pages.providers.idleAgentsLabel")}
             value={String(idleAgentLimit)}
             options={IDLE_AGENT_LIMITS.map((limit) => ({
               value: String(limit),
@@ -3607,11 +3624,11 @@ function ProvidersPage({
         </Row>
         <Row
           id="claude-hooks"
-          label="Claude Code hooks"
-          description="Run the hooks configured in your settings.json files — PreToolUse command rewrites, blocks, notifications, and the rest — just as the Claude Code CLI would. Turn this off if a hook is misbehaving and you need the session back. Takes effect on the next turn."
+          label={t("settings.pages.providers.claudeHooksLabel")}
+          description={t("settings.pages.providers.claudeHooksDescription")}
         >
           <Toggle
-            label="Claude Code hooks"
+            label={t("settings.pages.providers.claudeHooksLabel")}
             on={claudeHooks}
             onChange={onClaudeHooks}
           />
@@ -3622,28 +3639,29 @@ function ProvidersPage({
 }
 
 function UsageDisplaySettings() {
+  const t = useT();
   const showRemainingUsage = useShowRemainingUsage();
   const maskEmails = useMaskEmails();
   return (
-    <Group title="Usage and privacy">
+    <Group title={t("settings.pages.providers.usageTitle")}>
       <Row
         id="show-remaining-usage"
-        label="Show remaining usage"
-        description="Fill usage meters with what is left in each limit instead of what has been used."
+        label={t("settings.pages.providers.showRemainingUsageLabel")}
+        description={t("settings.pages.providers.showRemainingUsageDescription")}
       >
         <Toggle
-          label="Show remaining usage"
+          label={t("settings.pages.providers.showRemainingUsageLabel")}
           on={showRemainingUsage}
           onChange={saveShowRemainingUsage}
         />
       </Row>
       <Row
         id="mask-emails"
-        label="Mask account emails"
-        description="Blur account emails in Settings and the usage popover until you click one, so they stay out of screenshots."
+        label={t("settings.pages.providers.maskEmailsLabel")}
+        description={t("settings.pages.providers.maskEmailsDescription")}
       >
         <Toggle
-          label="Mask account emails"
+          label={t("settings.pages.providers.maskEmailsLabel")}
           on={maskEmails}
           onChange={saveMaskEmails}
         />
@@ -3659,6 +3677,7 @@ type AccountEditor = {
 };
 
 function ProviderAccountsSettings() {
+  const t = useT();
   const [version, setVersion] = useState(0);
   const [editor, setEditor] = useState<AccountEditor | null>(null);
   const [working, setWorking] = useState<string | null>(null);
@@ -3756,8 +3775,8 @@ function ProviderAccountsSettings() {
   return (
     <Group
       id="provider-accounts"
-      title="Accounts"
-      description="Create isolated sign-ins for providers that support account profiles. Account switching stays available from the usage control in the footer."
+      title={t("settings.pages.providers.accountsTitle")}
+      description={t("settings.pages.providers.accountsDescription")}
       action={<AccountUsageRefresh usage={usage} />}
     >
       {PROVIDER_ACCOUNT_PROVIDERS.map((provider) => {
@@ -3860,7 +3879,7 @@ function ProviderAccountsSettings() {
                         type="button"
                         disabled={Boolean(working)}
                         aria-label={`Rename ${account.label}`}
-                        title="Rename account"
+                        title={t("settings.pages.providers.renameAccountTitle")}
                         onClick={() => startRename(account)}
                         className="grid size-7 place-items-center rounded-md text-content/40 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.96] disabled:opacity-35"
                       >
@@ -3871,7 +3890,7 @@ function ProviderAccountsSettings() {
                           type="button"
                           disabled={Boolean(working)}
                           aria-label={`Remove ${account.label}`}
-                          title="Remove account"
+                          title={t("settings.pages.providers.removeAccountTitle")}
                           onClick={() => void removeAccount(account)}
                           className="grid size-7 place-items-center rounded-md text-content/35 transition-transform duration-150 hover:bg-red-400/10 hover:text-red-400 active:scale-[0.96] disabled:opacity-35"
                         >
@@ -4131,6 +4150,7 @@ function ArchivePage({
   onRestoreProject?: (path: string) => void;
   onDeleteProject?: (path: string) => void;
 }) {
+  const t = useT();
   const [filters, setFilters] = useState(loadSessionSidebarFilters);
   const [deleting, setDeleting] = useState<ArchivedProject | null>(null);
   const archivedProjects = useArchivedProjects();
@@ -4151,8 +4171,8 @@ function ArchivePage({
   return (
     <>
       <Group
-        title="Archived projects"
-        description="Archive a project from the rail to keep its chats without listing it in the sidebar."
+        title={t("settings.pages.archive.title")}
+        description={t("settings.pages.archive.description")}
       >
         {archivedProjects.length === 0 ? (
           <p className="px-4 py-3.5 text-[12px] text-content/45">
@@ -4196,11 +4216,11 @@ function ArchivePage({
       >
         <Row
           id="show-archived"
-          label="Show archived in the sidebar"
-          description="Keep archived conversations listed alongside the active ones."
+          label={t("settings.pages.archive.showArchivedLabel")}
+          description={t("settings.pages.archive.showArchivedDescription")}
         >
           <Toggle
-            label="Show archived in the sidebar"
+            label={t("settings.pages.archive.showArchivedLabel")}
             on={filters.showArchived}
             onChange={onShowArchived}
           />
@@ -4278,6 +4298,7 @@ function formatDate(value: number): string {
 
 /** Monos on or off, and each Mono the user has. */
 function MonosPage() {
+  const t = useT();
   const enabled = useSyncExternalStore(
     subscribeMonosEnabled,
     loadMonosEnabled,
@@ -4294,21 +4315,21 @@ function MonosPage() {
 
   return (
     <>
-      <Group title="Monos">
+      <Group title={t("settings.pages.monos.groupTitle")}>
         <Row
           id="monos-enabled"
-          label="Show monos"
-          description="Agents of your own on the project rail. Each works on the projects you give it, remembers what matters and picks up habits it runs on its own. Turn this off to hide them."
+          label={t("settings.pages.monos.enabledLabel")}
+          description={t("settings.pages.monos.enabledDescription")}
         >
-          <Toggle label="Show monos" on={enabled} onChange={saveMonosEnabled} />
+          <Toggle label={t("settings.pages.monos.enabledLabel")} on={enabled} onChange={saveMonosEnabled} />
         </Row>
         <Row
           id="rail-monos-pinned"
-          label="Pin monos to the icon rail"
-          description="When the project rail is collapsed to icons, show each Mono at the top of the rail, above a divider, instead of inside the project picker."
+          label={t("settings.pages.monos.pinnedLabel")}
+          description={t("settings.pages.monos.pinnedDescription")}
         >
           <Toggle
-            label="Pin monos to the icon rail"
+            label={t("settings.pages.monos.pinnedLabel")}
             on={railPinned}
             onChange={saveRailMonosPinned}
             disabled={!enabled}
@@ -4317,11 +4338,11 @@ function MonosPage() {
         {IS_MAC && (
           <Row
             id="mono-menu-bar-icon"
-            label="Menu bar icon"
-            description="Chat with a Mono or open the quick composer from the macOS menu bar. Turn this off to hide the icon."
+            label={t("settings.pages.monos.menuBarLabel")}
+            description={t("settings.pages.monos.menuBarDescription")}
           >
             <Toggle
-              label="Menu bar icon"
+              label={t("settings.pages.monos.menuBarLabel")}
               on={menuBarIcon}
               onChange={saveMonoMenuBarIcon}
             />
@@ -4330,8 +4351,8 @@ function MonosPage() {
       </Group>
       <Group
         id="mono-list"
-        title="Your monos"
-        description="Choose whether new sessions started by each Mono appear in the sidebar. Hidden sessions remain saved and can be opened from the Mono's chat. Add a Mono with the plus on the rail and choose its projects from its details."
+        title={t("settings.pages.monos.listTitle")}
+        description={t("settings.pages.monos.listDescription")}
       >
         {monos.length ? (
           monos.map((mono) => <MonoRow key={mono.id} mono={mono} />)
@@ -4346,6 +4367,7 @@ function MonosPage() {
 }
 
 function MonoRow({ mono }: { mono: Mono }) {
+  const t = useT();
   const look = monoLook(mono);
   return (
     <Row
@@ -4380,7 +4402,7 @@ function MonoRow({ mono }: { mono: Mono }) {
         }
       />
       <ConfirmReset
-        label="Reset Mono"
+        label={t("settings.pages.monos.resetLabel")}
         title={`Reset ${look.name} to its defaults?`}
         body={`Its soul goes back to the default and its name to ${defaultMonoName(look.mascot)}. Changes to its soul can't be recovered.`}
         kept="Its conversation, projects, memory and habits will be kept."
@@ -4391,7 +4413,7 @@ function MonoRow({ mono }: { mono: Mono }) {
           <button
             ref={ref}
             type="button"
-            title="Reset to defaults"
+            title={t("settings.pages.monos.resetDefaultsTitle")}
             aria-label={`Reset ${look.name} to defaults`}
             onClick={open}
             className="grid size-7 place-items-center rounded-md text-content/40 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.96]"
