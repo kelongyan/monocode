@@ -275,6 +275,12 @@ export const SETTINGS_INDEX: SettingsEntry[] = [
       ]
     : []),
   {
+    id: "language",
+    section: "appearance",
+    label: "Language",
+    keywords: "locale translation english chinese 语言 中文",
+  },
+  {
     id: "theme",
     section: "appearance",
     label: "Theme",

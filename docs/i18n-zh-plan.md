@@ -172,7 +172,7 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 
 ## 5. 分阶段实施
 
-### 阶段 0：地基（0.5 天）
+### 阶段 0：地基（0.5 天）— ✅ 已完成
 1. 建 `src/shared/i18n/`，实现 `t` / `useT` / `setLocale` / store。
 2. 语言持久化：`monocode.locale`（新增 `readString/writeString`，或直接 `localStorage`）。
 3. `src/features/settings/model/locale.ts`：`loadLocale()` / `saveLocale()`。
@@ -182,6 +182,33 @@ expect(searchSettings("glass").map((r) => r.label)).toEqual([
 7. `vitest.config.ts` 加 `setupFiles: ["src/test/setup.ts"]`，其中 `setLocale("en")`。
 
 **验收**：切到中文，界面仍为英文，无报错；`npm run check:web` 全绿。
+
+#### 实际落地
+
+| 文件 | 内容 |
+| --- | --- |
+| `src/shared/i18n/types.ts` | `Locale`、`LOCALES`、`LOCALE_LABEL`、`isLocale` |
+| `src/shared/i18n/dictionary.ts` | 由 `en` 推导 `Dictionary`；`Leaves<>` 生成 `MessageKey` 联合类型 |
+| `src/shared/i18n/store.ts` | 模块级 locale store + 订阅（`useSyncExternalStore`） |
+| `src/shared/i18n/index.ts` | `t(key, vars?)`、`useT()`、`useLocale()`、`setLocale`；无 Provider 时回退 `en` |
+| `src/shared/i18n/locales/en/index.ts` | 唯一真相源 |
+| `src/shared/i18n/locales/zh-CN/index.ts` | 标注 `: Dictionary`，漏键/多键即编译错误 |
+| `src/shared/i18n/i18n.test.ts` | 8 条：键集合一致、无空值、占位符一致、回退与插值 |
+| `src/features/settings/model/locale.ts` | `loadLocale()` / `saveLocale()`（`monocode.locale`） |
+| `src/features/settings/model/locale.test.ts` | 4 条：默认值、往返、非法值、订阅者重渲染 |
+| `src/test/setup.ts` | 测试环境固定 `setLocale("en")` |
+| `vitest.config.ts` | 接上 `setupFiles` |
+| `src/main.tsx` | 首屏渲染前 `setLocale(loadLocale())` |
+| `src/styles/index.css` | `--font-sans` 补 `Microsoft YaHei` / `PingFang SC` / `Noto Sans CJK SC` |
+| `SettingsView.tsx` | Appearance 页顶部「界面 / 语言」分段控件 |
+| `settings.ts` | `SETTINGS_INDEX` 新增 `language` 条目（共 55 条） |
+
+**验证**：`tsc` 通过；`vitest` 5541 通过（仅剩 1 条预存时区失败）；`cargo fmt --check` 通过。
+
+**两个实施要点**（后来者容易踩）：
+
+1. **`SETTINGS_INDEX` 双向校验**：`SettingsView.test.ts` 的 `renders every indexed setting on the $section page` 与 `only tags rows that search can find` 互为反向断言——新增任何带 `id` 的 `<Row>` 必须同时在 `SETTINGS_INDEX` 登记，否则两条都红。
+2. **`en` 不能加 `as const`**：这会把 `"Close"` 变成字面量类型，使 `zhCN: Dictionary` 无法赋 `"关闭"`。用普通对象字面量，让 `Dictionary = typeof en` 推导为 `string`。
 
 ### 阶段 1：结构改造 + 骨架文案（2 天）
 1. `SETTINGS_SECTIONS` / `SETTINGS_INDEX` / `RUNTIME_MODE_*` 函数化（3.5），同步修 18 处测试引用。

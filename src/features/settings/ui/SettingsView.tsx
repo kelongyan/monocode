@@ -432,6 +432,16 @@ import {
   type RemoveWorktree,
 } from "../../source-control/model/worktrees";
 import type { Session } from "../../sessions/model/session";
+import {
+  LOCALE_LABEL,
+  LOCALES,
+  isLocale,
+  setLocale,
+  useLocale,
+  useT,
+  type Locale,
+} from "../../../shared/i18n";
+import { saveLocale } from "../model/locale";
 
 /**
  * The `data-setting-id` Settings should reveal when it opens: one of the ids in
@@ -1987,6 +1997,7 @@ function useAppearanceSettings(
     null,
   );
   const [uiScale, setUiScale] = useState(loadUiScale);
+  const locale = useLocale();
   const [storedCollapsedProjectRailMode, setStoredCollapsedProjectRailMode] =
     useState<CollapsedProjectRailMode>(loadCollapsedProjectRailMode);
   const collapsedProjectRailMode =
@@ -1998,6 +2009,11 @@ function useAppearanceSettings(
     applyThemePreference(next);
     saveThemePreference(next);
     setThemePreference(next);
+  }, []);
+
+  const onLocaleChange = useCallback((next: Locale) => {
+    saveLocale(next);
+    setLocale(next);
   }, []);
 
   const onAccentColor = useCallback((value: string | null) => {
@@ -2213,6 +2229,7 @@ function useAppearanceSettings(
     chatBackgroundError,
     uiScale,
     collapsedProjectRailMode,
+    locale,
     onThemePreference,
     onAccentColor,
     onWorkspaceTheme,
@@ -2233,6 +2250,7 @@ function useAppearanceSettings(
     onNewThreadBackgroundEffect,
     onUiScale,
     onCollapsedProjectRailMode,
+    onLocaleChange,
     restoreDefaults,
   };
 }
@@ -2240,6 +2258,8 @@ function useAppearanceSettings(
 function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
   const percent = Math.round(appearance.opacity * 100);
   const glassDisabled = useColorScheme() === "light";
+  const locale = useLocale();
+  const t = useT();
   // The inset workspace takes its colours from the workspace theme and has a
   // fixed tint and blur, so the tint and translucency groups only belong to
   // the classic layout. Its one glass switch lives with the theme instead.
@@ -2247,6 +2267,28 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
 
   return (
     <>
+      <Group
+        title={t("settings.language.group")}
+        description={t("settings.language.description")}
+      >
+        <Row
+          id="language"
+          label={t("settings.language.label")}
+          description={t("settings.language.hint")}
+        >
+          <Segmented
+            label={t("settings.language.label")}
+            value={locale}
+            options={LOCALES.map((value) => ({
+              value,
+              label: LOCALE_LABEL[value],
+            }))}
+            onChange={(value) => {
+              if (isLocale(value)) appearance.onLocaleChange(value);
+            }}
+          />
+        </Row>
+      </Group>
       <Group
         title="Theme"
         description={

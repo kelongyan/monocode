@@ -18,6 +18,8 @@ import {
 } from "./app/model/appLifecycle";
 import { homeDir } from "./platform/tauri/fs";
 import { setHomeDir } from "./shared/lib/paths";
+import { setLocale } from "./shared/i18n";
+import { loadLocale } from "./features/settings/model/locale";
 import { installNativeContextMenuGuard } from "./shared/lib/nativeContextMenu";
 import { consumeInstalledUpdate } from "./app/model/updateNotice";
 import { initializeProviderBinaryPaths } from "./features/providers/model/providerBinaryPaths";
@@ -30,6 +32,9 @@ performance.mark("monocode:bootstrap");
 const appLoaded = import("./app/App");
 
 initAppearance();
+// Before the first render, so the boot splash hands over to a localized UI
+// instead of flashing English.
+setLocale(loadLocale());
 initSounds();
 installNativeContextMenuGuard();
 // Prime the real home directory before the first render so every `~/` file
