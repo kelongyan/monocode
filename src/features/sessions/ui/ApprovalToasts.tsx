@@ -13,6 +13,7 @@ import {
   type Session,
 } from "../model/session";
 import { HarnessIcon } from "./HarnessIcon";
+import { useT } from "../../../shared/i18n";
 
 type Notice = PendingApprovalNotice & { session: Session };
 
@@ -87,6 +88,7 @@ function ApprovalToastCard({
   onFocusSession: (sessionId: string) => void;
   onApproval: Props["onApproval"];
 }) {
+  const t = useT();
   const { session, label, requestId } = notice;
   const title = sessionDisplayTitle(session.title, session.harness);
   const harness = HARNESS_TITLE[session.harness];
@@ -125,15 +127,13 @@ function ApprovalToastCard({
             className="flex-1 rounded-md bg-content px-2.5 py-1 text-[11px] font-medium text-background-base hover:bg-content/80"
             onClick={() => onApproval(session.id, requestId, "allow")}
           >
-            Allow
-          </button>
+            {t("ui.sessions.allow")}</button>
           <button
             type="button"
             className="flex-1 rounded-md bg-content/10 px-2.5 py-1 text-[11px] font-medium text-content/70 hover:bg-content/20"
             onClick={() => onApproval(session.id, requestId, "deny")}
           >
-            Deny
-          </button>
+            {t("ui.sessions.deny")}</button>
         </div>
       )}
     </article>

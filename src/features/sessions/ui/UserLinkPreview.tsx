@@ -34,6 +34,7 @@ import {
   type LinkPreviewMetadata,
   type UserLink,
 } from "../model/linkPreview";
+import { useT } from "../../../shared/i18n";
 
 export function UserLinkPreview({
   link,
@@ -322,6 +323,7 @@ function GithubWorkItemCard({
   details: GithubWorkItemDetails | null;
   loadState: "idle" | "loading" | "ready" | "unavailable";
 }) {
+  const t = useT();
   const status = workItemStatus(parsed.kind, item);
   const summary = plainTextSummary(details?.body ?? "");
   const updated = item?.updatedAt ? formatRelativeTime(item.updatedAt) : "";
@@ -375,9 +377,7 @@ function GithubWorkItemCard({
             </p>
           ) : (
             <p className="mt-1 text-[11px] leading-relaxed text-content/50">
-              Details aren&apos;t available here, but the link can still be
-              opened on GitHub.
-            </p>
+              {t("ui.sessions.detailsArenAposTAvailableHere")}</p>
           )}
         </div>
       )}
@@ -391,7 +391,7 @@ function GithubWorkItemCard({
             />
           ) : null}
           {details?.author && updated ? <span aria-hidden>·</span> : null}
-          {updated ? <span className="shrink-0">Updated {updated}</span> : null}
+          {updated ? <span className="shrink-0">{t("ui.sessions.updated")}{updated}</span> : null}
         </div>
       ) : null}
 
@@ -446,15 +446,15 @@ function GithubWorkItemCard({
 
       <div className="mt-3 flex items-center gap-1.5 border-t border-content/[0.07] pt-2 text-[10px] text-content/35">
         <ExternalLink className="size-3" aria-hidden="true" />
-        Click the chip to open on GitHub
-      </div>
+        {t("ui.sessions.clickTheChipToOpenOn")}</div>
     </div>
   );
 }
 
 function GithubWorkItemCardSkeleton() {
+  const t = useT();
   return (
-    <div aria-label="Loading GitHub details" className="mt-2.5 space-y-2">
+    <div aria-label={t("ui.sessions.loadingGithubDetails")} className="mt-2.5 space-y-2">
       <div className="h-3 w-4/5 rounded bg-content/10 motion-safe:animate-pulse" />
       <div className="h-2 w-full rounded bg-content/[0.07] motion-safe:animate-pulse" />
       <div className="h-2 w-2/3 rounded bg-content/[0.07] motion-safe:animate-pulse" />

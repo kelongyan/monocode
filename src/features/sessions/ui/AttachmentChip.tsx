@@ -4,6 +4,7 @@ import { attachmentPreviewSrc, isAttachmentFolder } from "../model/attachments";
 import type { Attachment } from "../model/session";
 import { FileTypeIcon } from "../../files/ui/FileTypeIcon";
 import { ImageLightbox } from "../../../shared/ui/ImageLightbox";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   attachment: Attachment;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function AttachmentChip({ attachment, onRemove, photo = false }: Props) {
+  const t = useT();
   const [previewOpen, setPreviewOpen] = useState(false);
   const preview = attachmentPreviewSrc(attachment);
   const image = attachment.kind === "image" && preview;
@@ -64,7 +66,7 @@ export function AttachmentChip({ attachment, onRemove, photo = false }: Props) {
         {onRemove ? (
           <button
             type="button"
-            title="Remove"
+            title={t("ui.sessions.remove")}
             aria-label={`Remove ${attachment.name}`}
             onClick={(event) => {
               event.stopPropagation();

@@ -21,6 +21,7 @@ import {
   type BtwThread,
   type HarnessId,
 } from "../model/session";
+import { useT } from "../../../shared/i18n";
 
 type Options = {
   /** False when this session cannot take side questions right now. */
@@ -488,6 +489,7 @@ export function BtwSheet({
   onOpenFile?: (path: string) => void;
   onOpenDiff?: (path: string) => void;
 }) {
+  const t = useT();
   const sheetRef = useRef<HTMLElement | null>(null);
   const glassRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -695,7 +697,7 @@ export function BtwSheet({
       <section
         ref={sheetRef}
         role="dialog"
-        aria-label="By-the-way conversations"
+        aria-label={t("ui.sessions.byTheWayConversations")}
         className="btw-sheet absolute inset-x-0 bottom-0 isolate mx-auto w-full max-w-4xl"
       >
         <GlassBackdrop
@@ -709,7 +711,7 @@ export function BtwSheet({
           <div className="btw-sheet-body flex h-11 shrink-0 items-center gap-1 border-b border-content/8 pr-2 pl-2.5">
             <div
               role="tablist"
-              aria-label="Side questions"
+              aria-label={t("ui.sessions.sideQuestions")}
               className="scrollbar-none flex min-w-0 flex-1 items-center gap-1 overflow-x-auto"
             >
               {tabs.map((tab) => {
@@ -762,8 +764,8 @@ export function BtwSheet({
             {btw.canStartDraft ? (
               <button
                 type="button"
-                aria-label="New side question"
-                title="New side question"
+                aria-label={t("ui.sessions.newSideQuestion")}
+                title={t("ui.sessions.newSideQuestion")}
                 onClick={btw.startDraft}
                 className="grid size-7 shrink-0 place-items-center rounded-md text-content/45 transition-colors hover:bg-content/8 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent"
               >
@@ -772,8 +774,8 @@ export function BtwSheet({
             ) : null}
             <button
               type="button"
-              aria-label="Back to the conversation"
-              title="Back to the conversation (Esc)"
+              aria-label={t("ui.sessions.backToTheConversation")}
+              title={t("ui.sessions.backToTheConversationEsc")}
               onClick={btw.close}
               className="grid size-7 shrink-0 place-items-center rounded-md text-content/45 transition-colors hover:bg-content/8 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent"
             >
@@ -801,8 +803,7 @@ export function BtwSheet({
               <div className="btw-error" role="alert">
                 <div className="min-w-0">
                   <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-red-200/70">
-                    Couldn’t finish
-                  </div>
+                    {t("ui.sessions.couldntFinish")}</div>
                   <div className="mt-1 text-[12px] leading-4.5 text-red-100/75">
                     {persisted.error ||
                       `${HARNESS_TITLE[harness]} could not answer this side question.`}
@@ -814,8 +815,7 @@ export function BtwSheet({
                   className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md px-2 text-[11px] font-medium text-red-100/80 transition-colors hover:bg-red-200/10 hover:text-red-50 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-200/60"
                 >
                   <RefreshCw className="size-3" strokeWidth={1.75} />
-                  Retry
-                </button>
+                  {t("ui.sessions.retry")}</button>
               </div>
             </div>
           ) : null}
@@ -839,7 +839,7 @@ export function BtwSheet({
                 hideProjectPicker
                 hideBranchPicker
                 hideTopBar
-                placeholder="Ask a side question…"
+                placeholder={t("ui.sessions.askASideQuestion")}
                 inputAriaLabel="By-the-way question"
                 allowedModelHarnesses={[harness]}
                 initialDraft={btw.seed.text}

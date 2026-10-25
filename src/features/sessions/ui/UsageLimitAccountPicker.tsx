@@ -16,6 +16,7 @@ import {
   supportsProviderAccounts,
   type ProviderAccount,
 } from "../../providers/model/providerAccounts";
+import { useT } from "../../../shared/i18n";
 
 /** The provider's other accounts, offered when the current one is limited. */
 export function UsageLimitAccountPicker({
@@ -29,6 +30,7 @@ export function UsageLimitAccountPicker({
   onSelect: (accountId: string) => void;
   variant?: "composer" | "mono";
 }) {
+  const t = useT();
   const snapshot = useSyncExternalStore(
     subscribeProviderAccounts,
     () =>
@@ -80,7 +82,7 @@ export function UsageLimitAccountPicker({
       <button
         ref={button}
         type="button"
-        aria-label="Choose another account"
+        aria-label={t("ui.sessions.chooseAnotherAccount")}
         aria-haspopup="menu"
         aria-expanded={open}
         data-mono-account-picker
@@ -116,7 +118,7 @@ export function UsageLimitAccountPicker({
           onDismiss={(reason) => dismiss(reason === "escape")}
           ignore="[data-mono-account-picker]"
           role="menu"
-          aria-label="Choose another account"
+          aria-label={t("ui.sessions.chooseAnotherAccount")}
           aria-activedescendant={`${menuId}-${active}`}
           tabIndex={-1}
           onKeyDown={onKeyDown}

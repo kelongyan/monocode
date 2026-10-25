@@ -9,6 +9,7 @@ import {
 } from "../model/sessionFilters";
 import { HARNESS_TITLE, type HarnessId } from "../model/session";
 import { HarnessIcon } from "./HarnessIcon";
+import { useT } from "../../../shared/i18n";
 
 const MENU_WIDTH = 228;
 
@@ -39,6 +40,7 @@ export function SessionFiltersMenu({
   onChange,
   onClose,
 }: Props) {
+  const t = useT();
   const hiddenHarnesses = new Set(filters.hiddenHarnesses);
 
   const toggleHarness = (harness: HarnessId) => {
@@ -77,41 +79,41 @@ export function SessionFiltersMenu({
       maxHeight={480}
       onDismiss={onClose}
       role="menu"
-      aria-label="Filter sessions"
+      aria-label={t("ui.sessions.filterSessions")}
       onContextMenu={(event) => event.preventDefault()}
       className="overflow-y-auto overscroll-none p-1"
     >
       <FilterItem
-        label="Archived"
+        label={t("ui.sessions.archived")}
         checked={filters.showArchived}
         onClick={toggleArchived}
       />
       {unavailableOption ? (
         <FilterItem
-          label="Unavailable"
+          label={t("ui.sessions.unavailable")}
           checked={!!filters.showUnavailable}
           onClick={toggleUnavailable}
         />
       ) : null}
 
-      <SectionLabel>Status</SectionLabel>
+      <SectionLabel>{t("ui.sessions.status")}</SectionLabel>
       <FilterItem
-        label="Working"
+        label={t("ui.sessions.working")}
         checked={filters.status.working}
         onClick={() => toggleStatus("working")}
       />
       <FilterItem
-        label="Needs approval"
+        label={t("ui.sessions.needsApproval")}
         checked={filters.status.needsApproval}
         onClick={() => toggleStatus("needsApproval")}
       />
       <FilterItem
-        label="Done"
+        label={t("ui.sessions.done")}
         checked={filters.status.done}
         onClick={() => toggleStatus("done")}
       />
 
-      <SectionLabel>Time</SectionLabel>
+      <SectionLabel>{t("ui.sessions.time")}</SectionLabel>
       {TIME_OPTIONS.map((option) => (
         <FilterItem
           key={option.id}
@@ -123,7 +125,7 @@ export function SessionFiltersMenu({
 
       {harnesses.length > 0 ? (
         <>
-          <SectionLabel>Provider</SectionLabel>
+          <SectionLabel>{t("ui.sessions.provider")}</SectionLabel>
           {harnesses.map((harness) => (
             <FilterItem
               key={harness}
@@ -148,8 +150,7 @@ export function SessionFiltersMenu({
             onClick={() => onChange(DEFAULT_SESSION_SIDEBAR_FILTERS)}
             className="flex h-7 w-full items-center rounded-lg px-2 text-left text-[13px] leading-none text-content/70 hover:bg-content/5 hover:text-content"
           >
-            Clear filters
-          </button>
+            {t("ui.sessions.clearFilters")}</button>
         </>
       ) : null}
     </Popover>

@@ -80,6 +80,7 @@ import {
   useStreamPresentation,
   type StreamMeasurement,
 } from "../model/streamingPerformance";
+import { useT } from "../../../shared/i18n";
 
 const MERMAID_BASE_CONFIG = {
   startOnLoad: false,
@@ -664,6 +665,7 @@ export const AgentMarkdown = memo(function AgentMarkdown({
    */
   documentPath?: string;
 }) {
+  const t = useT();
   const [fileMenu, setFileMenu] = useState<FileLinkMenu | null>(null);
   const [fileActionError, setFileActionError] = useState<string | null>(null);
   const onFileContextMenu = useCallback(
@@ -831,7 +833,7 @@ export const AgentMarkdown = memo(function AgentMarkdown({
                 x={fileMenu.x}
                 y={fileMenu.y}
                 items={fileLinkMenuItems(!!onOpenFile, !!cwd)}
-                ariaLabel="File link actions"
+                ariaLabel={t("ui.sessions.fileLinkActions")}
                 onPick={onFileMenuPick}
                 onClose={() => setFileMenu(null)}
               />
@@ -867,6 +869,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
   /** The Markdown file shown, whose images load from the project, `cwd`. */
   documentPath?: string;
 }) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
 
   return (
@@ -874,7 +877,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
       ref={lockOverscroll}
       tabIndex={0}
       role="region"
-      aria-label="Markdown preview"
+      aria-label={t("ui.sessions.markdownPreview")}
       className="markdown-preview h-full overflow-y-auto overscroll-none [overflow-anchor:none]"
     >
       <div className="px-6 py-8">
@@ -897,6 +900,7 @@ export const MarkdownSource = memo(function MarkdownSource({
 }: {
   text: string;
 }) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
 
   return (
@@ -904,7 +908,7 @@ export const MarkdownSource = memo(function MarkdownSource({
       ref={lockOverscroll}
       tabIndex={0}
       role="region"
-      aria-label="Markdown source"
+      aria-label={t("ui.sessions.markdownSource")}
       className="markdown-preview h-full overflow-y-auto overscroll-none [overflow-anchor:none]"
     >
       <pre className="min-h-full min-w-0 whitespace-pre-wrap wrap-break-word px-4 py-3 font-mono text-[13px] leading-5 text-content/85">

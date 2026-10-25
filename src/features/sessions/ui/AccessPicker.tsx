@@ -141,7 +141,7 @@ export function AccessPicker({
           autoFocus
           onDismiss={(reason) => dismiss(reason === "escape")}
           role="listbox"
-          aria-label="Access"
+          aria-label={t("ui.sessions.access")}
           data-access-picker
           tabIndex={-1}
           onKeyDown={onMenuKey}

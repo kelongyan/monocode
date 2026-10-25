@@ -3,6 +3,7 @@ import { readBinaryFile } from "../../../platform/tauri/fs";
 import { formatFileSize, sniffImageMime } from "../../files/model/filePreview";
 import { ImageLightbox } from "../../../shared/ui/ImageLightbox";
 import type { GeneratedImageMeta } from "../model/session";
+import { useT } from "../../../shared/i18n";
 
 type State =
   | { status: "loading" }
@@ -10,6 +11,7 @@ type State =
   | { status: "error" };
 
 export function GeneratedImage({ image }: { image: GeneratedImageMeta }) {
+  const t = useT();
   const [state, setState] = useState<State>({ status: "loading" });
   const [open, setOpen] = useState(false);
 
@@ -41,16 +43,14 @@ export function GeneratedImage({ image }: { image: GeneratedImageMeta }) {
   if (state.status === "loading") {
     return (
       <div className="px-4 py-3 text-xs text-content/45" role="status">
-        Loading generated image…
-      </div>
+        {t("ui.sessions.loadingGeneratedImage")}</div>
     );
   }
 
   if (state.status === "error") {
     return (
       <div className="px-4 py-3 text-xs text-content/50" role="alert">
-        Could not open generated image.
-      </div>
+        {t("ui.sessions.couldNotOpenGeneratedImage")}</div>
     );
   }
 

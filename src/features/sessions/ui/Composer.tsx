@@ -2051,8 +2051,7 @@ export function Composer({
         >
           {fileDrag ? (
             <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center rounded-[inherit] bg-accent/8 text-[12px] text-content/70">
-              Drop files to attach
-            </div>
+              {t("ui.sessions.dropFilesToAttach")}</div>
           ) : null}
           {workspaceBarOutside ? null : workspaceBar}
 
@@ -2194,8 +2193,7 @@ export function Composer({
                   className="p-1.5"
                 >
                   <p className="px-2 pb-1 pt-0.5 text-[10px] font-medium uppercase tracking-wide text-content/40">
-                    Add to message
-                  </p>
+                    {t("ui.sessions.addToMessage")}</p>
                   <button
                     type="button"
                     disabled={!attachmentsSupported}
@@ -2208,7 +2206,7 @@ export function Composer({
                   >
                     <FilePlus className="mt-0.5 size-4 shrink-0" />
                     <span className="min-w-0">
-                      <span className="block text-[13px]">Upload file</span>
+                      <span className="block text-[13px]">{t("ui.sessions.uploadFile")}</span>
                       <span className="block truncate whitespace-nowrap text-[11px] leading-4 text-content/45">
                         {attachmentsSupported
                           ? "Attach files or images"
@@ -2236,10 +2234,9 @@ export function Composer({
                     >
                       <AiIdea className="mt-0.5 size-4 shrink-0 text-yellow-300/80" />
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[13px]">Plan mode</span>
+                        <span className="block text-[13px]">{t("ui.sessions.planMode")}</span>
                         <span className="block truncate whitespace-nowrap text-[11px] leading-4 text-content/45">
-                          Review a plan before building
-                        </span>
+                          {t("ui.sessions.reviewAPlanBeforeBuilding")}</span>
                       </span>
                       {planActive ? (
                         <Check className="mt-0.5 size-3.5 shrink-0 text-accent" />
@@ -2266,10 +2263,9 @@ export function Composer({
                     >
                       <CursorMagicSelection className="mt-0.5 size-4 shrink-0 text-sky-300/80" />
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[13px]">Operator</span>
+                        <span className="block text-[13px]">{t("ui.sessions.operator")}</span>
                         <span className="block truncate whitespace-nowrap text-[11px] leading-4 text-content/45">
-                          Give this thread access to MonoCode
-                        </span>
+                          {t("ui.sessions.giveThisThreadAccessToMonocode")}</span>
                       </span>
                       {operatorActive ? (
                         <Check className="mt-0.5 size-3.5 shrink-0 text-sky-300/80" />
@@ -2297,14 +2293,13 @@ export function Composer({
                       <Share className="mt-0.5 size-4 shrink-0 text-fuchsia-300/65" />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-1.5">
-                          <span className="text-[13px]">Orchestrator</span>
+                          <span className="text-[13px]">{t("ui.sessions.orchestrator")}</span>
                           <span className="rounded-full bg-fuchsia-300/10 px-1.5 py-0.5 text-[9px] font-medium leading-none tracking-wide text-fuchsia-200/55 mb-px">
                             v1
                           </span>
                         </span>
                         <span className="block truncate whitespace-nowrap text-[11px] leading-4 text-content/45">
-                          Plan and coordinate agent work
-                        </span>
+                          {t("ui.sessions.planAndCoordinateAgentWork")}</span>
                       </span>
                       {orchestrationActive && (
                         <Check className="mt-0.5 size-3.5 shrink-0 text-fuchsia-300/80" />
@@ -2329,10 +2324,9 @@ export function Composer({
                     >
                       <CircleDashed className="mt-0.5 size-4 shrink-0 text-content/60" />
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[13px]">Draft</span>
+                        <span className="block text-[13px]">{t("ui.sessions.draft")}</span>
                         <span className="block truncate whitespace-nowrap text-[11px] leading-4 text-content/45">
-                          Save this message without starting the agent
-                        </span>
+                          {t("ui.sessions.saveThisMessageWithoutStartingThe")}</span>
                       </span>
                       {draftActive ? (
                         <Check className="mt-0.5 size-3.5 shrink-0 text-accent" />
@@ -2445,7 +2439,7 @@ export function Composer({
                 className="edit-last-turn-button flex h-6.5 shrink-0 items-center gap-1 rounded-md border border-current/20 px-2 text-[11px] font-medium transition-[background-color,color,border-color] hover:border-current/35 hover:bg-content/15 hover:text-content focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
               >
                 <X className="size-3" strokeWidth={1.8} />
-                <span>Cancel edit</span>
+                <span>{t("ui.sessions.cancelEdit")}</span>
               </button>
             ) : null}
             <div className="flex shrink-0 items-center gap-1">

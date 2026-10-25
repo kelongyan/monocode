@@ -15,6 +15,7 @@ import {
   type UserQuestionPrompt,
   type UserQuestionReply,
 } from "../model/userQuestion";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   prompt: UserQuestionPrompt;
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export function QuestionForm({ prompt, onReply, onInteraction }: Props) {
+  const t = useT();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [custom, setCustom] = useState<Record<string, string>>({});
@@ -129,8 +131,7 @@ export function QuestionForm({ prompt, onReply, onInteraction }: Props) {
             className="h-6 shrink-0 rounded-md px-1.5 text-[11px] text-content/55 hover:bg-content/10 hover:text-content"
             onClick={skipCurrent}
           >
-            Skip
-          </button>
+            {t("ui.sessions.skip")}</button>
         </div>
         <div className="mt-2">
           <QuestionFields
@@ -173,7 +174,7 @@ export function QuestionForm({ prompt, onReply, onInteraction }: Props) {
           {prompt.autoResolveAt != null ? (
             <span
               className="mr-auto text-[11px] text-content/40"
-              title="Interact to keep this question open."
+              title={t("ui.sessions.interactToKeepThisQuestionOpen")}
             >
               {prompt.autoResolveAt - now > 60_000
                 ? "Optional question"
@@ -186,16 +187,14 @@ export function QuestionForm({ prompt, onReply, onInteraction }: Props) {
               className="h-6 shrink-0 rounded-md px-1.5 text-[11px] text-content/55 hover:bg-content/10 hover:text-content"
               onClick={goBack}
             >
-              Back
-            </button>
+              {t("ui.sessions.back")}</button>
           ) : null}
           <button
             type="submit"
             disabled={!ready}
             className="h-6 rounded-md bg-content px-2.5 text-[11px] font-medium text-background-base hover:bg-content/80 disabled:opacity-40"
           >
-            Continue
-          </button>
+            {t("ui.sessions.continue")}</button>
         </div>
       </form>
     </div>
@@ -215,6 +214,7 @@ function QuestionFields({
   onSelect: (optionId: string) => void;
   onCustom: (value: string) => void;
 }) {
+  const t = useT();
   const options = displayOptions(question);
   const customSelected = selected.some((id) => isCustomId(question, id));
   const customId = customOptionId(question);
@@ -273,13 +273,13 @@ function QuestionFields({
         {question.prompt}
       </p>
       {question.multiSelect ? (
-        <p className="mt-0.5 text-[11px] text-content/40">Select all that apply</p>
+        <p className="mt-0.5 text-[11px] text-content/40">{t("ui.sessions.selectAllThatApply")}</p>
       ) : null}
       {options.length === 0 && question.allowCustom ? (
         <input
           value={custom}
           onChange={(event) => onCustom(event.target.value)}
-          placeholder="Type your answer"
+          placeholder={t("ui.sessions.typeYourAnswer")}
           className="mt-1.5 w-full rounded-md border border-content/15 bg-transparent px-2 py-1 text-[12px] text-content outline-none placeholder:text-content/35 focus:border-content/30"
         />
       ) : (
@@ -347,7 +347,7 @@ function QuestionFields({
                   <input
                     value={custom}
                     onChange={(event) => onCustom(event.target.value)}
-                    placeholder="Type your answer"
+                    placeholder={t("ui.sessions.typeYourAnswer")}
                     className="mt-1 w-full rounded-md border border-content/15 bg-transparent px-2 py-1 text-[12px] text-content outline-none placeholder:text-content/35 focus:border-content/30"
                     onClick={(event) => event.stopPropagation()}
                     onFocus={() => {

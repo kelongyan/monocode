@@ -5,6 +5,7 @@ import {
 } from "../model/sessionFolders";
 import { Folder, Plus, X } from "../../../shared/ui/icons";
 import { useLockOverscroll } from "../../../shared/hooks/useLockOverscroll";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   folders: SessionFolder[];
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function SessionFolderPicker({ folders, onPick, onDismiss }: Props) {
+  const t = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const [query, setQuery] = useState("");
@@ -54,7 +56,7 @@ export function SessionFolderPicker({ folders, onPick, onDismiss }: Props) {
     <div
       data-session-folder-picker
       role="dialog"
-      aria-label="Choose a session folder"
+      aria-label={t("ui.sessions.chooseASessionFolder")}
       className="overflow-hidden rounded-lg border border-content/10 bg-content/5 backdrop-blur-xl"
     >
       <div className="flex items-center gap-2 border-b border-stroke px-2.5 py-2">
@@ -62,8 +64,8 @@ export function SessionFolderPicker({ folders, onPick, onDismiss }: Props) {
         <input
           ref={inputRef}
           value={query}
-          aria-label="Session folder"
-          placeholder="Choose or name a session folder…"
+          aria-label={t("ui.sessions.sessionFolder")}
+          placeholder={t("ui.sessions.chooseOrNameASessionFolder")}
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
@@ -92,8 +94,8 @@ export function SessionFolderPicker({ folders, onPick, onDismiss }: Props) {
         />
         <button
           type="button"
-          title="Cancel"
-          aria-label="Cancel"
+          title={t("ui.sessions.cancel")}
+          aria-label={t("ui.sessions.cancel")}
           onClick={onDismiss}
           className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
         >
@@ -103,13 +105,12 @@ export function SessionFolderPicker({ folders, onPick, onDismiss }: Props) {
       <div
         ref={lockOverscroll}
         role="listbox"
-        aria-label="Session folders"
+        aria-label={t("ui.sessions.sessionFolders")}
         className="max-h-[min(240px,40vh)] overflow-y-auto overscroll-none p-1"
       >
         {rows.length === 0 ? (
           <p className="px-2 py-2 text-[12px] text-content/50">
-            Type a name to create the first folder
-          </p>
+            {t("ui.sessions.typeANameToCreateThe")}</p>
         ) : (
           rows.map((row, index) => {
             const folder =

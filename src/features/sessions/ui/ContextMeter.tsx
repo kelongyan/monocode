@@ -5,6 +5,7 @@ import {
   type ContextUsage,
 } from "../model/contextUsage";
 import { Popover } from "../../../shared/ui/Popover";
+import { useT } from "../../../shared/i18n";
 
 const SIZE = 14;
 const STROKE = 2;
@@ -38,14 +39,15 @@ export function ContextMeter({
   /** The conversation has no messages yet. */
   empty?: boolean;
 }) {
+  const t = useT();
   const [hovered, setHovered] = useState(false);
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const ratio = contextRatio(usage);
   if (!usage || ratio === null) {
     return empty ? (
-      <span title="No context used yet" className="grid shrink-0">
-        <MeterRing ratio={0} label="No context used yet" />
+      <span title={t("ui.sessions.noContextUsedYet")} className="grid shrink-0">
+        <MeterRing ratio={0} label={t("ui.sessions.noContextUsedYet")} />
       </span>
     ) : null;
   }
@@ -63,7 +65,7 @@ export function ContextMeter({
       {onCompact ? (
         <button
           type="button"
-          title="Context usage"
+          title={t("ui.sessions.contextUsage")}
           aria-label={`${headline}, ${detail}. Open context actions`}
           aria-expanded={actionsOpen}
           onClick={() => setOpen((value) => !value)}
@@ -99,8 +101,7 @@ export function ContextMeter({
               }}
               className="mt-1.5 w-full rounded-md bg-content/10 px-2 py-1 text-[11px] text-content hover:bg-content/15 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Compact now
-            </button>
+              {t("ui.sessions.compactNow")}</button>
           ) : null}
         </Popover>
       ) : null}

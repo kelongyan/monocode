@@ -7,6 +7,7 @@ import type { SessionSummary } from "../data/sessionStore";
 import { resolveModel } from "../model/models";
 import { sessionDisplayTitle } from "../model/session";
 import { HarnessIcon } from "./HarnessIcon";
+import { useT } from "../../../shared/i18n";
 
 export function SessionCardPreview({
   anchor,
@@ -25,6 +26,7 @@ export function SessionCardPreview({
   onPointerEnter: () => void;
   onPointerLeave: () => void;
 }) {
+  const t = useT();
   useEffect(() => {
     const onScroll = (event: Event) => {
       // Transcript prefetching can scroll a different pane while hovering.
@@ -89,7 +91,7 @@ export function SessionCardPreview({
       </p>
       <dl className="mt-2 grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-2 gap-y-1.5 border-t border-stroke pt-2">
         {session.branch || session.worktreeRemoved ? (
-          <Detail label="Branch">
+          <Detail label={t("ui.sessions.branch")}>
             {session.worktreeRemoved ? NO_BRANCH_LABEL : session.branch}
           </Detail>
         ) : null}
@@ -102,7 +104,7 @@ export function SessionCardPreview({
         >
           {session.worktreeRemoved ? (
             <>
-              <span className="text-content/50">Removed</span>
+              <span className="text-content/50">{t("ui.sessions.removed")}</span>
               {session.worktreeCwd ? (
                 <span className="mt-0.5 block text-content/40">
                   {prettyCwd(session.worktreeCwd)}
@@ -114,7 +116,7 @@ export function SessionCardPreview({
           )}
         </Detail>
         {additions > 0 || deletions > 0 ? (
-          <Detail label="Changes">
+          <Detail label={t("ui.sessions.changes")}>
             <span className="flex gap-2 font-medium tabular-nums">
               {additions > 0 ? (
                 <span className="text-diff-add-fg">

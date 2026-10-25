@@ -6,6 +6,7 @@ import {
   ProviderSignInPanel,
   type ProviderSignInState,
 } from "./ProviderSignInPanel";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   harness: HarnessId;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function ProviderSignInDialog({ harness, onClose }: Props) {
+  const t = useT();
   const [state, setState] = useState<ProviderSignInState>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +42,7 @@ export function ProviderSignInDialog({ harness, onClose }: Props) {
   return (
     <Modal
       onClose={onClose}
-      title="Authentication required"
+      title={t("ui.sessions.authenticationRequired")}
       description={`Sign in to continue using ${HARNESS_TITLE[harness]}.`}
       size="sm"
       minimalHeader

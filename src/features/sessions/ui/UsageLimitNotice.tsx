@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Clock, Gauge, Play, X } from "../../../shared/ui/icons";
 import type { UsageLimit } from "../model/session";
 import { formatUsageLimitReset } from "../model/usageLimit";
+import { useT } from "../../../shared/i18n";
 
 const BUTTON =
   "flex h-6 shrink-0 items-center gap-1.5 rounded-md px-1.5 hover:bg-content/10 hover:text-content";
@@ -23,6 +24,7 @@ export function UsageLimitNotice({
   providerName?: string;
   modelPicker?: ReactNode;
 }) {
+  const t = useT();
   const [now, setNow] = useState(Date.now);
   const waiting = limit.resetsAt != null && limit.resetsAt > now;
   // Tick the countdown, and flip to "Resume" once the window resets.
@@ -76,8 +78,8 @@ export function UsageLimitNotice({
         {onDismiss ? (
           <button
             type="button"
-            title="Dismiss"
-            aria-label="Dismiss usage limit notice"
+            title={t("ui.sessions.dismiss")}
+            aria-label={t("ui.sessions.dismissUsageLimitNotice")}
             onClick={onDismiss}
             className="ml-auto grid size-6 shrink-0 place-items-center rounded-md hover:bg-content/10 hover:text-content"
           >
@@ -88,9 +90,7 @@ export function UsageLimitNotice({
       {variant === "mono" ? (
         <div className="pl-5.5">
           <p className="mt-1 leading-relaxed">
-            Your conversation is saved. Choose another model or account to keep
-            going.
-          </p>
+            {t("ui.sessions.yourConversationIsSavedChooseAnother")}</p>
           {limit.resetsAt != null ? (
             <p className="mt-1 text-content/45">
               {waiting
@@ -124,33 +124,31 @@ function ResumeControls({
   onResume?: () => void;
   onResumeAtReset?: (enabled: boolean) => void;
 }) {
+  const t = useT();
   return (
     <>
       {!waiting ? (
         <button type="button" onClick={onResume} className={BUTTON}>
           <Play className="size-3.5" />
-          Resume
-        </button>
+          {t("ui.sessions.resume")}</button>
       ) : limit.resumeAtReset ? (
         <button
           type="button"
-          title="Cancel the automatic resume"
+          title={t("ui.sessions.cancelTheAutomaticResume")}
           onClick={() => onResumeAtReset?.(false)}
           className={`${BUTTON} text-amber-400`}
         >
           <Clock className="size-3.5" />
-          Resuming at reset
-        </button>
+          {t("ui.sessions.resumingAtReset")}</button>
       ) : (
         <button
           type="button"
-          title="Continue this session once the limit resets"
+          title={t("ui.sessions.continueThisSessionOnceTheLimit")}
           onClick={() => onResumeAtReset?.(true)}
           className={BUTTON}
         >
           <Clock className="size-3.5" />
-          Resume at reset
-        </button>
+          {t("ui.sessions.resumeAtReset")}</button>
       )}
     </>
   );

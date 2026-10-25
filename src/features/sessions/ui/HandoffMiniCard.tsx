@@ -1,6 +1,7 @@
 import { ChevronRight, Replace, X } from "../../../shared/ui/icons";
 import { HARNESS_TITLE, type HarnessId } from "../model/session";
 import { HarnessIcon } from "./HarnessIcon";
+import { useT } from "../../../shared/i18n";
 
 type Card = {
   from: HarnessId;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export function HandoffMiniCard({ card, onDismiss }: Props) {
+  const t = useT();
   const files =
     card.files != null && card.files > 0
       ? `${card.files} ${card.files === 1 ? "file" : "files"}`
@@ -34,8 +36,7 @@ export function HandoffMiniCard({ card, onDismiss }: Props) {
               strokeWidth={1.75}
             />
             <span className="min-w-0 truncate text-[11px] text-content/50">
-              Handoff
-            </span>
+              {t("ui.sessions.handoff")}</span>
           </span>
           <span className="mt-1 flex min-w-0 items-center gap-1.5 text-[13px] font-semibold leading-snug text-content">
             <HarnessIcon harness={card.from} className="size-3.5 shrink-0" />
@@ -61,8 +62,8 @@ export function HandoffMiniCard({ card, onDismiss }: Props) {
         {onDismiss ? (
           <button
             type="button"
-            title="Remove"
-            aria-label="Remove handoff"
+            title={t("ui.sessions.remove")}
+            aria-label={t("ui.sessions.removeHandoff")}
             onClick={onDismiss}
             className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"
           >

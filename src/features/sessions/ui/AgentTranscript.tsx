@@ -345,6 +345,7 @@ function AgentTranscriptComponent({
   onScrollerChange,
   managed = false,
 }: Props) {
+  const t = useT();
   const isMonoChat = !!agentMascot;
   const blocks = useMemo(() => {
     // A Mono's reaction sits on the message it answers, not in a bubble.
@@ -1145,8 +1146,7 @@ function AgentTranscriptComponent({
                 onReturnToLatest();
               }}
             >
-              Back to latest messages
-            </button>
+              {t("ui.sessions.backToLatestMessages")}</button>
           </div>
         ) : null}
         {loadEarlierOnScroll && (loadingEarlier || loadEarlierError) ? (
@@ -1882,11 +1882,12 @@ function InitialThinking({
   live: boolean;
   embedded?: boolean;
 }) {
+  const t = useT();
   return (
     <div
       className={`min-w-0 pt-3 pb-1 font-sans text-sm text-content/50 ${embedded ? "" : "px-4"}`}
     >
-      {live ? <Shimmer duration={1.6}>Thinking…</Shimmer> : "Thinking…"}
+      {live ? <Shimmer duration={1.6}>{t("ui.sessions.thinking")}</Shimmer> : "Thinking…"}
     </div>
   );
 }
@@ -2170,6 +2171,7 @@ function CopyTurnButton({
   attachments?: Attachment[];
   label?: string;
 }) {
+  const t = useT();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -2219,7 +2221,7 @@ function CopyTurnButton({
       </button>
       {error && (
         <span role="alert" className="max-w-xs text-xs text-content/70">
-          Copy failed. {error}
+          {t("ui.sessions.copyFailed")}{error}
         </span>
       )}
     </>
@@ -2233,6 +2235,7 @@ function SaveNoteButton({
   text: string;
   onSave: (text: string) => void | Promise<void>;
 }) {
+  const t = useT();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -2279,7 +2282,7 @@ function SaveNoteButton({
       </button>
       {error && (
         <span role="alert" className="max-w-xs text-xs text-content/70">
-          Could not save note. {error}
+          {t("ui.sessions.couldNotSaveNote")}{error}
         </span>
       )}
     </>
@@ -2842,12 +2845,10 @@ function UserMessageBlock({
                 >
                   <summary className="flex w-fit cursor-pointer list-none items-center gap-1.5 rounded text-xs text-content/50 transition-colors hover:text-content/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/40 [&::-webkit-details-marker]:hidden">
                     <ChevronRight className="size-3 shrink-0 transition-transform group-open/ci:rotate-90" />
-                    <span>CI context</span>
+                    <span>{t("ui.sessions.ciContext")}</span>
                   </summary>
                   <p className="mt-2 text-xs text-content/50">
-                    CI instructions and failure details included with this
-                    request.
-                  </p>
+                    {t("ui.sessions.ciInstructionsAndFailureDetailsIncluded")}</p>
                   <pre className="mt-2 max-h-72 min-w-0 overflow-auto overscroll-contain rounded-md bg-content/5 p-2.5 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-content/70">
                     {block.ciContext}
                   </pre>
@@ -2857,8 +2858,7 @@ function UserMessageBlock({
                 <div className="mt-2 flex items-center justify-between gap-4 border-t border-dashed border-content/20 pt-2">
                   <span className="flex items-center gap-1.5 text-xs text-content/50">
                     <CircleDashed className="size-3.5" strokeWidth={1.75} />
-                    Draft
-                  </span>
+                    {t("ui.sessions.draft")}</span>
                   <span className="flex items-center gap-1">
                     <button
                       type="button"
@@ -2868,8 +2868,7 @@ function UserMessageBlock({
                       className="flex h-7 items-center gap-1.5 rounded-md px-2 text-xs text-content/55 hover:bg-content/10 hover:text-content"
                     >
                       <Trash2 className="size-3.5" strokeWidth={1.75} />
-                      Remove
-                    </button>
+                      {t("ui.sessions.remove")}</button>
                     <button
                       type="button"
                       title={t("transcript.sendDraft")}
@@ -2877,8 +2876,7 @@ function UserMessageBlock({
                       onClick={() => onSendDraft?.(block)}
                       className="primary-action flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition-transform duration-150 active:scale-[0.97]"
                     >
-                      Send
-                      <ArrowUp className="size-3.5" strokeWidth={2.25} />
+                      {t("ui.sessions.send")}<ArrowUp className="size-3.5" strokeWidth={2.25} />
                     </button>
                   </span>
                 </div>
@@ -5124,6 +5122,7 @@ function ApprovalControls({
   block: Block;
   onApproval?: (requestId: number, decision: ApprovalDecision) => void;
 }) {
+  const t = useT();
   const approval = block.approval;
   if (!approval || approval.decided || !onApproval) return null;
   return (
@@ -5133,15 +5132,13 @@ function ApprovalControls({
         className="rounded-md bg-content px-2.5 py-0.5 text-[11px] hover:bg-content/80     text-background-base"
         onClick={() => onApproval(approval.requestId, "allow")}
       >
-        Allow
-      </button>
+        {t("ui.sessions.allow")}</button>
       <button
         type="button"
         className="rounded-md bg-content/10 px-2.5 py-0.5 text-[11px] text-content/70 hover:bg-content/20"
         onClick={() => onApproval(approval.requestId, "deny")}
       >
-        Deny
-      </button>
+        {t("ui.sessions.deny")}</button>
     </div>
   );
 }

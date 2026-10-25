@@ -44,6 +44,7 @@ import {
 } from "../model/session";
 import { HarnessIcon } from "./HarnessIcon";
 import { Popover } from "../../../shared/ui/Popover";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   from: HarnessId;
@@ -80,14 +81,15 @@ export function HandoffButton({
   from,
   onPick,
 }: Pick<Props, "from" | "onPick">) {
+  const t = useT();
   return (
     <SecondOpinionButton
       from={from}
       onPick={onPick}
       icon={Replace}
-      title="Handoff"
+      title={t("ui.sessions.handoff")}
       disabledTitle="Install another provider to hand off"
-      description="Hand this session to another agent to continue the work."
+      description={t("ui.sessions.handThisSessionToAnotherAgent")}
       menuLabel="Hand this session to another agent"
     />
   );
@@ -106,6 +108,7 @@ export function BuildTargetButton({
   disabled?: boolean;
   onPick: (target: ModelTarget) => void;
 }) {
+  const t = useT();
   return (
     <SecondOpinionButton
       from={from}
@@ -113,9 +116,9 @@ export function BuildTargetButton({
       fromSettings={settings}
       onPick={onPick}
       icon={ChevronDown}
-      title="Build with another model"
+      title={t("ui.sessions.buildWithAnotherModel")}
       disabledTitle="No build providers are available"
-      description="Choose the model and provider that should build this plan."
+      description={t("ui.sessions.chooseTheModelAndProviderThat")}
       menuLabel="Build this plan with another model or provider"
       includeCurrent
       disabled={disabled}

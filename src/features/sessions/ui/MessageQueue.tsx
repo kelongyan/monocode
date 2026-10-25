@@ -11,6 +11,7 @@ import {
 } from "../../../shared/ui/icons";
 import { isImeComposition } from "../../../shared/lib/keyboard";
 import type { MessageQueueStatus, QueuedMessage } from "../model/session";
+import { useT } from "../../../shared/i18n";
 
 export function MessageQueue({
   messages,
@@ -33,6 +34,7 @@ export function MessageQueue({
   variant?: "queue" | "messages";
   sendingId?: string;
 }) {
+  const t = useT();
   const [editingId, setEditingId] = useState<string>();
   const [editDraft, setEditDraft] = useState("");
   const onEditingChangeRef = useRef(onEditingChange);
@@ -120,7 +122,7 @@ export function MessageQueue({
                 <>
                   <textarea
                     autoFocus
-                    aria-label="Edit queued message"
+                    aria-label={t("ui.sessions.editQueuedMessage")}
                     value={editDraft}
                     rows={1}
                     onChange={(event) => setEditDraft(event.target.value)}
@@ -138,8 +140,8 @@ export function MessageQueue({
                   />
                   <button
                     type="button"
-                    title="Save queued message"
-                    aria-label="Save queued message"
+                    title={t("ui.sessions.saveQueuedMessage")}
+                    aria-label={t("ui.sessions.saveQueuedMessage")}
                     disabled={
                       !editDraft.trim() && message.attachments.length === 0
                     }
@@ -150,8 +152,8 @@ export function MessageQueue({
                   </button>
                   <button
                     type="button"
-                    title="Cancel queued message edit"
-                    aria-label="Cancel queued message edit"
+                    title={t("ui.sessions.cancelQueuedMessageEdit")}
+                    aria-label={t("ui.sessions.cancelQueuedMessageEdit")}
                     onClick={cancelEdit}
                     className="grid size-6 shrink-0 place-items-center rounded-md hover:bg-content/10 hover:text-content"
                   >
@@ -178,13 +180,12 @@ export function MessageQueue({
                       className="flex h-6 shrink-0 items-center gap-1.5 rounded-md px-2 text-content/50 transition-colors hover:bg-content/8 hover:text-content/90 disabled:opacity-40"
                     >
                       <CornerDownRight className="size-3.5" />
-                      Steer
-                    </button>
+                      {t("ui.sessions.steer")}</button>
                   ) : null}
                   <button
                     type="button"
-                    title="Edit queued message"
-                    aria-label="Edit queued message"
+                    title={t("ui.sessions.editQueuedMessage")}
+                    aria-label={t("ui.sessions.editQueuedMessage")}
                     disabled={sending || !!message.monoSessionCompletion}
                     onClick={() => startEdit(message)}
                     className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 transition-colors hover:bg-content/8 hover:text-content/90 disabled:opacity-40"
@@ -193,8 +194,8 @@ export function MessageQueue({
                   </button>
                   <button
                     type="button"
-                    title="Remove queued message"
-                    aria-label="Remove queued message"
+                    title={t("ui.sessions.removeQueuedMessage")}
+                    aria-label={t("ui.sessions.removeQueuedMessage")}
                     disabled={sending}
                     onClick={() => onDelete?.(message.id)}
                     className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 transition-colors hover:bg-content/8 hover:text-content/90 disabled:opacity-40"

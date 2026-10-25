@@ -20,6 +20,7 @@ import { invalidateWatchedFiles } from "../../files/model/fileWatch";
 import { basename, notifyGitChanged } from "../../../platform/tauri/fs";
 import { formatInteger } from "../../../shared/lib/numbers";
 import { FileTypeIcon } from "../../files/ui/FileTypeIcon";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   sessionId: string;
@@ -45,6 +46,7 @@ export function SessionReview({
   onOpenDiff,
   onCommit,
 }: Props) {
+  const t = useT();
   const { files, setFiles, error, load, filesRef } = useSessionReviewFiles(
     sessionId,
     cwd,
@@ -70,8 +72,7 @@ export function SessionReview({
           className="rounded-xl border border-content/6 bg-content/3 px-3 py-2.5"
         >
           <p className="text-[12px] font-medium text-content/80">
-            Couldn’t record changes
-          </p>
+            {t("ui.sessions.couldntRecordChanges")}</p>
           <p className="mt-1 text-[11px] text-content/50">{error}</p>
         </div>
       </div>
@@ -116,8 +117,8 @@ export function SessionReview({
           </span>
           <div className="min-w-0 flex-1">
             <div className="truncate text-[12px] font-medium text-content/80">
-              <span title="Workspace changes recorded during the latest turn">
-                Changed {files.length} {files.length === 1 ? "file" : "files"}
+              <span title={t("ui.sessions.workspaceChangesRecordedDuringTheLatest")}>
+                {t("ui.sessions.changed")}{files.length} {files.length === 1 ? "file" : "files"}
               </span>
             </div>
             <div className="flex items-center gap-1.5 font-sans text-[11px] font-semibold tabular-nums -mt-0.5">
@@ -143,35 +144,31 @@ export function SessionReview({
               onClick={() => run("undo")}
               className="h-7 rounded-md px-2.5 text-[11px] text-content/50 hover:bg-content/8 hover:text-content disabled:opacity-35"
             >
-              Undo
-            </button>
+              {t("ui.sessions.undo")}</button>
             <button
               type="button"
-              title="Keep the recorded changes and dismiss this card"
+              title={t("ui.sessions.keepTheRecordedChangesAndDismiss")}
               disabled={disabled}
               onClick={() => run("keep")}
               className="h-7 rounded-md px-2.5 text-[11px] text-content/50 hover:bg-content/8 hover:text-content disabled:opacity-35"
             >
-              Keep
-            </button>
+              {t("ui.sessions.keep")}</button>
             {onCommit ? (
               <button
                 type="button"
-                title="Commit these changes"
+                title={t("ui.sessions.commitTheseChanges")}
                 onClick={() => onCommit({ sessionId, cwd })}
                 className="h-7 rounded-md px-2.5 text-[11px] text-content/50 hover:bg-content/8 hover:text-content"
               >
-                Commit
-              </button>
+                {t("ui.sessions.commit")}</button>
             ) : null}
             <button
               type="button"
-              title="Review changes"
+              title={t("ui.sessions.reviewChanges")}
               onClick={() => onOpenDiff(undefined, { sessionId, cwd })}
               className="h-7 rounded-md bg-content/8 px-2.5 text-[11px] font-medium text-content/75 hover:bg-content/12 hover:text-content"
             >
-              Review
-            </button>
+              {t("ui.sessions.review")}</button>
           </div>
         </div>
         <ul
@@ -350,14 +347,14 @@ function FileRow({
 }
 
 function DiffCounts({ file }: { file: CheckpointFile }) {
+  const t = useT();
   if (!file.exact) {
     return (
       <span
-        title="This older checkpoint has no exact before/after diff"
+        title={t("ui.sessions.thisOlderCheckpointHasNoExact")}
         className="shrink-0 text-[11px] font-medium text-content/45"
       >
-        Diff unavailable
-      </span>
+        {t("ui.sessions.diffUnavailable")}</span>
     );
   }
   return (
