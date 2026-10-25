@@ -40,6 +40,7 @@ import { FileActionError } from "../../files/ui/FileActionError";
 import { FileTypeIcon } from "../../files/ui/FileTypeIcon";
 import { HarnessIcon } from "../../sessions/ui/HarnessIcon";
 import { TabLabel } from "../../../shared/ui/TabLabel";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   files: FilePaneTab[];
@@ -205,6 +206,7 @@ export function SurfaceTabs({
   label = "Open files",
   trailing,
 }: Props) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const activeTabRef = useRef<HTMLDivElement | null>(null);
   const [menu, setMenu] = useState<SurfaceTabMenu | null>(null);
@@ -277,8 +279,8 @@ export function SurfaceTabs({
         {onPaneDragStart ? (
           <div
             role="button"
-            title="Drag to reorder pane"
-            aria-label="Drag to reorder pane"
+            title={t("ui.workspace.dragToReorderPane")}
+            aria-label={t("ui.workspace.dragToReorderPane")}
             tabIndex={-1}
             className="grid h-7.5 w-5 shrink-0 cursor-grab place-items-center rounded-md text-content/35 hover:bg-content/5 hover:text-content/70 active:cursor-grabbing touch-none"
             onPointerDown={(event) => {
@@ -398,8 +400,8 @@ export function SurfaceTabs({
                 {dirty ? (
                   <span
                     className="size-1.5 shrink-0 rounded-full bg-content/70"
-                    title="Unsaved changes"
-                    aria-label="Unsaved changes"
+                    title={t("ui.workspace.unsavedChanges")}
+                    aria-label={t("ui.workspace.unsavedChanges")}
                   />
                 ) : null}
               </button>
@@ -453,7 +455,7 @@ export function SurfaceTabs({
           x={menu.x}
           y={menu.y}
           items={surfaceTabMenuItems(menuFile, files.length > 1)}
-          ariaLabel="File tab actions"
+          ariaLabel={t("ui.workspace.fileTabActions")}
           onPick={onMenuPick}
           onClose={() => setMenu(null)}
         />

@@ -32,6 +32,7 @@ import {
   UPDATABLE_HARNESSES,
   type HarnessUpdate,
 } from "../model/harnessUpdates";
+import { useT } from "../../../shared/i18n";
 
 /**
  * Shared by every mount in this window: a StrictMode remount must reuse the
@@ -100,6 +101,7 @@ export function HarnessUpdateNotice({
   topOffset?: number;
   onHeightChange?: (height: number) => void;
 }) {
+  const t = useT();
   const panelRef = useRef<HTMLElement>(null);
   const [updates, setUpdates] = useState<HarnessUpdate[]>([]);
   const [rows, setRows] = useState<Partial<Record<HarnessId, RowState>>>({});
@@ -173,7 +175,7 @@ export function HarnessUpdateNotice({
   return createPortal(
     <section
       ref={panelRef}
-      aria-label="Harness updates"
+      aria-label={t("ui.providers.harnessUpdates")}
       role="status"
       style={{ zIndex: LAYER.toast, top: topOffset }}
       className="fixed right-3 isolate w-[min(340px,calc(100vw-24px))] overflow-hidden rounded-xl border border-content/10 text-content shadow-xl"
@@ -192,12 +194,11 @@ export function HarnessUpdateNotice({
               className="rounded-md px-2 py-1 text-[11px] font-medium text-content/70 hover:bg-content/10 hover:text-content"
               onClick={() => start(pending)}
             >
-              Update all
-            </button>
+              {t("ui.providers.updateAll")}</button>
           ) : null}
           <button
             type="button"
-            aria-label="Dismiss harness updates"
+            aria-label={t("ui.providers.dismissHarnessUpdates")}
             disabled={busy}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 hover:bg-content/10 hover:text-content disabled:opacity-40 disabled:hover:bg-transparent"
             onClick={dismiss}
@@ -235,6 +236,7 @@ function HarnessUpdateRow({
   state: RowState;
   onUpdate: () => void;
 }) {
+  const t = useT();
   return (
     <article className="px-3 py-2.5">
       <div className="flex items-center gap-2">
@@ -245,7 +247,7 @@ function HarnessUpdateRow({
         {state.status === "updated" ? (
           <span className="flex shrink-0 items-center gap-1 text-[11px] text-emerald-400">
             <Check className="size-3.5" />
-            Updated to {state.version}
+            {t("ui.providers.updatedToNamed", { version: state.version })}
           </span>
         ) : (
           <>
@@ -261,8 +263,7 @@ function HarnessUpdateRow({
               {state.status === "updating" ? (
                 <>
                   <Loader className="size-3 animate-spin" />
-                  Updating
-                </>
+                  {t("ui.providers.updating")}</>
               ) : state.status === "failed" ? (
                 "Retry"
               ) : (

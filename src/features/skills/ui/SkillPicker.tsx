@@ -14,6 +14,7 @@ import {
   type Skill,
 } from "../model/skills";
 import { useLockOverscroll } from "../../../shared/hooks/useLockOverscroll";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   skills: Skill[];
@@ -48,6 +49,7 @@ export function SkillPicker({
   onCancelCreate,
   onCreate,
 }: Props) {
+  const t = useT();
   return (
     <div
       data-skill-picker
@@ -84,8 +86,7 @@ export function SkillPicker({
               className="flex w-full items-center gap-2 border-t border-stroke px-2.5 py-2 text-left text-[12px] text-content/70 hover:bg-content/10 hover:text-content"
             >
               <Plus className="size-3.5 shrink-0" strokeWidth={1.75} />
-              New skill
-            </button>
+              {t("ui.skills.newSkill")}</button>
           ) : null}
         </>
       )}
@@ -108,6 +109,7 @@ function SkillList({
   onActive: (index: number) => void;
   onPick: (skill: Skill) => void;
 }) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const activeRef = useRef<HTMLButtonElement>(null);
   const pointer = useRef({ x: Number.NaN, y: Number.NaN, allow: false });
@@ -151,7 +153,7 @@ function SkillList({
     <div
       ref={lockOverscroll}
       role="listbox"
-      aria-label="Commands and skills"
+      aria-label={t("ui.skills.commandsAndSkills")}
       onMouseMove={onListMouseMove}
       className={`${compact ? "max-h-48" : "max-h-[min(240px,40vh)]"} overflow-y-auto overscroll-none px-1 py-1`}
     >
@@ -216,6 +218,7 @@ export function CreateSkillForm({
   onCancel: () => void;
   onCreate: (name: string, scope: "project" | "user") => void;
 }): ReactNode {
+  const t = useT();
   const input = useRef<HTMLInputElement>(null);
   const project = isLocalProject(cwd);
   const [name, setName] = useState(() => slugSkillName(query));
@@ -248,21 +251,20 @@ export function CreateSkillForm({
       className="px-2.5 py-2"
     >
       <p className="mb-2 text-[11px] text-content/50">
-        Writes a starter SKILL.md you can edit.
-      </p>
+        {t("ui.skills.writesAStarterSkillMdYou")}</p>
       <input
         ref={input}
         value={name}
         spellCheck={false}
         placeholder="skill-name"
-        aria-label="Skill name"
+        aria-label={t("ui.skills.skillName")}
         disabled={busy}
         onChange={(e) => setName(e.target.value)}
         className={`mb-2 w-full rounded-md bg-content/10 px-2 py-1.5 text-[13px] text-content outline-none placeholder:text-content/40 ${monospace ? "font-mono" : "font-sans"}`}
       />
       <div className="mb-2 flex gap-1">
         <ScopeButton
-          label="Project"
+          label={t("ui.skills.project")}
           hint=".agents/skills"
           monospace={monospace}
           selected={scope === "project"}
@@ -270,7 +272,7 @@ export function CreateSkillForm({
           onClick={() => setScope("project")}
         />
         <ScopeButton
-          label="Personal"
+          label={t("ui.skills.personal")}
           hint="~/.agents/skills"
           monospace={monospace}
           selected={scope === "user"}
@@ -282,8 +284,7 @@ export function CreateSkillForm({
         <p className="mb-2 text-[12px] text-content/70">{error}</p>
       ) : !name.trim() || valid ? null : (
         <p className="mb-2 text-[12px] text-content/50">
-          Use lowercase letters, numbers, and hyphens.
-        </p>
+          {t("ui.skills.useLowercaseLettersNumbersAndHyphens")}</p>
       )}
       <div className="flex items-center justify-end gap-1">
         <button
@@ -292,8 +293,7 @@ export function CreateSkillForm({
           onClick={onCancel}
           className="rounded-md px-2 py-1 text-[12px] text-content/50 hover:bg-content/10 hover:text-content"
         >
-          Cancel
-        </button>
+          {t("ui.skills.cancel")}</button>
         <button
           type="submit"
           disabled={!valid || busy}

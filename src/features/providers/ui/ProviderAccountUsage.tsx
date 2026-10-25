@@ -15,6 +15,7 @@ import type {
 } from "../model/accountUsage";
 import { RefreshCw } from "../../../shared/ui/icons";
 import { useShowRemainingUsage } from "../../settings/model/displayPrefs";
+import { useT } from "../../../shared/i18n";
 
 const STATUS_DOT: Record<AccountStatusTone, string> = {
   ready: "bg-emerald-400",
@@ -64,13 +65,14 @@ export function AccountStatusLabel({
 }
 
 export function AccountUsageRefresh({ usage }: { usage: AccountUsage }) {
+  const t = useT();
   return (
     <button
       type="button"
       disabled={usage.refreshing}
       onClick={usage.refresh}
-      aria-label="Refresh usage limits"
-      title="Refresh usage limits"
+      aria-label={t("ui.providers.refreshUsageLimits")}
+      title={t("ui.providers.refreshUsageLimits")}
       className="grid size-7 place-items-center rounded-md text-content/40 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.96] disabled:opacity-40"
     >
       <RefreshCw
@@ -106,6 +108,7 @@ export function AccountUsageMeters({
   limits: ProviderRateLimits | undefined;
   now: number;
 }) {
+  const t = useT();
   const windows = meterWindows(limits);
 
   if (windows.length === 0) {
@@ -137,8 +140,8 @@ export function AccountUsageMeters({
         />
       ))}
       {limits?.extraUsageBalance != null ? (
-        <div className="w-16 text-[10px] leading-3" title="Extra usage balance">
-          <div className="truncate text-content/40">Extra</div>
+        <div className="w-16 text-[10px] leading-3" title={t("ui.providers.extraUsageBalance")}>
+          <div className="truncate text-content/40">{t("ui.providers.extra")}</div>
           <div className="mt-1 font-medium tabular-nums text-content/70">
             {formatExtraUsageBalance(limits.extraUsageBalance)}
           </div>

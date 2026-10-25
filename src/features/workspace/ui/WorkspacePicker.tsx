@@ -31,6 +31,7 @@ import {
   keybindingShortcutLabel,
   keybindingShortcutTokens,
 } from "../../settings/model/settings";
+import { useT } from "../../../shared/i18n";
 
 export const WORKSPACE_MODE_SHORTCUT = `${MOD}${SHIFT}G`;
 const WORKSPACE_SURFACES =
@@ -170,6 +171,7 @@ function WorkspaceModePicker({
   onOpenChange?: (open: boolean) => void;
   popoverSide?: "top" | "bottom";
 }) {
+  const t = useT();
   const host = useContext(NativePopupHost);
   const [open, setOpen] = useState(initialOpen);
   useEffect(() => {
@@ -298,12 +300,12 @@ function WorkspaceModePicker({
           onDismiss={dismiss}
           ignore={WORKSPACE_SURFACES}
           role="dialog"
-          aria-label="Workspace"
+          aria-label={t("ui.workspace.workspace")}
           data-workspace-picker
           className="overflow-hidden p-1.5"
         >
           <div className="flex items-center justify-between gap-3 px-2 py-1 text-[11px] font-medium text-content/45">
-            <span>Workspace</span>
+            <span>{t("ui.workspace.workspace")}</span>
             {shortcut ? (
               <kbd className="font-sans text-[10px] font-normal text-content/35">
                 {shortcut}
@@ -361,7 +363,7 @@ function WorkspaceModePicker({
               }`}
             >
               <FolderTree className="size-4 shrink-0 text-content/55" />
-              <span className="flex-1">Existing worktree…</span>
+              <span className="flex-1">{t("ui.workspace.existingWorktree")}</span>
               <ChevronRight className="size-3.5 shrink-0 text-content/45" />
             </button>
           ) : null}
@@ -369,8 +371,8 @@ function WorkspaceModePicker({
             <div className="h-9 border-t border-stroke">
               <button
                 type="button"
-                title="Open worktree settings"
-                aria-label="Open worktree settings"
+                title={t("ui.workspace.openWorktreeSettings")}
+                aria-label={t("ui.workspace.openWorktreeSettings")}
                 onMouseDown={(event) => event.preventDefault()}
                 onMouseEnter={closeWorktreeMenu}
                 onClick={() => {
@@ -383,7 +385,7 @@ function WorkspaceModePicker({
                   className="size-4 shrink-0 text-content/45"
                   strokeWidth={1.75}
                 />
-                <span className="flex-1">Worktree settings</span>
+                <span className="flex-1">{t("ui.workspace.worktreeSettings")}</span>
               </button>
             </div>
           ) : null}
@@ -398,7 +400,7 @@ function WorkspaceModePicker({
           maxHeight={320}
           layer={LAYER.submenu}
           role="menu"
-          aria-label="Existing worktrees"
+          aria-label={t("ui.workspace.existingWorktrees")}
           data-existing-worktrees-submenu
           className="flex flex-col overflow-hidden p-1.5"
           onMouseEnter={openWorktreeMenu}
@@ -414,8 +416,7 @@ function WorkspaceModePicker({
           {!data && !loadError ? (
             <p className="flex items-center gap-2 px-2 py-3 text-[12px] text-content/50">
               <Loader className="size-3.5 animate-spin" />
-              Loading worktrees…
-            </p>
+              {t("ui.workspace.loadingWorktrees")}</p>
           ) : null}
           <div className="min-h-0 overflow-y-auto">
             {worktrees.map((tree) => (
@@ -446,8 +447,7 @@ function WorkspaceModePicker({
             ))}
             {data && worktrees.length === 0 ? (
               <p className="px-2 py-3 text-[12px] text-content/50">
-                No existing worktrees
-              </p>
+                {t("ui.workspace.noExistingWorktrees")}</p>
             ) : null}
           </div>
           {pickError || loadError ? (
@@ -491,6 +491,7 @@ export function WorktreeBasePicker({
   onOpenChange?: (open: boolean) => void;
   popoverSide?: "top" | "bottom";
 }) {
+  const t = useT();
   const [open, setOpen] = useState(initialOpen);
   useEffect(() => {
     onOpenChange?.(open);
@@ -549,7 +550,7 @@ export function WorktreeBasePicker({
           maxHeight={280}
           onDismiss={dismiss}
           role="dialog"
-          aria-label="Worktree base branch"
+          aria-label={t("ui.workspace.worktreeBaseBranch")}
           className="flex flex-col overflow-hidden"
         >
           <label className="flex shrink-0 items-center gap-2 border-b border-stroke px-2 py-2.5 text-content/50">
@@ -557,8 +558,8 @@ export function WorktreeBasePicker({
             <input
               ref={search}
               value={query}
-              placeholder="Search base branches…"
-              aria-label="Search base branches"
+              placeholder={t("ui.workspace.searchBaseBranches")}
+              aria-label={t("ui.workspace.searchBaseBranches2")}
               spellCheck={false}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -588,7 +589,7 @@ export function WorktreeBasePicker({
           </label>
           <div
             role="listbox"
-            aria-label="Base branches"
+            aria-label={t("ui.workspace.baseBranches")}
             className="min-h-0 flex-1 overflow-y-auto p-1.5"
           >
             {rows.map((branch, index) => {
@@ -628,8 +629,7 @@ export function WorktreeBasePicker({
             })}
             {rows.length === 0 ? (
               <p className="px-2 py-3 text-[12px] text-content/45">
-                No matching branches
-              </p>
+                {t("ui.workspace.noMatchingBranches")}</p>
             ) : null}
           </div>
         </Popover>

@@ -24,6 +24,7 @@ import {
   resolveTabGroupMascot,
 } from "../../workspace/model/tabGroups";
 import type { RecentProject } from "../../projects/model/recents";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   cwd: string;
@@ -40,6 +41,7 @@ export function ProjectNotificationSettings({
   notificationSettingsRequest = 0,
   highlighted = false,
 }: Props) {
+  const t = useT();
   const notificationProjects = useNotificationProjects([
     cwd,
     notificationProjectPath ?? "",
@@ -110,19 +112,15 @@ export function ProjectNotificationSettings({
   return (
     <section
       id="settings-project-notifications"
-      aria-label="Project notifications"
+      aria-label={t("ui.notifications.projectNotifications")}
       className="@container/notifications"
     >
       <div className="flex flex-wrap items-end gap-4 pb-2.5">
         <div className="min-w-[min(100%,240px)] flex-1">
           <h2 className="text-[13px] font-semibold text-content">
-            Project notifications
-          </h2>
+            {t("ui.notifications.projectNotifications")}</h2>
           <p className="mt-1 text-[12px] leading-relaxed text-content/45">
-            Choose sounds, banners and sidebar indicators by category. Mute
-            pauses them without changing your choices. Unread items stay marked
-            in Inbox.
-          </p>
+            {t("ui.notifications.chooseSoundsBannersAndSidebarIndicators")}</p>
         </div>
         {projects.length ? (
           <div className="shrink-0 pb-0.5">
@@ -154,8 +152,7 @@ export function ProjectNotificationSettings({
             role="status"
             className="px-4 py-3.5 text-[12px] leading-relaxed text-content/45"
           >
-            Open a project or connect an Inbox provider to configure its notifications.
-          </p>
+            {t("ui.notifications.openAProjectOrConnectAn")}</p>
         ) : null}
         {projects.length ? (
           <>
@@ -163,7 +160,7 @@ export function ProjectNotificationSettings({
               <div className="flex min-h-9 flex-wrap items-center justify-between gap-3 border-b border-content/5 px-4 py-3.5">
                 <label className="flex cursor-pointer items-center gap-2.5 text-[12px] text-content/55 hover:text-content/80">
                   <ProjectSelection
-                    label="Select all projects"
+                    label={t("ui.notifications.selectAllProjects")}
                     checked={selectedIds.length === projects.length}
                     mixed={
                       selectedIds.length > 0 &&
@@ -180,7 +177,7 @@ export function ProjectNotificationSettings({
                     : "Select all projects"}
                 </label>
                 {selectedIds.length ? (
-                  <div role="group" aria-label="Mute selected projects">
+                  <div role="group" aria-label={t("ui.notifications.muteSelectedProjects")}>
                     <NotificationMuteControl projectIds={selectedIds} />
                   </div>
                 ) : null}
@@ -322,9 +319,7 @@ export function ProjectNotificationSettings({
                             role="status"
                             className="pt-3.5 text-[12px] leading-relaxed text-content/45"
                           >
-                            Your category choices apply when notifications
-                            resume. You can edit them while muted.
-                          </p>
+                            {t("ui.notifications.yourCategoryChoicesApplyWhenNotifications")}</p>
                         ) : null}
                         {categories.map((category) => (
                           <label

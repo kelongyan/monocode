@@ -20,6 +20,7 @@ import {
   type PressureState,
   type ResourceSample,
 } from "../model/resourcePressure";
+import { useT } from "../../../shared/i18n";
 
 type OwnedProcess = {
   pid: number;
@@ -51,6 +52,7 @@ export function ResourcePressureNotice({
   chipHost,
   insetChip = false,
 }: Props) {
+  const t = useT();
   const [pressure, setPressure] = useState<PressureState>(emptyPressure);
   const [open, setOpen] = useState(false);
   const [processes, setProcesses] = useState<OwnedProcess[]>([]);
@@ -206,7 +208,7 @@ export function ResourcePressureNotice({
         ? createPortal(
             <button
               type="button"
-              aria-label="High resource usage"
+              aria-label={t("ui.notifications.highResourceUsage")}
               aria-haspopup="dialog"
               aria-expanded={open}
               onClick={() => setOpen(true)}
@@ -218,14 +220,14 @@ export function ResourcePressureNotice({
                 strokeWidth={1.75}
                 aria-hidden
               />
-              <span>High usage</span>
+              <span>{t("ui.notifications.highUsage")}</span>
             </button>,
             chipHost,
           )
         : null}
       {open && chipHost ? (
         <Modal
-          title="Running work"
+          title={t("ui.notifications.runningWork")}
           size="sm"
           fitViewport
           onClose={() => setOpen(false)}
@@ -256,8 +258,7 @@ export function ResourcePressureNotice({
                 title={error}
                 className="mt-3 text-[12px] text-red-500 dark:text-red-400"
               >
-                Couldn't load running work. Trying again…
-              </p>
+                {t("ui.notifications.couldntLoadRunningWorkTryingAgain")}</p>
             ) : null}
             {stopError ? (
               <p
@@ -265,8 +266,7 @@ export function ResourcePressureNotice({
                 title={stopError}
                 className="mt-3 text-[12px] text-red-500 dark:text-red-400"
               >
-                Couldn't stop this work. Please try again.
-              </p>
+                {t("ui.notifications.couldntStopThisWorkPleaseTry")}</p>
             ) : null}
             {loading && !processes.length ? (
               <p
@@ -274,12 +274,10 @@ export function ResourcePressureNotice({
                 className="flex items-center justify-center gap-2 py-8 text-[12px] text-content/50"
               >
                 <Loader className="size-3.5 animate-spin" />
-                Checking running work…
-              </p>
+                {t("ui.notifications.checkingRunningWork")}</p>
             ) : !processes.length && !error ? (
               <p className="py-6 text-center text-[12px] leading-relaxed text-content/50">
-                No running work found in MonoCode.
-                {pressure.active
+                {t("ui.notifications.noRunningWorkFoundInMonocode")}{pressure.active
                   ? " Other apps may be using these resources."
                   : ""}
               </p>
@@ -293,7 +291,7 @@ export function ResourcePressureNotice({
                 <div
                   ref={lockOverscroll}
                   role="list"
-                  aria-label="Running sessions"
+                  aria-label={t("ui.notifications.runningSessions")}
                   className="max-h-[min(320px,45dvh)] divide-y divide-stroke overflow-y-auto overscroll-contain"
                 >
                   {[...groups].map(([id, rows]) => {
@@ -328,7 +326,7 @@ export function ResourcePressureNotice({
                             <button
                               type="button"
                               aria-label={`Stop session ${title}`}
-                              title="Stop this session and pause queued work"
+                              title={t("ui.notifications.stopThisSessionAndPauseQueued")}
                               disabled={!!stopping}
                               className="flex h-7 shrink-0 items-center gap-1.5 rounded-md bg-content/6 px-2.5 text-[12px] text-content/70 hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40 dark:hover:text-red-400"
                               onClick={() =>
@@ -340,8 +338,7 @@ export function ResourcePressureNotice({
                               {stopping === `session:${id}` ? (
                                 <>
                                   <Loader className="size-3 animate-spin" />
-                                  Stopping…
-                                </>
+                                  {t("ui.notifications.stopping")}</>
                               ) : (
                                 "Stop"
                               )}
@@ -413,8 +410,7 @@ export function ResourcePressureNotice({
                   })}
                 </div>
                 <p className="mt-3 border-t border-stroke pt-3 text-[11px] text-content/40">
-                  Stopping work keeps your conversations saved.
-                </p>
+                  {t("ui.notifications.stoppingWorkKeepsYourConversationsSaved")}</p>
               </>
             ) : null}
           </div>

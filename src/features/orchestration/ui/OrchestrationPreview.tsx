@@ -35,6 +35,7 @@ import {
   Play,
   Search,
 } from "../../../shared/ui/icons";
+import { useT } from "../../../shared/i18n";
 
 function AssignmentModel({
   task,
@@ -48,6 +49,7 @@ function AssignmentModel({
     modelSettings: Record<string, string>,
   ): void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -231,8 +233,8 @@ function AssignmentModel({
             <input
               ref={search}
               type="text"
-              aria-label="Search assignment models"
-              placeholder="Search models or harnesses…"
+              aria-label={t("ui.orchestration.searchAssignmentModels")}
+              placeholder={t("ui.orchestration.searchModelsOrHarnesses")}
               spellCheck={false}
               autoComplete="off"
               value={query}
@@ -248,7 +250,7 @@ function AssignmentModel({
           <div
             ref={listOverscroll}
             role="listbox"
-            aria-label="Assignment models"
+            aria-label={t("ui.orchestration.assignmentModels")}
             className="min-h-0 flex-1 overflow-y-auto overscroll-none p-1"
           >
             {matches.map((choice, index) => (
@@ -307,8 +309,7 @@ function AssignmentModel({
             ))}
             {!matches.length && (
               <p className="px-2 py-3 text-[12px] text-content/45">
-                No matching models
-              </p>
+                {t("ui.orchestration.noMatchingModels")}</p>
             )}
           </div>
         </Popover>
@@ -367,6 +368,7 @@ function AssignmentModel({
 }
 
 function WorkerHelp() {
+  const t = useT();
   const [hovered, setHovered] = useState(false);
   const [open, setOpen] = useState(false);
   const anchor = useRef<HTMLButtonElement>(null);
@@ -375,7 +377,7 @@ function WorkerHelp() {
       <button
         type="button"
         ref={anchor}
-        aria-label="What parallel workers means"
+        aria-label={t("ui.orchestration.whatParallelWorkersMeans")}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
         onMouseEnter={() => setHovered(true)}
@@ -396,14 +398,9 @@ function WorkerHelp() {
           className={`px-2.5 py-2 ${open ? "" : "pointer-events-none"}`}
         >
           <div className="text-[12px] leading-4 text-content">
-            How many workers run at once
-          </div>
+            {t("ui.orchestration.howManyWorkersRunAtOnce")}</div>
           <div className="mt-1 text-[11px] leading-4 text-content/50">
-            The rest of the tasks wait their turn, and a task that depends on
-            another waits for it either way. Every worker edits this same
-            project folder, so a lower number means fewer changes landing in it
-            at the same time.
-          </div>
+            {t("ui.orchestration.theRestOfTheTasksWait")}</div>
         </Popover>
       )}
     </>
@@ -451,6 +448,7 @@ export function OrchestrationPreview({
   block: Block;
   busy?: boolean;
 }) {
+  const t = useT();
   const actions = useContext(OrchestrationActions);
   const runs = useSyncExternalStore(
     orchestrator.subscribe,
@@ -505,7 +503,7 @@ export function OrchestrationPreview({
   return (
     <div
       className="mb-2 overflow-hidden rounded-xl border border-content/10 bg-content/3 font-sans"
-      aria-label="Orchestration proposal"
+      aria-label={t("ui.orchestration.orchestrationProposal")}
       data-orchestration-review
     >
       <div className="flex min-w-0 flex-wrap items-center gap-2.5 px-3 py-2.5">
@@ -546,8 +544,7 @@ export function OrchestrationPreview({
               disabled={busy || !actions}
               onClick={() => actions?.retry(proposal.leadId, block.id)}
             >
-              Try again
-            </button>
+              {t("ui.orchestration.tryAgain")}</button>
           )}
           {!run && ["ready", "starting"].includes(proposal.status) && (
             <button
@@ -575,8 +572,7 @@ export function OrchestrationPreview({
                 )
               }
             >
-              View agents
-            </button>
+              {t("ui.orchestration.viewAgents")}</button>
           )}
         </div>
       </div>
@@ -661,7 +657,7 @@ export function OrchestrationPreview({
                     {editable ? (
                       <>
                         <label className="block">
-                          <span className={fieldLabel}>Task</span>
+                          <span className={fieldLabel}>{t("ui.orchestration.task")}</span>
                           <input
                             aria-label={`Title for task ${index + 1}`}
                             className={field}
@@ -672,7 +668,7 @@ export function OrchestrationPreview({
                           />
                         </label>
                         <label className="block">
-                          <span className={fieldLabel}>Instructions</span>
+                          <span className={fieldLabel}>{t("ui.orchestration.instructions")}</span>
                           <InstructionsField
                             label={`Instructions for task ${index + 1}`}
                             value={task.prompt}
@@ -732,10 +728,10 @@ export function OrchestrationPreview({
           <div className="flex items-center gap-1.5">
             {editable ? (
               <>
-                <span>Parallel workers</span>
+                <span>{t("ui.orchestration.parallelWorkers")}</span>
                 <div
                   role="radiogroup"
-                  aria-label="Parallel workers"
+                  aria-label={t("ui.orchestration.parallelWorkers")}
                   className="flex items-center gap-0.5 rounded-md bg-content/5 p-0.5"
                 >
                   {[1, 2, 3, 4].map((number) => (
@@ -776,8 +772,7 @@ export function OrchestrationPreview({
                 : proposal.status === "ready"
                   ? "Awaiting confirmation"
                   : "")}{" "}
-            · Shared project folder
-          </span>
+            {t("ui.orchestration.sharedProjectFolder")}</span>
         </div>
       )}
     </div>

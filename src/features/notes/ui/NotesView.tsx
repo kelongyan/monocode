@@ -54,6 +54,7 @@ import {
 } from "../../workspace/model/tabGroups";
 import { AgentMarkdown } from "../../sessions/ui/AgentMarkdown";
 import { MarkdownSourceEditor } from "../../sessions/ui/MarkdownSourceEditor";
+import { useT } from "../../../shared/i18n";
 
 const MIN_WIDTH = 240;
 const MAX_WIDTH = 420;
@@ -109,6 +110,7 @@ export function NotesView({
   onClose,
   onToggleSidebar,
 }: Props) {
+  const t = useT();
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
   const listLock = useLockOverscroll<HTMLDivElement>();
@@ -270,8 +272,8 @@ export function NotesView({
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter notes"
-            aria-label="Filter notes"
+            placeholder={t("ui.notes.filterNotes")}
+            aria-label={t("ui.notes.filterNotes")}
             spellCheck={false}
             autoComplete="off"
             className="h-7 w-full rounded-md bg-transparent pl-7 pr-2 text-[12px] text-content outline-none placeholder:text-content/40"
@@ -279,8 +281,8 @@ export function NotesView({
         </div>
         <button
           type="button"
-          title="New note"
-          aria-label="New note"
+          title={t("ui.notes.newNote")}
+          aria-label={t("ui.notes.newNote")}
           disabled={creating}
           onClick={() => void onCreate()}
           className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content disabled:opacity-40"
@@ -332,7 +334,7 @@ export function NotesView({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize notes list"
+        aria-label={t("ui.notes.resizeNotesList")}
         className={`absolute inset-y-0 -right-px z-10 w-1.5 cursor-col-resize touch-none ${
           resize.dragging ? "bg-content/15" : "hover:bg-content/10"
         }`}
@@ -345,7 +347,7 @@ export function NotesView({
   return (
     <div
       role="region"
-      aria-label="Notes"
+      aria-label={t("ui.notes.notes")}
       data-app-notes
       className="flex min-h-0 min-w-0 flex-1 flex-col text-content"
     >
@@ -365,7 +367,7 @@ export function NotesView({
               className="size-3.5 shrink-0 text-content/45"
               strokeWidth={1.75}
             />
-            <span className="min-w-0 truncate text-content">Notes</span>
+            <span className="min-w-0 truncate text-content">{t("ui.notes.notes")}</span>
           </div>
           {IS_MAC ? null : <WindowControls />}
         </div>
@@ -545,11 +547,12 @@ function NoteDetail({
   onDelete: (id: string) => void | Promise<void>;
   onAddToChat: (note: Note) => void;
 }) {
+  const t = useT();
   if (!note) {
     return (
       <div className="flex h-full min-w-0 flex-1 flex-col items-center justify-center px-6 text-center">
         <File className="mb-3 size-6 text-content/30" strokeWidth={1.75} />
-        <p className="text-[13px] text-content/45">Select a note</p>
+        <p className="text-[13px] text-content/45">{t("ui.notes.selectANote")}</p>
       </div>
     );
   }
@@ -581,6 +584,7 @@ function NoteEditor({
   onDelete: (id: string) => void | Promise<void>;
   onAddToChat: (note: Note) => void;
 }) {
+  const t = useT();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const blank = !note.body.trim() && note.title === "Untitled";
   const [mode, setMode] = useMarkdownMode(note.id);
@@ -854,7 +858,7 @@ function NoteEditor({
         <header className="flex flex-col gap-3">
           <div className="flex min-w-0 items-center gap-2 text-[12px] text-content/50">
             <File className="size-3.5 shrink-0" strokeWidth={1.75} />
-            <span>Note</span>
+            <span>{t("ui.notes.note")}</span>
             {note.slug ? (
               <span className="min-w-0 truncate">{note.slug}</span>
             ) : null}
@@ -889,12 +893,12 @@ function NoteEditor({
               void saveNow();
             }}
             onKeyDown={onTitleKeyDown}
-            aria-label="Note title"
+            aria-label={t("ui.notes.noteTitle")}
             className="w-full border-0 bg-transparent p-0 text-[20px] font-semibold leading-tight text-content outline-none placeholder:text-content/35"
-            placeholder="Untitled"
+            placeholder={t("ui.notes.untitled")}
           />
           {time ? (
-            <div className="text-[12px] text-content/50">Updated {time}</div>
+            <div className="text-[12px] text-content/50">{t("ui.notes.updated")}{time}</div>
           ) : null}
           <NoteTagsEditor
             tags={tags}
@@ -910,8 +914,7 @@ function NoteEditor({
               onClick={() => onAddToChat(draft)}
               className="inline-flex items-center gap-1 rounded-md bg-content px-3 h-6.5 text-[12px] text-background-base hover:bg-content/80 disabled:cursor-default disabled:opacity-40"
             >
-              Add to chat
-            </button>
+              {t("ui.notes.addToChat")}</button>
             <button
               type="button"
               onClick={() => {
@@ -923,15 +926,14 @@ function NoteEditor({
               className="inline-flex items-center gap-1.5 rounded-md px-3 h-7 text-[12px] text-content/70 hover:bg-content/10 hover:text-red-400"
             >
               <Trash2 className="size-3.5" strokeWidth={1.75} />
-              Delete
-            </button>
+              {t("ui.notes.delete")}</button>
           </div>
           {saveError ? (
             <div
               role="alert"
               className="flex items-center gap-2 text-[12px] text-red-400/90"
             >
-              <span>Could not save note: {saveError}</span>
+              <span>{t("ui.notes.couldNotSaveNote", { error: saveError })}</span>
               <button
                 type="button"
                 onClick={() => {
@@ -940,23 +942,22 @@ function NoteEditor({
                 }}
                 className="shrink-0 underline hover:no-underline"
               >
-                Retry
-              </button>
+                {t("ui.notes.retry")}</button>
             </div>
           ) : null}
         </header>
         <div
           role="tablist"
-          aria-label="Note sections"
+          aria-label={t("ui.notes.noteSections")}
           className="flex h-9 items-stretch gap-4 border-b border-stroke"
         >
           <NoteDetailTab
-            label="Preview"
+            label={t("ui.notes.preview")}
             selected={mode === "preview"}
             onSelect={() => setMode("preview")}
           />
           <NoteDetailTab
-            label="Source"
+            label={t("ui.notes.source")}
             selected={mode === "source"}
             onSelect={() => setMode("source")}
           />
@@ -1011,7 +1012,7 @@ function NoteEditor({
           ) : body.trim() ? (
             <AgentMarkdown text={body} cwd={sourceCwd} hardBreaks />
           ) : (
-            <p className="text-[13px] text-content/45">No description</p>
+            <p className="text-[13px] text-content/45">{t("ui.notes.noDescription")}</p>
           )}
         </div>
       </div>
@@ -1026,6 +1027,7 @@ function NoteTagsEditor({
   tags: string[];
   onChange: (tags: string[]) => void;
 }) {
+  const t = useT();
   const [value, setValue] = useState("");
 
   const addTag = (input = value) => {
@@ -1037,9 +1039,9 @@ function NoteTagsEditor({
   return (
     <div
       className="flex min-w-0 flex-wrap items-center gap-1.5"
-      aria-label="Tags"
+      aria-label={t("ui.notes.tags")}
     >
-      <span className="mr-0.5 text-[11px] text-content/45">Tags</span>
+      <span className="mr-0.5 text-[11px] text-content/45">{t("ui.notes.tags")}</span>
       {tags.map((tag) => (
         <span
           key={tag}
@@ -1078,8 +1080,8 @@ function NoteTagsEditor({
               onChange(tags.slice(0, -1));
             }
           }}
-          aria-label="Add note tag"
-          placeholder="Add tag…"
+          aria-label={t("ui.notes.addNoteTag")}
+          placeholder={t("ui.notes.addTag")}
           spellCheck={false}
           autoComplete="off"
           className="h-6 min-w-20 flex-1 border-0 bg-transparent px-1 text-[11px] text-content outline-none placeholder:text-content/35"

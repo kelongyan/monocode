@@ -172,7 +172,7 @@ export function AutomationsView({
               className="size-3.5 shrink-0 text-content/45"
               strokeWidth={1.75}
             />
-            <span className="min-w-0 truncate text-content">Automations</span>
+            <span className="min-w-0 truncate text-content">{t("ui.automations.automations")}</span>
           </div>
           {IS_MAC ? null : <WindowControls />}
         </div>
@@ -391,7 +391,7 @@ function AutomationsContent({
         <div className="flex h-9 shrink-0 items-center gap-1 border-b border-stroke px-2">
           <label className="relative flex h-7 min-w-0 flex-1 items-center">
             <Search className="pointer-events-none absolute left-2 size-3 shrink-0 text-content/40" />
-            <span className="sr-only">Filter automations</span>
+            <span className="sr-only">{t("ui.automations.filterAutomations")}</span>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -618,6 +618,7 @@ function AutomationPicker({
   onBlank: () => void;
   onPick: (template: AutomationTemplate) => void;
 }) {
+  const t = useT();
   const [category, setCategory] =
     useState<AutomationTemplateCategoryId>("popular");
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
@@ -630,11 +631,9 @@ function AutomationPicker({
     >
       <div className="mx-auto w-full max-w-5xl px-8 pt-5 pb-10">
         <h1 className="text-[20px] font-semibold leading-tight text-content">
-          New automation
-        </h1>
+          {t("ui.automations.newAutomation")}</h1>
         <p className="mt-1.5 text-[13px] text-content/50">
-          Pick an example or start from scratch.
-        </p>
+          {t("ui.automations.pickAnExampleOrStartFrom")}</p>
         <div className="mt-4 flex flex-wrap gap-1.5">
           {AUTOMATION_TEMPLATE_CATEGORIES.map((option) => {
             const selected = option.id === category;
@@ -666,11 +665,9 @@ function AutomationPicker({
               </span>
               <span className="min-w-0">
                 <span className="block text-[13px] font-medium text-content">
-                  Start from scratch
-                </span>
+                  {t("ui.automations.startFromScratch")}</span>
                 <span className="mt-1 block text-[12px] leading-snug text-content/50">
-                  Write your own instructions and choose a trigger.
-                </span>
+                  {t("ui.automations.writeYourOwnInstructionsAndChoose")}</span>
               </span>
             </div>
           </button>
@@ -1039,8 +1036,7 @@ function AutomationEditor({
                     ) : (
                       <Play className="size-3.5" />
                     )}
-                    Run now
-                  </button>
+                    {t("ui.automations.runNow")}</button>
                 ) : null}
                 <button
                   type="submit"
@@ -1120,8 +1116,7 @@ function AutomationEditor({
                         className="flex h-8 w-full items-center gap-2 rounded-lg px-2 text-left text-[13px] text-red-300/90 hover:bg-red-500/15"
                       >
                         <Trash2 className="size-3.5" strokeWidth={1.75} />
-                        Delete automation
-                      </button>
+                        {t("ui.automations.deleteAutomation")}</button>
                     </Popover>
                   ) : null}
                 </>
@@ -1171,7 +1166,7 @@ function AutomationEditor({
         {!showingHistory ? (
           <div className="mx-auto w-full max-w-5xl space-y-8 px-8 py-5 pb-10">
             <section>
-              <SectionTitle>Triggers</SectionTitle>
+              <SectionTitle>{t("ui.automations.triggers")}</SectionTitle>
               <div className="mt-3 rounded-md border border-content/10">
                 {draft.triggers.length > 0 ? (
                   <ul className="px-3 py-1.5">
@@ -1212,8 +1207,7 @@ function AutomationEditor({
                   }`}
                 >
                   <Plus className="size-3.5" />
-                  Add Trigger
-                </button>
+                  {t("ui.automations.addTrigger")}</button>
               </div>
               {triggerOpen ? (
                 <Popover
@@ -1234,7 +1228,7 @@ function AutomationEditor({
                 >
                   <label className="flex h-11 items-center gap-2.5 border-b border-stroke px-3 text-content/45 focus-within:text-content/70">
                     <Search className="size-3.5 shrink-0" strokeWidth={1.75} />
-                    <span className="sr-only">Search triggers</span>
+                    <span className="sr-only">{t("ui.automations.searchTriggers")}</span>
                     <input
                       autoFocus
                       value={triggerQuery}
@@ -1297,16 +1291,14 @@ function AutomationEditor({
                             <ChevronRight className="size-3.5 text-content/45" />
                           ) : (
                             <span className="shrink-0 text-[11px] text-content/35">
-                              Not connected
-                            </span>
+                              {t("ui.automations.notConnected")}</span>
                           )}
                         </button>
                       );
                     })}
                     {triggerCategories.length === 0 ? (
                       <p className="px-2 py-5 text-center text-[12px] text-content/40">
-                        No matching triggers
-                      </p>
+                        {t("ui.automations.noMatchingTriggers")}</p>
                     ) : null}
                   </div>
                 </Popover>
@@ -1351,7 +1343,7 @@ function AutomationEditor({
             </section>
 
             <section>
-              <SectionTitle>Instructions</SectionTitle>
+              <SectionTitle>{t("ui.automations.instructions")}</SectionTitle>
               <div className="relative mt-3 rounded-md border border-content/10 bg-content/3 backdrop-blur-sm has-focus:border-content/20">
                 <PromptField
                   value={draft.prompt}
@@ -1398,12 +1390,11 @@ function AutomationEditor({
                 </div>
               </div>
               <p className="mt-2 px-1 text-[11px] text-content/35">
-                Skills, @file references, and built-in commands work here.
-              </p>
+                {t("ui.automations.skillsFileReferencesAndBuiltIn")}</p>
             </section>
 
             <section>
-              <SectionTitle>Session</SectionTitle>
+              <SectionTitle>{t("ui.automations.session")}</SectionTitle>
               <div className="mt-3 divide-y divide-content/7 rounded-md border border-content/10">
                 <SettingsRow
                   label={t("automations.workingCopy")}
@@ -1462,11 +1453,9 @@ function AutomationEditor({
               <summary className="flex min-h-14 cursor-default list-none items-center justify-between gap-3 px-4 active:opacity-75">
                 <span>
                   <span className="block text-[13px] font-medium text-content/75">
-                    Advanced
-                  </span>
+                    {t("ui.automations.advanced")}</span>
                   <span className="mt-0.5 block text-[11px] text-content/40">
-                    Catch-up window for missed runs
-                  </span>
+                    {t("ui.automations.catchUpWindowForMissedRuns")}</span>
                 </span>
                 <ChevronDown className="size-3.5 text-content/40" />
               </summary>
@@ -1489,14 +1478,14 @@ function AutomationEditor({
           </div>
         ) : (
           <section className="mx-auto w-full max-w-5xl px-8 py-5 pb-10">
-            <SectionTitle>Run history</SectionTitle>
+            <SectionTitle>{t("ui.automations.runHistory")}</SectionTitle>
             {runs.length > 0 ? (
               <div className="mt-3 overflow-hidden rounded-md border border-content/10">
                 <div className={`${RUN_GRID} h-10 text-[11px] text-content/40`}>
-                  <span>Trigger</span>
-                  <span>Triggered</span>
-                  <span>Status</span>
-                  <span className="text-right">Duration</span>
+                  <span>{t("ui.automations.trigger")}</span>
+                  <span>{t("ui.automations.triggered")}</span>
+                  <span>{t("ui.automations.status")}</span>
+                  <span className="text-right">{t("ui.automations.duration")}</span>
                 </div>
                 <ul className="divide-y divide-content/8 border-t border-content/8">
                   {runs.slice(0, 100).map((run) => (
@@ -1511,8 +1500,7 @@ function AutomationEditor({
               </div>
             ) : (
               <div className="mt-3 rounded-md border border-dashed border-content/10 px-4 py-16 text-center text-[12px] text-content/40">
-                This automation has not run yet.
-              </div>
+                {t("ui.automations.thisAutomationHasNotRunYet")}</div>
             )}
           </section>
         )}
@@ -1883,7 +1871,7 @@ function TimeTriggerSentence({
       {trigger.scheduleKind === "weekly" ? (
         <>
           <TriggerPill
-            label="Day"
+            label={t("ui.automations.day")}
             value={String(trigger.dayOfWeek)}
             options={dayOptions}
             onChange={(value) =>

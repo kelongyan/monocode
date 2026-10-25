@@ -6,6 +6,7 @@ import { MonoSidebarHeader } from "../../monos/ui/MonoSidebar";
 import { PageHeader } from "../../monos/ui/monoPanelParts";
 import { artifactLabel, deleteArtifact } from "../artifacts";
 import { ArtifactContent, useArtifact } from "./ArtifactContent";
+import { useT } from "../../../shared/i18n";
 
 /**
  * A document's title, body and actions. With `onBack` it is a page over a
@@ -22,6 +23,7 @@ export function ArtifactReader({
   onClose: () => void;
   onOpenFile?: (path: string) => void;
 }) {
+  const t = useT();
   const leave = onBack ?? onClose;
   const { artifact, loaded, error, setError } = useArtifact(id);
   const [copied, setCopied] = useState(false);
@@ -88,7 +90,7 @@ export function ArtifactReader({
       {onBack ? (
         <PageHeader title={artifact?.title ?? label} onBack={onBack}>
           {actions}
-          <IconButton label="Hide overview" active onClick={onClose}>
+          <IconButton label={t("ui.artifacts.hideOverview")} active onClick={onClose}>
             <PanelRightToggle className="size-3.5" strokeWidth={1.75} />
           </IconButton>
         </PageHeader>
@@ -98,16 +100,14 @@ export function ArtifactReader({
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none px-4 py-3">
         {!loaded ? (
           <p role="status" className="text-[13px] text-content/50">
-            Loading document…
-          </p>
+            {t("ui.artifacts.loadingDocument")}</p>
         ) : error && !artifact ? (
           <p role="alert" className="text-[13px] text-content/65">
             {error}
           </p>
         ) : !artifact ? (
           <p role="status" className="text-[13px] text-content/50">
-            This document is no longer available.
-          </p>
+            {t("ui.artifacts.thisDocumentIsNoLongerAvailable")}</p>
         ) : (
           <article data-artifact-reader={artifact.id}>
             <ArtifactContent artifact={artifact} onOpenFile={onOpenFile} />

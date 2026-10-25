@@ -16,6 +16,7 @@ import {
   resolveTabGroupLogo,
   resolveTabGroupMascot,
 } from "../../workspace/model/tabGroups";
+import { useT } from "../../../shared/i18n";
 
 type Props = {
   card: NoteCardMeta;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export function NoteMiniCard({ card, onDismiss, embedded = false }: Props) {
+  const t = useT();
   const logos = useTabGroupLogos();
   const [mascots] = useState(loadTabGroupMascots);
   const [colors] = useState(loadTabGroupColors);
@@ -50,7 +52,7 @@ export function NoteMiniCard({ card, onDismiss, embedded = false }: Props) {
             strokeWidth={1.75}
           />
           <span className="min-w-0 truncate text-[11px] text-content/50">
-            Note{!embedded && card.slug ? ` · ${card.slug}` : ""}
+            {t("ui.notes.note")}{!embedded && card.slug ? ` · ${card.slug}` : ""}
           </span>
         </span>
         <span className="mt-1 line-clamp-1 text-[13px] font-semibold leading-snug text-content">
@@ -79,7 +81,7 @@ export function NoteMiniCard({ card, onDismiss, embedded = false }: Props) {
       {onDismiss ? (
         <button
           type="button"
-          title="Remove"
+          title={t("ui.notes.remove")}
           aria-label={`Remove note ${card.title || "Untitled"}`}
           onClick={onDismiss}
           className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"

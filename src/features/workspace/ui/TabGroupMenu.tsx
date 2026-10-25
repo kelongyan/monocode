@@ -28,6 +28,7 @@ import { ProjectLogoIcon } from "../../projects/ui/ProjectLogoIcon";
 import { ProjectMascot } from "../../projects/ui/ProjectMascot";
 import { MOD } from "../../../platform/tauri/platform";
 import { ExplorerMenu, type ExplorerMenuItem } from "../../files/ui/ExplorerMenu";
+import { useT } from "../../../shared/i18n";
 
 export type TabGroupMenuAction =
   | "new-tab"
@@ -147,6 +148,7 @@ export function TabGroupMenu({
   onExtraPick,
   footer,
 }: Props) {
+  const t = useT();
   const menuId = useId();
   const [submenu, setSubmenu] = useState<{
     item: TabGroupMenuExtraItem;
@@ -231,7 +233,7 @@ export function TabGroupMenu({
           value={name}
           onChange={(e) => setName(e.target.value)}
           onBlur={commitName}
-          aria-label="Group name"
+          aria-label={t("ui.workspace.groupName")}
           className="mb-2 w-full rounded-lg border border-content/10 bg-content/5 px-2.5 py-1.5 text-[13px] text-content outline-none ring-accent/40 focus:ring-1"
         />
 
@@ -265,7 +267,7 @@ export function TabGroupMenu({
               />
             </button>
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] text-content/50">Project logo</p>
+              <p className="text-[11px] text-content/50">{t("ui.workspace.projectLogo")}</p>
               <p className="truncate text-[12px] text-content/70">
                 {logoPath ? "Shown in tabs and composer" : "Optional — replaces folder icon"}
               </p>
@@ -273,8 +275,8 @@ export function TabGroupMenu({
             {logoPath ? (
               <button
                 type="button"
-                title="Remove project logo"
-                aria-label="Remove project logo"
+                title={t("ui.workspace.removeProjectLogo")}
+                aria-label={t("ui.workspace.removeProjectLogo")}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   void clearProjectLogo(projectKey(logoProject)).then(onLogoChange);
@@ -309,7 +311,7 @@ export function TabGroupMenu({
         ) : null}
 
         <div className="mb-2 px-0.5">
-          <p className="mb-1 text-[11px] text-content/50">Mascot</p>
+          <p className="mb-1 text-[11px] text-content/50">{t("ui.workspace.mascot")}</p>
           <div className="flex items-center justify-between gap-1">
             {PROJECT_MASCOTS.map((mascot) => (
               <MascotSwatch

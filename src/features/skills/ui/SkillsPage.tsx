@@ -25,6 +25,7 @@ import {
   saveDisabledSkillPaths,
   SKILLS_CHANGE_EVENT,
 } from "../model/skills";
+import { useT } from "../../../shared/i18n";
 
 /** Inspect and manage file skills without modifying provider-owned catalogs. */
 export function SkillsPage({
@@ -36,6 +37,7 @@ export function SkillsPage({
 }): ReactNode {
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
   const previewId = useId();
+  const t = useT();
   const previewOpener = useRef<string | null>(null);
   const previewButtons = useRef(new Map<string, HTMLButtonElement>());
   const filterInput = useRef<HTMLInputElement>(null);
@@ -229,8 +231,8 @@ export function SkillsPage({
                     ref={filterInput}
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Filter"
-                    aria-label="Filter skills"
+                    placeholder={t("ui.skills.filter")}
+                    aria-label={t("ui.skills.filterSkills")}
                     spellCheck={false}
                     autoComplete="off"
                     className="min-w-0 flex-1 bg-transparent text-[12px] text-content outline-none placeholder:text-content/35"
@@ -238,8 +240,8 @@ export function SkillsPage({
                 </label>
                 <button
                   type="button"
-                  aria-label="Refresh skills"
-                  title="Rescan skill folders"
+                  aria-label={t("ui.skills.refreshSkills")}
+                  title={t("ui.skills.rescanSkillFolders")}
                   disabled={skills === null && !error}
                   onClick={() => {
                     invalidateSkills();
@@ -262,7 +264,7 @@ export function SkillsPage({
                     setAdding((value) => !value);
                     setCreateError(null);
                   }}
-                  title="Create a starter SKILL.md you can edit"
+                  title={t("ui.skills.createAStarterSkillMdYou")}
                 >
                   {adding ? "Close" : "Add skill"}
                 </button>
@@ -299,7 +301,7 @@ export function SkillsPage({
                 {error}
               </p>
             ) : skills == null ? (
-              <p className="text-[12px] text-content/45">Loading skills…</p>
+              <p className="text-[12px] text-content/45">{t("ui.skills.loadingSkills")}</p>
             ) : (
               <div className="overflow-hidden rounded-lg border border-content/10">
                 {filtered.length === 0 ? (
@@ -371,7 +373,7 @@ export function SkillsPage({
                           <button
                             type="button"
                             aria-label={`Preview skill ${skill.name}`}
-                            title="Preview skill"
+                            title={t("ui.skills.previewSkill")}
                             ref={registerPreviewButton(`icon:${skill.path}`)}
                             aria-controls={previewOpen ? previewId : undefined}
                             aria-expanded={previewSkill?.path === skill.path}
@@ -387,7 +389,7 @@ export function SkillsPage({
                           <button
                             type="button"
                             aria-label={`Copy path of ${skill.name}`}
-                            title="Copy path"
+                            title={t("ui.skills.copyPath")}
                             onClick={() => onCopyPath(skill.path)}
                             className="grid size-5 shrink-0 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"
                           >
@@ -396,7 +398,7 @@ export function SkillsPage({
                           <button
                             type="button"
                             aria-label={`Reveal ${skill.name} in file explorer`}
-                            title="Reveal in file manager"
+                            title={t("ui.skills.revealInFileManager")}
                             onClick={() => onReveal(skill.path)}
                             className="grid size-5 shrink-0 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"
                           >
@@ -411,19 +413,15 @@ export function SkillsPage({
             )}
 
             <p className="pt-3 text-[12px] text-content/40">
-              Hidden skills stay on disk and are excluded from MonoCode's
-              file-skill catalog. Provider-managed skills and native commands
-              are unaffected. Skills live in{" "}
+              {t("ui.skills.hiddenSkillsStayOnDiskAnd")}{" "}
               <span className="font-sans">.agents/skills</span> for this project
-              and <span className="font-sans">~/.agents/skills</span> for you
-              personally; harness folders are also picked up.
-            </p>
+              and <span className="font-sans">~/.agents/skills</span> {t("ui.skills.forYouPersonallyHarnessFoldersAre")}</p>
           </div>
         </div>
         {previewSkill ? (
           <aside
             id={previewId}
-            aria-label="Skill preview"
+            aria-label={t("ui.skills.skillPreview")}
             className="flex min-h-0 min-w-0 flex-1 flex-col border-t border-stroke @3xl/skills:max-w-[720px] @3xl/skills:border-t-0 @3xl/skills:border-l"
           >
             <header className="flex shrink-0 items-start gap-2 px-4 pt-4 pb-2">
@@ -433,8 +431,8 @@ export function SkillsPage({
               <button
                 ref={closePreview}
                 type="button"
-                aria-label="Close skill preview"
-                title="Close preview (Escape)"
+                aria-label={t("ui.skills.closeSkillPreview")}
+                title={t("ui.skills.closePreviewEscape")}
                 onClick={() => setPreviewSkill(null)}
                 className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
@@ -468,8 +466,7 @@ export function SkillsPage({
                   role="status"
                   className="px-4 py-5 text-[12px] text-content/50"
                 >
-                  Loading skill…
-                </p>
+                  {t("ui.skills.loadingSkill")}</p>
               ) : previewMode === "preview" ? (
                 <SkillDocumentPreview text={previewText} />
               ) : (

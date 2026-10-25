@@ -28,6 +28,7 @@ import {
 import { MOD } from "../../../platform/tauri/platform";
 import type { TerminalMetaPatch } from "../model/terminalTab";
 import { lazySurface } from "../../../shared/ui/lazySurface";
+import { useT } from "../../../shared/i18n";
 
 const TerminalView = lazySurface(async () => {
   const module = await import("./TerminalView");
@@ -86,6 +87,7 @@ export function ProjectTerminalDock({
   onReorderTerminals,
   onTerminalMetaChange,
 }: Props) {
+  const t = useT();
   const vertical = isVerticalDock(dock.side);
   const [dragging, setDragging] = useState(false);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
@@ -194,7 +196,7 @@ export function ProjectTerminalDock({
       <div
         role="separator"
         aria-orientation={vertical ? "horizontal" : "vertical"}
-        aria-label="Resize terminal"
+        aria-label={t("ui.terminal.resizeTerminal")}
         aria-valuenow={dock.size}
         className={`${sash} ${dragging ? "bg-content/15" : "hover:bg-content/10"}`}
         onPointerDown={onResizePointerDown}
@@ -211,7 +213,7 @@ export function ProjectTerminalDock({
         activeFileId={dock.pane.activeFileId}
         dirtyFileIds={EMPTY_IDS}
         fileErrorCounts={EMPTY_ERRORS}
-        label="Terminals"
+        label={t("ui.terminal.terminals")}
         onSelectFile={onSelectTerminal}
         onCloseFile={onCloseTerminal}
         onCloseOtherFiles={onCloseOtherTerminals}
@@ -226,7 +228,7 @@ export function ProjectTerminalDock({
             </IconButton>
             <div ref={sideButton}>
             <IconButton
-              label="Move Terminal"
+              label={t("ui.terminal.moveTerminal")}
               onClick={() => {
                 const rect = sideButton.current?.getBoundingClientRect();
                 if (!rect) return;
@@ -269,7 +271,7 @@ export function ProjectTerminalDock({
         <ExplorerMenu
           x={menu.x}
           y={menu.y}
-          ariaLabel="Move terminal"
+          ariaLabel={t("ui.terminal.moveTerminal2")}
           items={SIDE_ITEMS.map((item) => ({
             kind: "item" as const,
             id: item.id,

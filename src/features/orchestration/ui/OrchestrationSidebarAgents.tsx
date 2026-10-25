@@ -18,6 +18,7 @@ import {
   CircleAlert,
 } from "../../../shared/ui/icons";
 import { TerminalSpinner } from "../../sessions/ui/TerminalSpinner";
+import { useT } from "../../../shared/i18n";
 
 export function OrchestrationSidebarAgents({
   leadId,
@@ -32,6 +33,7 @@ export function OrchestrationSidebarAgents({
    */
   variant?: "card" | "tree";
 }) {
+  const t = useT();
   const tree = variant === "tree";
   const actions = useContext(OrchestrationActions);
   const workers = useContext(OrchestrationWorkers);
@@ -116,7 +118,7 @@ export function OrchestrationSidebarAgents({
         a second scroll region here made rows clip mid-line.
       */}
       <div
-        aria-label="Orchestrated agents"
+        aria-label={t("ui.orchestration.orchestratedAgents")}
         className={`flex touch-pan-y flex-col${tree ? "" : " -mx-2 gap-px"}`}
         onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => event.stopPropagation()}
@@ -245,7 +247,7 @@ export function OrchestrationSidebarAgents({
                     {workers.openDetails && (
                       <button
                         type="button"
-                        title="Open this agent beside the orchestrator"
+                        title={t("ui.orchestration.openThisAgentBesideTheOrchestrator")}
                         className={solidAction}
                         onClick={() =>
                           workers.openDetails?.({
@@ -256,8 +258,7 @@ export function OrchestrationSidebarAgents({
                           })
                         }
                       >
-                        See details
-                      </button>
+                        {t("ui.orchestration.seeDetails")}</button>
                     )}
                     {live && ["queued", "running"].includes(live.status) && (
                       <button
@@ -270,8 +271,7 @@ export function OrchestrationSidebarAgents({
                           )
                         }
                       >
-                        Cancel task
-                      </button>
+                        {t("ui.orchestration.cancelTask")}</button>
                     )}
                   </div>
                 </div>
@@ -310,8 +310,7 @@ export function OrchestrationSidebarAgents({
                 disabled={pending}
                 onClick={() => actions.open(resumeBlocker.id)}
               >
-                Open blocker
-              </button>
+                {t("ui.orchestration.openBlocker")}</button>
             )}
             <button
               type="button"
@@ -336,8 +335,7 @@ export function OrchestrationSidebarAgents({
                 )
               }
             >
-              Resume
-            </button>
+              {t("ui.orchestration.resume")}</button>
           </div>
         </div>
       )}
