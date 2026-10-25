@@ -1478,6 +1478,7 @@ function NameIssueView({
   issue: NameIssue | null;
   fallback: string | null;
 }) {
+  const t = useT();
   let body: ReactNode = null;
   if (fallback) {
     body = fallback;
@@ -1492,16 +1493,18 @@ function NameIssueView({
       case "exists":
         body = (
           <>
-            A file or folder <span className="font-semibold">{issue.name}</span>{" "}
-            already exists at this location. Please choose a different name.
+            {t("ui.files.existsLead")}{" "}
+            <span className="font-semibold">{issue.name}</span>{" "}
+            {t("ui.files.existsTail")}
           </>
         );
         break;
       case "invalid":
         body = (
           <>
-            The name <span className="font-semibold">{issue.name}</span> is not
-            valid as a file or folder name. Please choose a different name.
+            {t("ui.files.invalidLead")}{" "}
+            <span className="font-semibold">{issue.name}</span>{" "}
+            {t("ui.files.invalidTail")}
           </>
         );
         break;

@@ -35,6 +35,7 @@ import { BinaryFileView } from "./BinaryFileView";
 import { ReleaseNotesSurface } from "../../../app/ui/ReleaseNotesSurface";
 import { WorkingTreeDiffSurface as WorkingTreeDiff } from "../../source-control/ui/workingTreeDiffSurface";
 import { isRemoteProjectPath } from "../../projects/model/recents";
+import { useT } from "../../../shared/i18n";
 
 const CommitDiff = lazySurface(async () => {
   const module = await import("../../source-control/ui/CommitDiff");
@@ -292,6 +293,7 @@ function PlanSurface({
     target?: PlanBuildTarget,
   ) => void;
 }) {
+  const t = useT();
   const plan = file.plan;
   const [mode, setMode] = useMarkdownMode(file.path);
   const session = plan
@@ -306,8 +308,7 @@ function PlanSurface({
     return (
       <div className="grid h-full place-items-center p-6 text-center">
         <p className="text-[13px] text-content/70">
-          This plan is no longer in the session.
-        </p>
+          {t("ui.files.thisPlanIsNoLongerIn")}</p>
       </div>
     );
   }
@@ -366,7 +367,7 @@ function PlanSurface({
         }
         source={
           <textarea
-            aria-label="Plan markdown"
+            aria-label={t("ui.files.planMarkdown")}
             spellCheck={false}
             value={block.text}
             disabled={

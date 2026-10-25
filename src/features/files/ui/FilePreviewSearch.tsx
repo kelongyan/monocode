@@ -10,6 +10,7 @@ import {
 import { ALT, MOD, SHIFT } from "../../../platform/tauri/platform";
 import { ChevronDown, ChevronUp, X } from "../../../shared/ui/icons";
 import { keybindingPressed } from "../../settings/model/settings";
+import { useT } from "../../../shared/i18n";
 
 const MATCH_CAP = 999;
 const MATCH_HIGHLIGHT = "monocode-file-preview-search-match";
@@ -148,6 +149,7 @@ export function FilePreviewSearch({
   contentVersion: string;
   children: ReactNode;
 }) {
+  const t = useT();
   const rootRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -349,7 +351,7 @@ export function FilePreviewSearch({
       {open ? (
         <div
           role="search"
-          aria-label="Find in preview"
+          aria-label={t("ui.files.findInPreview")}
           className="relative z-30 flex h-[35px] shrink-0 items-center gap-1 border-b border-stroke px-2 py-1 text-content"
           onKeyDown={onKeyDown}
         >
@@ -364,8 +366,8 @@ export function FilePreviewSearch({
               ref={inputRef}
               type="text"
               value={query}
-              aria-label="Find"
-              placeholder="Find"
+              aria-label={t("ui.files.find")}
+              placeholder={t("ui.files.find")}
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
@@ -403,7 +405,7 @@ export function FilePreviewSearch({
             onClick={() => toggle(setRegexp)}
           />
           <FindButton
-            label="Previous Match"
+            label={t("ui.files.previousMatch")}
             title={`Previous Match (${MOD}${SHIFT}G)`}
             disabled={total === 0}
             onClick={() => step(-1)}
@@ -411,7 +413,7 @@ export function FilePreviewSearch({
             <ChevronUp className="size-3.5" strokeWidth={1.75} />
           </FindButton>
           <FindButton
-            label="Next Match"
+            label={t("ui.files.nextMatch")}
             title={`Next Match (${MOD}G)`}
             disabled={total === 0}
             onClick={() => step(1)}
@@ -419,7 +421,7 @@ export function FilePreviewSearch({
             <ChevronDown className="size-3.5" strokeWidth={1.75} />
           </FindButton>
           <FindButton
-            label="Close"
+            label={t("ui.files.close")}
             title="Close (Escape)"
             onClick={closeSearch}
           >

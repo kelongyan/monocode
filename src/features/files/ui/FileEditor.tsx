@@ -96,6 +96,7 @@ import { editorLint } from "../editor/editorLint";
 import { editorSearch } from "../editor/editorSearch";
 import { editorScrollbar } from "../editor/editorScrollbar";
 import { FilePreviewSearch } from "./FilePreviewSearch";
+import { useT } from "../../../shared/i18n";
 
 type EditorNavigationRequest = EditorNavigation & { token: number };
 
@@ -134,6 +135,7 @@ export function FileEditor({
   onErrorCountChange,
   onOpenFile,
 }: Props) {
+  const t = useT();
   const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
   const [saveState, setSaveState] = useState<SaveState>({ status: "idle" });
   const [reloadKey, setReloadKey] = useState(0);
@@ -419,7 +421,7 @@ export function FileEditor({
   if (loadState.status === "loading") {
     return (
       <div className="grid h-full place-items-center text-[12px] text-content/45">
-        Opening {basename(path)}…
+        {t("ui.files.openingNamed", { name: basename(path) })}
       </div>
     );
   }
@@ -441,8 +443,7 @@ export function FileEditor({
             className="mx-auto mt-4 flex h-7 items-center gap-1.5 rounded-md bg-content/10 px-2.5 text-[12px] text-content hover:bg-content/15"
           >
             <RotateCcw className="size-3" strokeWidth={1.75} />
-            Retry
-          </button>
+            {t("ui.files.retry")}</button>
         </div>
       </div>
     );
@@ -455,8 +456,11 @@ export function FileEditor({
           role="status"
           className="shrink-0 border-b border-stroke px-3 py-1 text-[12px] text-content/60"
         >
-          {gitDiff.kind === "staged" ? "Staged" : "Unstaged"} line-ending
-          changes. Line breaks are normalized in this view.
+          {t(
+            gitDiff.kind === "staged"
+              ? "ui.files.stagedLineEnding"
+              : "ui.files.unstagedLineEnding",
+          )}
         </p>
       )}
       {markdown || svg ? (
@@ -541,7 +545,7 @@ export function FileEditor({
             className="max-w-64 truncate text-red-400"
             title={saveState.message}
           >
-            Save failed: {saveState.message}
+            {t("ui.files.saveFailed", { error: saveState.message })}
           </span>
         ) : null}
       </footer>

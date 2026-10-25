@@ -35,6 +35,7 @@ import { displayPath } from "../../../shared/lib/paths";
 import { IS_MAC } from "../../../platform/tauri/platform";
 import { claimTrackpadMagnify } from "../../../platform/tauri/trackpadZoom";
 import { resolveZoomKeybinding } from "../../settings/model/zoomKeybinding";
+import { useT } from "../../../shared/i18n";
 
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 16;
@@ -61,6 +62,7 @@ type LoadState =
  * Read-only image and video previews, with a card for unreadable media.
  */
 export function BinaryFileView({ path, cwd, visible = true }: Props) {
+  const t = useT();
   const [state, setState] = useState<LoadState>({ status: "loading" });
   const [reloadKey, setReloadKey] = useState(0);
 
@@ -119,7 +121,7 @@ export function BinaryFileView({ path, cwd, visible = true }: Props) {
   if (state.status === "loading") {
     return (
       <div className="grid h-full place-items-center text-[12px] text-content/45">
-        Opening {basename(path)}…
+        {t("ui.files.openingNamed", { name: basename(path) })}
       </div>
     );
   }
@@ -303,6 +305,7 @@ function ImageView({
   size: number;
   mime: string;
 }) {
+  const t = useT();
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
   const [zoom, setZoomState] = useState<Zoom>("fit");
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
@@ -526,21 +529,21 @@ function ImageView({
           </ZoomButton>
         ) : null}
         <ZoomButton
-          label="Zoom out"
+          label={t("ui.files.zoomOut")}
           onClick={() => zoomAtCenter(currentScale() / ZOOM_STEP)}
         >
           <Minus className="size-3" strokeWidth={1.75} />
         </ZoomButton>
         <button
           type="button"
-          title="Fit to window"
+          title={t("ui.files.fitToWindow")}
           onClick={() => setZoom("fit")}
           className="w-11 rounded text-center tabular-nums hover:text-content"
         >
           {zoom === "fit" ? "Fit" : `${Math.round(zoom * 100)}%`}
         </button>
         <ZoomButton
-          label="Zoom in"
+          label={t("ui.files.zoomIn")}
           onClick={() => zoomAtCenter(currentScale() * ZOOM_STEP)}
         >
           <Plus className="size-3" strokeWidth={1.75} />
@@ -557,7 +560,7 @@ function ImageView({
               label: "Copy Original File",
             },
           ]}
-          ariaLabel="Image actions"
+          ariaLabel={t("ui.files.imageActions")}
           onPick={(id) => {
             if (id === "copy-original") copyOriginal();
           }}
@@ -607,6 +610,7 @@ function FileCard({
   onRetry?: () => void;
   offerOpen?: boolean;
 }) {
+  const t = useT();
   return (
     <div className="grid h-full place-items-center p-6">
       <div className="max-w-md text-center">
@@ -620,23 +624,19 @@ function FileCard({
           {onRetry ? (
             <CardButton onClick={onRetry}>
               <RotateCcw className="size-3" strokeWidth={1.75} />
-              Retry
-            </CardButton>
+              {t("ui.files.retry")}</CardButton>
           ) : null}
           {offerOpen && !path.startsWith(REMOTE_PATH_PREFIX) ? (
             <CardButton
               onClick={() => void openPathWithDefaultApp(path).catch(() => {})}
             >
-              Open externally
-            </CardButton>
+              {t("ui.files.openExternally")}</CardButton>
           ) : null}
           <CardButton onClick={() => void revealPath(path).catch(() => {})}>
             <Folder className="size-3" strokeWidth={1.75} />
-            Reveal
-          </CardButton>
+            {t("ui.files.reveal")}</CardButton>
           <CardButton onClick={() => void copyText(path).catch(() => {})}>
-            Copy path
-          </CardButton>
+            {t("ui.files.copyPath")}</CardButton>
         </div>
       </div>
     </div>
