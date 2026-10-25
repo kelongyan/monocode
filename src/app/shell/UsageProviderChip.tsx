@@ -55,6 +55,7 @@ import {
 } from "../../features/providers/model/providerAccountIdentity";
 import { ProviderAccountSubtitle } from "../../features/providers/ui/ProviderAccountSubtitle";
 import { useShowRemainingUsage } from "../../features/settings/model/displayPrefs";
+import { useT } from "../../shared/i18n";
 
 type UsageWindowEntry = {
   key: "session" | "weekly" | "monthly";
@@ -115,6 +116,7 @@ export function UsageProviderChip({
   /** `composer` matches the quiet tool buttons under a Mono's composer. */
   variant?: UsageChipVariant;
 }) {
+  const t = useT();
   const showRemaining = useShowRemainingUsage();
   const trigger = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -415,15 +417,13 @@ export function UsageProviderChip({
                       strokeWidth={1.75}
                       aria-hidden
                     />
-                    Updating
-                  </span>
+                    {t("ui.shell.updating")}</span>
                 ) : null}
               </div>
 
               {limits.status === "error" && windows.length > 0 ? (
                 <p className="mb-2 rounded-lg bg-amber-400/10 px-2.5 py-2 text-[10px] leading-4 text-amber-700 dark:text-amber-300">
-                  Couldn’t refresh. Showing the last available snapshot.
-                </p>
+                  {t("ui.shell.couldntRefreshShowingTheLastAvailable")}</p>
               ) : null}
 
               {windows.length > 0 ? (
@@ -444,8 +444,7 @@ export function UsageProviderChip({
               {limits.extraUsageBalance != null ? (
                 <section className="mt-1.5 flex items-baseline justify-between gap-3 rounded-lg bg-content/[0.045] px-3 py-2.5 ring-1 ring-inset ring-content/[0.06]">
                   <h3 className="text-[11px] font-medium text-content/65">
-                    Extra usage balance
-                  </h3>
+                    {t("ui.shell.extraUsageBalance")}</h3>
                   <span className="shrink-0 text-[11px] font-medium tabular-nums">
                     {formatExtraUsageBalance(limits.extraUsageBalance)}
                   </span>
@@ -502,6 +501,7 @@ function AccountSwitchRow({
   accountLabel: string;
   onClick: () => void;
 }) {
+  const t = useT();
   return (
     <div className="px-2.5 pt-2.5">
       <button
@@ -511,7 +511,7 @@ function AccountSwitchRow({
         onClick={onClick}
       >
         <span className="min-w-0 flex-1 truncate">{accountLabel}</span>
-        <span className="text-[10px] text-content/40">Switch</span>
+        <span className="text-[10px] text-content/40">{t("ui.shell.switch")}</span>
         <ChevronRight
           className="size-3 shrink-0 text-content/35"
           strokeWidth={1.75}
@@ -545,6 +545,7 @@ function ProviderAccountPicker({
   onManage?: () => void;
   onSelect: (accountId: string) => void;
 }) {
+  const t = useT();
   const statusId = useId();
   return (
     <div>
@@ -552,7 +553,7 @@ function ProviderAccountPicker({
         <button
           type="button"
           className="grid size-6 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
-          aria-label="Back to usage"
+          aria-label={t("ui.shell.backToUsage")}
           onClick={onBack}
         >
           <ArrowLeft className="size-3.5" strokeWidth={1.75} aria-hidden />
@@ -560,8 +561,7 @@ function ProviderAccountPicker({
         <h2 className="text-[13px] font-medium">{providerLabel} accounts</h2>
       </div>
       <p className="mt-1 px-1 text-[10px] leading-4 text-content/40">
-        Each conversation stays pinned to the account that started it.
-      </p>
+        {t("ui.shell.eachConversationStaysPinnedToThe")}</p>
       <div
         className="mt-2 flex flex-col gap-1"
         role="group"
@@ -648,8 +648,7 @@ function ProviderAccountPicker({
         onClick={onAdd}
       >
         <Plus className="size-3.5" strokeWidth={1.75} aria-hidden />
-        Add account
-      </button>
+        {t("ui.shell.addAccount")}</button>
       {onManage ? (
         <button
           type="button"
@@ -658,8 +657,7 @@ function ProviderAccountPicker({
             onManage();
           }}
         >
-          Manage accounts…
-        </button>
+          {t("ui.shell.manageAccounts")}</button>
       ) : null}
     </div>
   );
@@ -678,12 +676,12 @@ function SwitchSuggestion({
   now: number;
   onSwitch: () => void;
 }) {
+  const t = useT();
   return (
     <section className="mt-2 flex items-center gap-2.5 rounded-lg bg-content/[0.045] px-3 py-2.5 ring-1 ring-inset ring-content/[0.06]">
       <div className="min-w-0 flex-1">
         <p className="text-[10px] leading-4 text-content/45">
-          {exhausted ? "Out of usage" : "Running low"} · switch to
-        </p>
+          {exhausted ? "Out of usage" : "Running low"} {t("ui.shell.switchTo")}</p>
         <p className="mt-0.5 flex min-w-0 items-center gap-2 text-[11px]">
           <span className="min-w-0 truncate font-medium">{account.label}</span>
           <AccountStatusLabel
@@ -697,8 +695,7 @@ function SwitchSuggestion({
         className="h-7 shrink-0 rounded-md bg-content px-2.5 text-[11px] font-medium text-background-base transition-transform duration-150 hover:bg-content/85 active:scale-[0.97]"
         onClick={onSwitch}
       >
-        Switch
-      </button>
+        {t("ui.shell.switch")}</button>
     </section>
   );
 }
@@ -714,6 +711,7 @@ function AddProviderAccount({
   onAdd?: (label: string) => Promise<ProviderAccount>;
   onComplete: () => void;
 }) {
+  const t = useT();
   const [label, setLabel] = useState("");
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -740,26 +738,26 @@ function AddProviderAccount({
         <button
           type="button"
           className="grid size-6 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content disabled:opacity-40"
-          aria-label="Back to accounts"
+          aria-label={t("ui.shell.backToAccounts")}
           disabled={running}
           onClick={onBack}
         >
           <ArrowLeft className="size-3.5" strokeWidth={1.75} aria-hidden />
         </button>
-        <h2 className="text-[13px] font-medium">Add {providerLabel} account</h2>
+        <h2 className="text-[13px] font-medium">
+          {t("ui.shell.addProviderAccount", { provider: providerLabel })}
+        </h2>
       </div>
       <p className="mt-1 px-1 text-[10px] leading-4 text-content/40">
-        Give this account a local name, then finish sign-in in your browser.
-      </p>
+        {t("ui.shell.giveThisAccountALocalName")}</p>
       <label className="mt-3 block text-[10px] font-medium text-content/55">
-        Account name
-        <input
+        {t("ui.shell.accountName")}<input
           autoFocus
           type="text"
           maxLength={48}
           value={label}
           disabled={running}
-          placeholder="Work or Personal"
+          placeholder={t("ui.shell.workOrPersonal")}
           className="mt-1.5 h-8 w-full rounded-lg border border-content/10 bg-content/[0.04] px-2.5 text-[11px] text-content outline-none placeholder:text-content/25 focus:border-accent/45 disabled:opacity-55"
           onChange={(event) => setLabel(event.target.value)}
         />
@@ -888,6 +886,7 @@ function BankedResets({
   onUse: (credit: RateLimitResetCredit | undefined, rowKey: string) => void;
   canUse: boolean;
 }) {
+  const t = useT();
   const count = limits.resetCredits?.availableCount ?? 0;
   if (count <= 0) return null;
 
@@ -904,7 +903,7 @@ function BankedResets({
       <div className="relative min-h-[78px] overflow-hidden rounded-lg bg-content/[0.04] px-3 py-3 pr-[84px] ring-1 ring-inset ring-content/[0.06]">
         <div className="relative z-10 min-w-0">
           <div className="flex items-center gap-1.5">
-            <h3 className="text-[11px] font-medium">Banked resets</h3>
+            <h3 className="text-[11px] font-medium">{t("ui.shell.bankedResets")}</h3>
             <span className="rounded-full bg-content/[0.07] px-1.5 py-px text-[9px] font-medium tabular-nums text-content/65 ring-1 ring-inset ring-content/[0.07]">
               {count}
             </span>
@@ -922,7 +921,7 @@ function BankedResets({
 
       <div
         className="mt-2 max-h-56 overflow-y-auto overscroll-contain"
-        aria-label="Available banked resets"
+        aria-label={t("ui.shell.availableBankedResets")}
       >
         <div className="flex flex-col gap-1.5">
           {rows.map((credit, index) => {
@@ -1040,6 +1039,7 @@ function BankedResetRow({
   onCancel: () => void;
   onUse: () => void;
 }) {
+  const t = useT();
   return (
     <article className="rounded-lg bg-content/[0.04] px-2.5 py-2 ring-1 ring-inset ring-content/[0.06]">
       <h4 className="text-[10px] font-medium leading-4 text-content/70">
@@ -1072,8 +1072,7 @@ function BankedResetRow({
               strokeWidth={1.75}
               aria-hidden
             />
-            Applying…
-          </span>
+            {t("ui.shell.applying")}</span>
         ) : isResetOutcome(action) || action === "error" ? (
           <span
             className={`shrink-0 text-[10px] ${
@@ -1092,30 +1091,26 @@ function BankedResetRow({
             disabled={disabled}
             onClick={onConfirm}
           >
-            Use reset
-          </button>
+            {t("ui.shell.useReset")}</button>
         ) : null}
       </div>
       {action === "confirming" ? (
         <div className="mt-2 flex items-center justify-between gap-2 border-t border-content/[0.07] pt-2">
           <p className="text-[10px] leading-4 text-content/50">
-            Spend this reset now?
-          </p>
+            {t("ui.shell.spendThisResetNow")}</p>
           <div className="flex shrink-0 gap-1">
             <button
               type="button"
               className="h-6 rounded-md px-2 text-[10px] text-content/50 hover:bg-content/10 hover:text-content"
               onClick={onCancel}
             >
-              Cancel
-            </button>
+              {t("ui.shell.cancel")}</button>
             <button
               type="button"
               className="h-6 rounded-md bg-content px-2.5 text-[10px] font-medium text-background-base transition-transform duration-150 ease-out active:scale-[0.97]"
               onClick={onUse}
             >
-              Confirm
-            </button>
+              {t("ui.shell.confirm")}</button>
           </div>
         </div>
       ) : null}

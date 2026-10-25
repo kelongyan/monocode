@@ -96,6 +96,7 @@ import {
 import { remoteProjectFor } from "../../features/connections/model/remoteProjects";
 import { useProjectMenu } from "./useProjectMenu";
 import { MonoRailSection, type MonoRailProps } from "./MonoRailSection";
+import { useT } from "../../shared/i18n";
 
 type Props = {
   visible?: boolean;
@@ -187,6 +188,7 @@ export function ProjectRail({
   onDismissUpdate,
   monos,
 }: Props) {
+  const t = useT();
   const trafficLightsVisible = useTrafficLightsVisible();
   const resize = useDragResize({
     min: sharedWidth?.min ?? PROJECT_RAIL_WIDTH_MIN,
@@ -379,7 +381,7 @@ export function ProjectRail({
   return (
     <nav
       ref={resize.setPaneRef}
-      aria-label="Projects"
+      aria-label={t("ui.shell.projects")}
       className={`sidebar-glass relative shrink-0 flex-col border-r border-stroke ${visible ? "flex" : "hidden"}`}
     >
       {headerless ? null : (
@@ -410,7 +412,7 @@ export function ProjectRail({
         <>
           <div className="flex shrink-0 flex-col gap-px px-2 pb-2 pt-0.5">
             <RailSearch
-              label="Search"
+              label={t("ui.shell.search")}
               icon={Search}
               onClick={onSearch}
               active={searchActive}
@@ -419,7 +421,7 @@ export function ProjectRail({
             />
             <div className="mt-0.5" />
             <RailAction
-              label="Inbox"
+              label={t("ui.shell.inbox")}
               icon={Inbox}
               onClick={onOpenInbox}
               onOpenContextMenu={(x, y) => {
@@ -436,19 +438,19 @@ export function ProjectRail({
             />
             {notesEnabled ? (
               <RailAction
-                label="Notes"
+                label={t("ui.shell.notes")}
                 icon={File}
                 onClick={onOpenNotes}
                 active={notesActive}
-                ariaLabel="Notes"
+                ariaLabel={t("ui.shell.notes")}
               />
             ) : null}
             <RailAction
-              label="Automations"
+              label={t("ui.shell.automations")}
               icon={Zap}
               onClick={onOpenAutomations}
               active={automationsActive}
-              ariaLabel="Automations"
+              ariaLabel={t("ui.shell.automations")}
             />
           </div>
 
@@ -463,7 +465,7 @@ export function ProjectRail({
 
             {sections.pinned.length > 0 ? (
               <ProjectSection
-                label="Pinned"
+                label={t("ui.shell.pinned")}
                 items={sections.pinned}
                 muteStatuses={muteStatuses}
                 cwd={cwd}
@@ -487,7 +489,7 @@ export function ProjectRail({
             {projectGroups.length > 0 ? (
               <div className="mb-2 shrink-0">
                 <ProjectSectionHeader
-                  label="Groups"
+                  label={t("ui.shell.groups")}
                   onAddGroup={(x, y) => projectMenu.createGroup(x, y)}
                 />
                 <div className="flex flex-col gap-px px-2">
@@ -528,7 +530,7 @@ export function ProjectRail({
             ) : null}
 
             <ProjectSection
-              label="Projects"
+              label={t("ui.shell.projects")}
               items={groupedProjectSections.ungrouped}
               muteStatuses={muteStatuses}
               emptyLabel={
@@ -571,7 +573,7 @@ export function ProjectRail({
           <div className="flex shrink-0 flex-col gap-px p-2">
             <GithubStarPrompt />
             <RailAction
-              label="Settings"
+              label={t("ui.shell.settings")}
               icon={Settings}
               onClick={onOpenSettings}
               shortcut={`${MOD},`}
@@ -595,7 +597,7 @@ export function ProjectRail({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize project sidebar"
+        aria-label={t("ui.shell.resizeProjectSidebar")}
         aria-valuenow={resize.width}
         aria-valuemin={PROJECT_RAIL_WIDTH_MIN}
         aria-valuemax={PROJECT_RAIL_WIDTH_MAX}
@@ -702,6 +704,7 @@ function ProjectSectionHeader({
   onAdd?: () => void;
   onAddGroup?: (x: number, y: number) => void;
 }) {
+  const t = useT();
   return (
     <div className="flex items-center gap-1 px-3 pb-1.5 pt-1">
       {/* As tall as the header buttons, so every section header matches. */}
@@ -711,8 +714,8 @@ function ProjectSectionHeader({
       {onAddGroup ? (
         <button
           type="button"
-          title="New project group"
-          aria-label="New project group"
+          title={t("ui.shell.newProjectGroup")}
+          aria-label={t("ui.shell.newProjectGroup")}
           onClick={(event) => {
             const rect = event.currentTarget.getBoundingClientRect();
             onAddGroup(rect.left, rect.bottom);
@@ -771,6 +774,7 @@ function ProjectGroupSection({
   groupLogos: ReturnType<typeof useTabGroupLogos>;
   groupMascots: Record<string, string>;
 }) {
+  const t = useT();
   const sortable = useAnimatedReorder(
     items.map((item) => item.path),
     onReorder,
@@ -850,7 +854,7 @@ function ProjectGroupSection({
         <button
           type="button"
           data-no-drag
-          title="Group options"
+          title={t("ui.shell.groupOptions")}
           aria-label={`${group.name} group options`}
           aria-haspopup="menu"
           onPointerDown={(event) => event.stopPropagation()}
@@ -930,6 +934,7 @@ function ProjectCard({
   groupLogos: ReturnType<typeof useTabGroupLogos>;
   groupMascots: Record<string, string>;
 }) {
+  const t = useT();
   const fallbackName = basename(item.path);
   const key = projectKey(item.path);
   const seed = projectName(item.path);
@@ -1088,8 +1093,8 @@ function ProjectCard({
       <button
         type="button"
         data-no-drag
-        title="Project options"
-        aria-label="Project options"
+        title={t("ui.shell.projectOptions")}
+        aria-label={t("ui.shell.projectOptions")}
         aria-haspopup="menu"
         onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => {
@@ -1210,6 +1215,7 @@ function projectCardAriaLabel(
 
 /** Adds a folder on this computer, or one on a connected machine. */
 function AddProjectButton({ onOpenFolder }: { onOpenFolder: () => void }) {
+  const t = useT();
   const anchor = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const item =
@@ -1219,8 +1225,8 @@ function AddProjectButton({ onOpenFolder }: { onOpenFolder: () => void }) {
       <button
         ref={anchor}
         type="button"
-        title="Open project"
-        aria-label="Open project"
+        title={t("ui.shell.openProject")}
+        aria-label={t("ui.shell.openProject")}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
@@ -1235,7 +1241,7 @@ function AddProjectButton({ onOpenFolder }: { onOpenFolder: () => void }) {
           width={230}
           onDismiss={() => setOpen(false)}
           role="menu"
-          aria-label="Open project"
+          aria-label={t("ui.shell.openProject")}
           className="p-1"
         >
           <button
@@ -1248,8 +1254,7 @@ function AddProjectButton({ onOpenFolder }: { onOpenFolder: () => void }) {
             }}
           >
             <FolderPlus className="size-3.5 shrink-0" strokeWidth={1.75} />
-            Open folder…
-          </button>
+            {t("ui.shell.openFolder")}</button>
           <button
             type="button"
             role="menuitem"
@@ -1260,8 +1265,7 @@ function AddProjectButton({ onOpenFolder }: { onOpenFolder: () => void }) {
             }}
           >
             <Internet className="size-3.5 shrink-0" strokeWidth={1.75} />
-            Open folder on a machine…
-          </button>
+            {t("ui.shell.openFolderOnAMachine")}</button>
         </Popover>
       ) : null}
     </>

@@ -55,6 +55,7 @@ import {
   subscribeProviderAccounts,
   type ProviderAccountProvider,
 } from "../../features/providers/model/providerAccounts";
+import { useT } from "../../shared/i18n";
 
 const CLOCK_MS = 30_000;
 
@@ -102,6 +103,7 @@ export function UsageFooter({
   /** Receives the slot beside the terminal button for the pressure chip. */
   pressureSlot?: (element: HTMLSpanElement | null) => void;
 }) {
+  const t = useT();
   const opencode = useCachedRateLimits("opencode");
   const showUsage =
     providers.some((provider) => provider !== "opencode") ||
@@ -184,7 +186,7 @@ export function UsageFooter({
               onClick={onTerminalClick}
             >
               <Terminal className="size-3.5" strokeWidth={1.75} aria-hidden />
-              <span>Terminal</span>
+              <span>{t("ui.shell.terminal")}</span>
             </button>
           ) : null}
         </div>
@@ -223,6 +225,7 @@ export function UsageChips({
   fallback?: ReactNode;
   variant?: UsageChipVariant;
 }) {
+  const t = useT();
   const wantClaude = providers.includes("claude");
   const wantCodex = providers.includes("codex");
   const wantOpencode = providers.includes("opencode");
@@ -521,8 +524,8 @@ export function UsageChips({
       <button
         type="button"
         className={USAGE_REFRESH_CLASSES[variant]}
-        aria-label="Refresh usage"
-        title="Refresh usage"
+        aria-label={t("ui.shell.refreshUsage")}
+        title={t("ui.shell.refreshUsage")}
         disabled={refreshing}
         onClick={() => void refresh()}
       >
@@ -659,6 +662,7 @@ function RunningTerminalChip({
   onToggle?: (fileId: string) => void;
   inset: boolean;
 }) {
+  const t = useT();
   const root = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const label = runningTerminalChipLabel(terminals);
@@ -715,7 +719,7 @@ function RunningTerminalChip({
           autoFocus
           onDismiss={() => setMenuOpen(false)}
           role="menu"
-          aria-label="Running terminals"
+          aria-label={t("ui.shell.runningTerminals")}
           className="min-w-[12rem] p-1"
         >
           {terminals.map((terminal) => (

@@ -12,6 +12,7 @@ import {
 } from "../../features/settings/model/displayPrefs";
 import { LAYER } from "../../shared/lib/layers";
 import { GlassBackdrop } from "./GlassBackdrop";
+import { useT } from "../../shared/i18n";
 
 export function NewLayoutNotice({
   topOffset = 12,
@@ -20,6 +21,7 @@ export function NewLayoutNotice({
   topOffset?: number;
   onHeightChange?: (height: number) => void;
 }) {
+  const t = useT();
   const panelRef = useRef<HTMLElement>(null);
   const dismissed = useNewLayoutPromptDismissed();
   const enabled = useSyncExternalStore(
@@ -47,26 +49,23 @@ export function NewLayoutNotice({
   return createPortal(
     <section
       ref={panelRef}
-      aria-label="Try the new layout"
+      aria-label={t("ui.shell.tryTheNewLayout")}
       role="status"
       style={{ zIndex: LAYER.toast, top: topOffset }}
       className="fixed right-3 isolate w-[min(340px,calc(100vw-24px))] overflow-hidden rounded-xl border border-content/10 text-content shadow-xl"
     >
       <GlassBackdrop />
       <div className="relative z-[1] px-3 py-3">
-        <p className="text-[13px] font-semibold">Try the new layout</p>
+        <p className="text-[13px] font-semibold">{t("ui.shell.tryTheNewLayout")}</p>
         <p className="mt-1 text-[12px] leading-relaxed text-content/60">
-          A redesigned sidebar, project switcher and workspace tabs. Switch back
-          anytime in Settings → Appearance → Layout.
-        </p>
+          {t("ui.shell.aRedesignedSidebarProjectSwitcherAnd")}</p>
         <div className="mt-3 flex justify-end gap-2">
           <button
             type="button"
             className="rounded-md px-2.5 py-1.5 text-[12px] text-content/60 hover:bg-content/10 hover:text-content"
             onClick={() => saveNewLayoutPromptDismissed(true)}
           >
-            Not now
-          </button>
+            {t("ui.shell.notNow")}</button>
           <button
             type="button"
             className="rounded-md bg-content/10 px-2.5 py-1.5 text-[12px] font-medium hover:bg-content/15"
@@ -75,8 +74,7 @@ export function NewLayoutNotice({
               saveInsetLayout(true);
             }}
           >
-            Try it
-          </button>
+            {t("ui.shell.tryIt")}</button>
         </div>
       </div>
     </section>,

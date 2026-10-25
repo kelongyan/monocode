@@ -598,8 +598,7 @@ export function DevModeLabel() {
       title={t("shell.developmentBuild")}
       className="mr-1 min-w-0 truncate rounded-md bg-skill/15 px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-skill"
     >
-      Development
-    </span>
+      {t("ui.shell.development")}</span>
   );
 }
 
@@ -688,6 +687,7 @@ export function MonoViewActions({
   onOpenSettings?: () => void;
   className?: string;
 }) {
+  const t = useT();
   return (
     <div className={`flex items-center gap-1 ${className}`}>
       {onToggleOverview ? (
@@ -704,8 +704,7 @@ export function MonoViewActions({
           }`}
         >
           <DashboardSquare className="size-3.5" strokeWidth={1.75} />
-          Overview
-        </button>
+          {t("ui.shell.overview")}</button>
       ) : null}
       {onOpenSettings ? (
         <IconButton label={`${name} settings`} onClick={onOpenSettings}>
@@ -1225,7 +1224,7 @@ function TitleBarComponent({
           onNewTerminal={onNewTerminal}
           buttonClassName="flex h-full min-w-0 max-w-64 shrink items-center gap-2 px-6 text-left text-sm font-medium leading-tight"
         >
-          <span className="min-w-0 truncate text-content/50">No project</span>
+          <span className="min-w-0 truncate text-content/50">{t("ui.shell.noProject")}</span>
         </CwdPicker>
       ) : null}
 

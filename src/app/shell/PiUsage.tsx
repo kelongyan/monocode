@@ -13,6 +13,7 @@ import {
   RATE_LIMIT_POLL_MS,
 } from "../../features/providers/model/rateLimits";
 import { UsageProviderChip, type UsageChipVariant } from "./UsageProviderChip";
+import { useT } from "../../shared/i18n";
 
 export function PiUsage({
   model,
@@ -23,6 +24,7 @@ export function PiUsage({
   now: number;
   variant?: UsageChipVariant;
 }) {
+  const t = useT();
   const provider = piUsageProvider(model);
   if (!provider) {
     return (
@@ -35,7 +37,7 @@ export function PiUsage({
         }
       >
         <HarnessIcon harness="pi" className="size-3 shrink-0" />
-        <span>pi · Usage unavailable</span>
+        <span>{t("ui.shell.piUsageUnavailable")}</span>
       </span>
     );
   }
@@ -58,6 +60,7 @@ function PiProviderUsage({
   now: number;
   variant: UsageChipVariant;
 }) {
+  const t = useT();
   const [limits, setLimits] = useState(() =>
     idleRateLimits(piBillingProvider(provider)),
   );
@@ -117,8 +120,8 @@ function PiProviderUsage({
       />
       <button
         type="button"
-        aria-label="Refresh Pi usage"
-        title="Refresh Pi usage"
+        aria-label={t("ui.shell.refreshPiUsage")}
+        title={t("ui.shell.refreshPiUsage")}
         disabled={fetching}
         onClick={() => refreshRef.current(true)}
         className={`grid size-6 shrink-0 place-items-center ${variant === "inset" ? "rounded-full" : "rounded-md"} text-content/40 hover:bg-content/10 hover:text-content disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-accent`}

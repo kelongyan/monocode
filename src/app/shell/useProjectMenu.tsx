@@ -76,6 +76,7 @@ import { useProjectNotificationPreferences } from "../../features/notifications/
 import { useNotificationProjects } from "../../features/notifications/hooks/useNotificationProjects";
 import { updateNotificationPreferences } from "../../features/notifications/model/notificationPreferences";
 import type { ExplorerMenuItem } from "../../features/files/ui/ExplorerMenu";
+import { useT } from "../../shared/i18n";
 
 const REVEAL_LABEL = IS_MAC
   ? "Reveal in Finder"
@@ -209,6 +210,7 @@ export function useProjectMenu({
   onOpen,
   railOptions = true,
 }: Options) {
+  const t = useT();
   const [projectMenu, setProjectMenu] = useState<
     (Point & { path: string; projectKey: string }) | null
   >(null);
@@ -521,7 +523,7 @@ export function useProjectMenu({
           restoreFocus();
         }}
         showActions={false}
-        ariaLabel="Project group actions"
+        ariaLabel={t("ui.shell.projectGroupActions")}
         extraItems={[
           {
             id: "delete-project-group",
@@ -551,7 +553,7 @@ export function useProjectMenu({
           gap={0}
           width={280}
           role="dialog"
-          aria-label="Mute project notifications"
+          aria-label={t("ui.shell.muteProjectNotifications")}
           onDismiss={closeNotificationMenu}
           className="space-y-1 overflow-y-auto p-3"
         >

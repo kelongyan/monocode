@@ -1,0 +1,273 @@
+{
+  "AddRemoteProjectDialog.tsx": [
+    {
+      "line": 118,
+      "kind": "aria-label",
+      "value": "Open folder on a machine"
+    },
+    {
+      "line": 128,
+      "kind": "text",
+      "value": "Open folder on a machine"
+    },
+    {
+      "line": 131,
+      "kind": "text",
+      "value": "Sessions in this project run on that machine, using its checkout and its Codex or Claude Code sign-in. They keep running when you close MonoCode here."
+    },
+    {
+      "line": 139,
+      "kind": "text",
+      "value": "No machines are connected yet. Add one in Settings, then open a folder on it here."
+    },
+    {
+      "line": 148,
+      "kind": "text",
+      "value": "Cancel"
+    },
+    {
+      "line": 158,
+      "kind": "text",
+      "value": "Add a machine"
+    },
+    {
+      "line": 166,
+      "kind": "label",
+      "value": "Machine"
+    },
+    {
+      "line": 182,
+      "kind": "aria-label",
+      "value": "Folder path on the machine"
+    },
+    {
+      "line": 193,
+      "kind": "aria-label",
+      "value": "Folders"
+    },
+    {
+      "line": 212,
+      "kind": "text",
+      "value": "No subfolders"
+    },
+    {
+      "line": 217,
+      "kind": "text",
+      "value": "Loading folders…"
+    },
+    {
+      "line": 236,
+      "kind": "text",
+      "value": "Cancel"
+    }
+  ],
+  "ConnectionsSettings.tsx": [
+    {
+      "line": 244,
+      "kind": "text",
+      "value": "Your machines"
+    },
+    {
+      "line": 247,
+      "kind": "text",
+      "value": "Run agents on another computer and return to them from your laptop. The host keeps working when you close MonoCode here."
+    },
+    {
+      "line": 261,
+      "kind": "text",
+      "value": "Add machine"
+    },
+    {
+      "line": 285,
+      "kind": "text",
+      "value": "Updating restarts the host and interrupts active agent turns."
+    },
+    {
+      "line": 296,
+      "kind": "title",
+      "value": "Downloads the matching host package and restarts the host; active agent turns will be interrupted"
+    },
+    {
+      "line": 299,
+      "kind": "text",
+      "value": "Update Host"
+    },
+    {
+      "line": 307,
+      "kind": "text",
+      "value": "Reconnect"
+    },
+    {
+      "line": 315,
+      "kind": "title",
+      "value": "Remove connection…"
+    },
+    {
+      "line": 331,
+      "kind": "text",
+      "value": "Remove"
+    },
+    {
+      "line": 331,
+      "kind": "text",
+      "value": "from this desktop?"
+    },
+    {
+      "line": 334,
+      "kind": "text",
+      "value": "This closes this desktop’s connection to the machine. It does not stop the host, and its sessions keep running and stay on that machine. You can add it again later."
+    },
+    {
+      "line": 339,
+      "kind": "text",
+      "value": "Removing alone leaves this desktop’s credential valid on the host. Revoke access to invalidate it first; the machine must be reachable."
+    },
+    {
+      "line": 344,
+      "kind": "text",
+      "value": "To stop the host and turn off its background service, run"
+    },
+    {
+      "line": 346,
+      "kind": "text",
+      "value": "~/.monocode-host/bin/monocode-host service uninstall"
+    },
+    {
+      "line": 348,
+      "kind": "text",
+      "value": "on that machine ("
+    },
+    {
+      "line": 350,
+      "kind": "text",
+      "value": "%USERPROFILE%\\.monocode-host\\bin\\monocode-host.cmd service uninstall"
+    },
+    {
+      "line": 353,
+      "kind": "text",
+      "value": "on Windows). Its sessions and history are kept."
+    },
+    {
+      "line": 361,
+      "kind": "text",
+      "value": "Revoke access and remove"
+    },
+    {
+      "line": 368,
+      "kind": "text",
+      "value": "Remove from this desktop only"
+    },
+    {
+      "line": 375,
+      "kind": "text",
+      "value": "Cancel"
+    },
+    {
+      "line": 385,
+      "kind": "text",
+      "value": "Add your always-on Windows, Mac, or Linux machine to get started."
+    },
+    {
+      "line": 397,
+      "kind": "text",
+      "value": "Connect through SSH"
+    },
+    {
+      "line": 403,
+      "kind": "text",
+      "value": "SSH address"
+    },
+    {
+      "line": 411,
+      "kind": "placeholder",
+      "value": "user@my-mac-mini or an SSH alias"
+    },
+    {
+      "line": 417,
+      "kind": "text",
+      "value": "Name"
+    },
+    {
+      "line": 423,
+      "kind": "placeholder",
+      "value": "Optional, e.g. Home Mac mini"
+    },
+    {
+      "line": 431,
+      "kind": "text",
+      "value": "Advanced"
+    },
+    {
+      "line": 433,
+      "kind": "text",
+      "value": "SSH port"
+    },
+    {
+      "line": 442,
+      "kind": "placeholder",
+      "value": "From SSH config"
+    },
+    {
+      "line": 447,
+      "kind": "text",
+      "value": "MonoCode installs and starts its background host, then connects securely. Your SSH keys and config are used automatically. Enable SSH on the host and sign in to Codex or Claude Code there. On Windows and Mac, keep the host’s desktop account signed in and the machine awake. Locking the desktop is fine."
+    },
+    {
+      "line": 454,
+      "kind": "text",
+      "value": "On Linux, setup installs a systemd user service and turns on lingering for your account ("
+    },
+    {
+      "line": 459,
+      "kind": "text",
+      "value": "), so the host and your other user services keep running after you log out. Without systemd, as in many containers and microVMs, the host runs as a background process instead and is started again when you reconnect. The host keeps running until you stop it on that machine; removing it here only disconnects this desktop."
+    },
+    {
+      "line": 472,
+      "kind": "text",
+      "value": "Cancel"
+    },
+    {
+      "line": 506,
+      "kind": "aria-label",
+      "value": "SSH password or passphrase"
+    },
+    {
+      "line": 525,
+      "kind": "text",
+      "value": "Reject"
+    },
+    {
+      "line": 541,
+      "kind": "text",
+      "value": "Cancel connection"
+    },
+    {
+      "line": 560,
+      "kind": "text",
+      "value": "Connect to an existing host by URL"
+    },
+    {
+      "line": 579,
+      "kind": "text",
+      "value": "Host URL"
+    },
+    {
+      "line": 589,
+      "kind": "text",
+      "value": "Device token"
+    },
+    {
+      "line": 601,
+      "kind": "text",
+      "value": "Connect by URL"
+    }
+  ],
+  "RemoteSession.tsx": [
+    {
+      "line": 158,
+      "kind": "text",
+      "value": "Manage machines"
+    }
+  ]
+}

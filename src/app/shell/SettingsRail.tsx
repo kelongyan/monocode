@@ -19,7 +19,7 @@ import {
   settingsSectionsByGroup,
   type SettingsSectionId,
 } from "../../features/settings/model/settings";
-import { useLocale } from "../../shared/i18n";
+import { useLocale, useT } from "../../shared/i18n";
 
 const SECTION_ICONS: Record<SettingsSectionId, IconComponent> = {
   general: SlidersHorizontal,
@@ -44,6 +44,7 @@ type Props = {
 
 /** Body of the project rail while settings are open. */
 export function SettingsNav({ section, onSelect, onClose }: Props) {
+  const t = useT();
   // Section labels come from the dictionary, so this has to re-render on a
   // language change.
   useLocale();
@@ -53,7 +54,7 @@ export function SettingsNav({ section, onSelect, onClose }: Props) {
     <>
       <div
         ref={lockOverscroll}
-        aria-label="Settings"
+        aria-label={t("ui.shell.settings")}
         className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-none px-2 py-3"
       >
         {settingsSectionsByGroup().map((group) => (
@@ -74,7 +75,7 @@ export function SettingsNav({ section, onSelect, onClose }: Props) {
         ))}
       </div>
       <div className="flex shrink-0 flex-col gap-px p-2">
-        <NavRow label="Back" icon={ArrowLeft} onClick={onClose} />
+        <NavRow label={t("ui.shell.back")} icon={ArrowLeft} onClick={onClose} />
       </div>
     </>
   );

@@ -11,6 +11,7 @@ import { resolveTabGroupLabel } from "../../features/workspace/model/tabGroups";
 import { projectKey, projectName } from "../../shared/lib/paths";
 import { Plus, Settings } from "../../shared/ui/icons";
 import { IconButton } from "./TitleBar";
+import { useT } from "../../shared/i18n";
 
 /** How far a switched-in project slides, and for how long. */
 const SLIDE_DISTANCE = 28;
@@ -87,6 +88,7 @@ export function ProjectSpacesBar({
   onOpenProject?: () => void;
   onOpenSettings?: () => void;
 }) {
+  const t = useT();
   const { groupLabels } = useProjectAppearance();
   const busy = useMemo(() => [...(busyPaths ?? [])], [busyPaths]);
   return (
@@ -102,7 +104,7 @@ export function ProjectSpacesBar({
         ) : null}
       </div>
       <nav
-        aria-label="Projects"
+        aria-label={t("ui.shell.projects")}
         className="flex min-w-0 items-center justify-center gap-0.5 overflow-hidden"
       >
         {spaces.map((path) => {

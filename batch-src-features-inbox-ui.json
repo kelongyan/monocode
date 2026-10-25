@@ -1,0 +1,528 @@
+{
+  "CheckEvidence.tsx": [
+    {
+      "line": 45,
+      "kind": "text",
+      "value": "Show"
+    },
+    {
+      "line": 131,
+      "kind": "title",
+      "value": "View source at the checked commit"
+    },
+    {
+      "line": 177,
+      "kind": "text",
+      "value": "Source preview unavailable for this commit."
+    }
+  ],
+  "CheckRepairForm.tsx": [
+    {
+      "line": 158,
+      "kind": "aria-label",
+      "value": "Fix checks with AI"
+    },
+    {
+      "line": 169,
+      "kind": "text",
+      "value": "Fix with AI"
+    },
+    {
+      "line": 183,
+      "kind": "aria-label",
+      "value": "Close fix picker"
+    },
+    {
+      "line": 197,
+      "kind": "aria-label",
+      "value": "Search project chats"
+    },
+    {
+      "line": 202,
+      "kind": "placeholder",
+      "value": "Search chats..."
+    },
+    {
+      "line": 226,
+      "kind": "aria-label",
+      "value": "Project chats"
+    },
+    {
+      "line": 268,
+      "kind": "text",
+      "value": "No matching chats"
+    },
+    {
+      "line": 282,
+      "kind": "text",
+      "value": "Wait for the latest checks before starting a fix."
+    },
+    {
+      "line": 290,
+      "kind": "text",
+      "value": "CI details included"
+    }
+  ],
+  "CheckRepairProgress.tsx": [
+    {
+      "line": 378,
+      "kind": "text",
+      "value": "Show check"
+    },
+    {
+      "line": 388,
+      "kind": "text",
+      "value": "Open conversation"
+    },
+    {
+      "line": 397,
+      "kind": "text",
+      "value": "Included checks"
+    },
+    {
+      "line": 410,
+      "kind": "text",
+      "value": "Latest PR commit:"
+    },
+    {
+      "line": 414,
+      "kind": "text",
+      "value": ". Results appear in the checks below."
+    },
+    {
+      "line": 438,
+      "kind": "aria-label",
+      "value": "Repair progress"
+    }
+  ],
+  "InboxComments.tsx": [
+    {
+      "line": 171,
+      "kind": "text",
+      "value": "Activity"
+    },
+    {
+      "line": 181,
+      "kind": "text",
+      "value": "Latest comments · more on"
+    },
+    {
+      "line": 295,
+      "kind": "text",
+      "value": "Replying to"
+    },
+    {
+      "line": 299,
+      "kind": "title",
+      "value": "Cancel reply"
+    },
+    {
+      "line": 300,
+      "kind": "aria-label",
+      "value": "Cancel reply"
+    },
+    {
+      "line": 340,
+      "kind": "text",
+      "value": "Loading comments"
+    },
+    {
+      "line": 451,
+      "kind": "text",
+      "value": "Reply"
+    }
+  ],
+  "InboxConnectMenu.tsx": [
+    {
+      "line": 28,
+      "kind": "aria-label",
+      "value": "Connect an inbox source"
+    },
+    {
+      "line": 33,
+      "kind": "text",
+      "value": "Not connected"
+    },
+    {
+      "line": 52,
+      "kind": "text",
+      "value": "Connect"
+    }
+  ],
+  "InboxDiscussionPanel.tsx": [
+    {
+      "line": 69,
+      "kind": "aria-label",
+      "value": "Resize discussion"
+    },
+    {
+      "line": 80,
+      "kind": "label",
+      "value": "Restart conversation"
+    },
+    {
+      "line": 95,
+      "kind": "label",
+      "value": "Close panel"
+    }
+  ],
+  "InboxFiltersMenu.tsx": [
+    {
+      "line": 153,
+      "kind": "aria-label",
+      "value": "Filter inbox"
+    },
+    {
+      "line": 167,
+      "kind": "text",
+      "value": "Status"
+    },
+    {
+      "line": 169,
+      "kind": "label",
+      "value": "Open"
+    },
+    {
+      "line": 175,
+      "kind": "label",
+      "value": "Draft"
+    },
+    {
+      "line": 181,
+      "kind": "label",
+      "value": "Closed"
+    },
+    {
+      "line": 187,
+      "kind": "label",
+      "value": "Merged"
+    },
+    {
+      "line": 193,
+      "kind": "text",
+      "value": "Time"
+    },
+    {
+      "line": 205,
+      "kind": "text",
+      "value": "Type"
+    },
+    {
+      "line": 224,
+      "kind": "text",
+      "value": "Teams"
+    },
+    {
+      "line": 238,
+      "kind": "text",
+      "value": "Projects"
+    },
+    {
+      "line": 252,
+      "kind": "text",
+      "value": "Projects"
+    },
+    {
+      "line": 271,
+      "kind": "text",
+      "value": "Projects"
+    },
+    {
+      "line": 311,
+      "kind": "text",
+      "value": "Clear filters"
+    }
+  ],
+  "InboxMiniCard.tsx": [
+    {
+      "line": 79,
+      "kind": "title",
+      "value": "Remove"
+    }
+  ],
+  "InboxNotificationMenu.tsx": [
+    {
+      "line": 87,
+      "kind": "aria-label",
+      "value": "Mute project notifications"
+    },
+    {
+      "line": 92,
+      "kind": "text",
+      "value": "Mute all projects"
+    },
+    {
+      "line": 106,
+      "kind": "ariaLabel",
+      "value": "Inbox actions"
+    },
+    {
+      "line": 113,
+      "kind": "text",
+      "value": "Inbox"
+    }
+  ],
+  "InboxPrChecks.tsx": [
+    {
+      "line": 113,
+      "kind": "text",
+      "value": "Checks"
+    },
+    {
+      "line": 361,
+      "kind": "title",
+      "value": "Fix with AI"
+    },
+    {
+      "line": 389,
+      "kind": "title",
+      "value": "View full log on GitHub"
+    },
+    {
+      "line": 414,
+      "kind": "text",
+      "value": "Loading steps…"
+    },
+    {
+      "line": 419,
+      "kind": "text",
+      "value": "Could not load job details."
+    },
+    {
+      "line": 426,
+      "kind": "text",
+      "value": "Retry details"
+    },
+    {
+      "line": 444,
+      "kind": "text",
+      "value": "View run steps"
+    },
+    {
+      "line": 477,
+      "kind": "text",
+      "value": "No steps reported for this job."
+    },
+    {
+      "line": 484,
+      "kind": "text",
+      "value": "No error annotations reported. View the full log on GitHub."
+    },
+    {
+      "line": 564,
+      "kind": "title",
+      "value": "Retry loading checks"
+    },
+    {
+      "line": 565,
+      "kind": "aria-label",
+      "value": "Retry loading checks"
+    },
+    {
+      "line": 570,
+      "kind": "text",
+      "value": "Retry"
+    },
+    {
+      "line": 601,
+      "kind": "aria-label",
+      "value": "Pull request checks"
+    },
+    {
+      "line": 634,
+      "kind": "aria-label",
+      "value": "Fix all failed"
+    },
+    {
+      "line": 641,
+      "kind": "text",
+      "value": "Fix all failed"
+    },
+    {
+      "line": 652,
+      "kind": "title",
+      "value": "Refresh checks"
+    },
+    {
+      "line": 653,
+      "kind": "aria-label",
+      "value": "Refresh checks"
+    },
+    {
+      "line": 689,
+      "kind": "text",
+      "value": "Saved results may be out of date."
+    },
+    {
+      "line": 709,
+      "kind": "aria-label",
+      "value": "Filter checks"
+    },
+    {
+      "line": 741,
+      "kind": "text",
+      "value": "No checks reported"
+    }
+  ],
+  "InboxPrOverview.tsx": [
+    {
+      "line": 76,
+      "kind": "text",
+      "value": "No description"
+    },
+    {
+      "line": 93,
+      "kind": "text",
+      "value": "Description is media only"
+    },
+    {
+      "line": 139,
+      "kind": "text",
+      "value": "Changed files"
+    },
+    {
+      "line": 177,
+      "kind": "text",
+      "value": "No file changes"
+    }
+  ],
+  "InboxView.tsx": [
+    {
+      "line": 977,
+      "kind": "text",
+      "value": "Add connection"
+    },
+    {
+      "line": 1052,
+      "kind": "text",
+      "value": "Add a connection to start using the Inbox."
+    },
+    {
+      "line": 1193,
+      "kind": "text",
+      "value": "Inbox"
+    },
+    {
+      "line": 1427,
+      "kind": "text",
+      "value": "Open on GitHub"
+    },
+    {
+      "line": 1473,
+      "kind": "text",
+      "value": "Select an inbox item"
+    },
+    {
+      "line": 1875,
+      "kind": "text",
+      "value": "Ready for review"
+    },
+    {
+      "line": 1886,
+      "kind": "text",
+      "value": "Convert to draft"
+    },
+    {
+      "line": 1897,
+      "kind": "text",
+      "value": "Close pull request"
+    },
+    {
+      "line": 1908,
+      "kind": "text",
+      "value": "Reopen pull request"
+    },
+    {
+      "line": 2000,
+      "kind": "text",
+      "value": "Cancel"
+    },
+    {
+      "line": 2758,
+      "kind": "text",
+      "value": "Unassigned"
+    },
+    {
+      "line": 2769,
+      "kind": "text",
+      "value": "Created"
+    },
+    {
+      "line": 2776,
+      "kind": "text",
+      "value": "Updated"
+    },
+    {
+      "line": 2805,
+      "kind": "text",
+      "value": "Related"
+    },
+    {
+      "line": 2824,
+      "kind": "text",
+      "value": "Archived"
+    },
+    {
+      "line": 2890,
+      "kind": "text",
+      "value": "Ask"
+    },
+    {
+      "line": 2957,
+      "kind": "text",
+      "value": "Hunks"
+    },
+    {
+      "line": 2969,
+      "kind": "text",
+      "value": "Full file"
+    },
+    {
+      "line": 3016,
+      "kind": "text",
+      "value": "No file changes"
+    },
+    {
+      "line": 3066,
+      "kind": "text",
+      "value": "No description"
+    }
+  ],
+  "LinkedWorkItemUpdateNotice.tsx": [
+    {
+      "line": 149,
+      "kind": "text",
+      "value": "GitHub activity"
+    },
+    {
+      "line": 154,
+      "kind": "title",
+      "value": "Dismiss"
+    },
+    {
+      "line": 239,
+      "kind": "text",
+      "value": "Clean up this session"
+    },
+    {
+      "line": 244,
+      "kind": "title",
+      "value": "Archive session"
+    },
+    {
+      "line": 255,
+      "kind": "text",
+      "value": "Archive session"
+    },
+    {
+      "line": 260,
+      "kind": "title",
+      "value": "Delete session"
+    },
+    {
+      "line": 271,
+      "kind": "text",
+      "value": "Delete…"
+    }
+  ]
+}

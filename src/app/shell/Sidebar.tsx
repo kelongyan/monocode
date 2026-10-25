@@ -2402,8 +2402,7 @@ function SidebarComponent({
           />
         ) : (
           <span className="min-w-0 truncate text-sm font-medium leading-tight">
-            Workspace
-          </span>
+            {t("ui.shell.workspace")}</span>
         )}
       </div>
       {/* Inset, a new session is the + at the end of the title bar's tabs. */}
@@ -2506,8 +2505,7 @@ function SidebarComponent({
         </div>
       ) : (
         <p className="px-3 py-2 text-[12px] text-content/50">
-          No project folder
-        </p>
+          {t("ui.shell.noProjectFolder")}</p>
       )}
     </div>
   );
@@ -2678,7 +2676,7 @@ function SidebarComponent({
           ) : null}
           {!cwd || cwd === "~" ? (
             <div className="px-3 py-2 text-[12px] text-content/50">
-              <p>No project folder</p>
+              <p>{t("ui.shell.noProjectFolder")}</p>
               {inset && onOpenProject ? (
                 <button
                   type="button"
@@ -2686,8 +2684,7 @@ function SidebarComponent({
                   className="mt-2 flex items-center gap-1.5 rounded-md bg-content/5 px-2 py-1.5 text-content/70 hover:bg-content/10 hover:text-content"
                 >
                   <Plus className="size-3.5" strokeWidth={1.75} />
-                  Open project
-                </button>
+                  {t("ui.shell.openProject")}</button>
               ) : null}
             </div>
           ) : (
@@ -2702,8 +2699,7 @@ function SidebarComponent({
               {pendingFirstLoad ? null : status === "error" &&
                 projectSessions.length === 0 ? (
                 <p className="px-3 py-2 text-[12px] text-content/50">
-                  Couldn’t load sessions
-                </p>
+                  {t("ui.shell.couldntLoadSessions")}</p>
               ) : visibleSessions.length === 0 ? (
                 // Inset like the list it stands in for, so the label and
                 // its text line up with the sections above.
@@ -2724,8 +2720,7 @@ function SidebarComponent({
                     <p
                       className={`${inset ? "px-2" : "px-3"} py-2 text-[12px] text-content/45`}
                     >
-                      This project’s machine isn’t connected on this computer.
-                    </p>
+                      {t("ui.shell.thisProjectsMachineIsntConnectedOn")}</p>
                   ) : (
                     <SessionsEmpty message="Sessions you start will show up here" />
                   )}
@@ -3013,8 +3008,7 @@ function SidebarComponent({
                                         strokeWidth={1.75}
                                       />
                                       <span className="text-[13px] font-semibold leading-snug">
-                                        New session
-                                      </span>
+                                        {t("ui.shell.newSession")}</span>
                                     </button>
                                   </div>
                                 ) : null}
@@ -4992,17 +4986,17 @@ export const SessionCard = memo(function SessionCard({
       ) : busy ? (
         <>
           <TerminalSpinner className="inline-block w-3 select-none text-center text-[11px] leading-none text-accent" />
-          <span>Working...</span>
+          <span>{t("ui.shell.working")}</span>
         </>
       ) : done ? (
         <>
           <Check className="size-3" strokeWidth={2.25} />
-          <span>Done</span>
+          <span>{t("ui.shell.done")}</span>
         </>
       ) : draft ? (
         <>
           <CircleDashed className="size-3" strokeWidth={1.75} />
-          <span>Draft</span>
+          <span>{t("ui.shell.draft")}</span>
         </>
       ) : (
         <span>{statusLabel ?? time}</span>
@@ -5607,8 +5601,7 @@ export const SessionCard = memo(function SessionCard({
           >
             <div className="flex items-center justify-between gap-3">
               <span className="text-[11px] font-semibold text-content/85">
-                Subagents
-              </span>
+                {t("ui.shell.subagents")}</span>
               <span className="shrink-0 text-[10px] tabular-nums text-content/45">
                 {orchestrationDone}/{orchestration.tasks.length} done
               </span>
