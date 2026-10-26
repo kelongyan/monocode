@@ -40,7 +40,7 @@ import { FileActionError } from "../../files/ui/FileActionError";
 import { FileTypeIcon } from "../../files/ui/FileTypeIcon";
 import { HarnessIcon } from "../../sessions/ui/HarnessIcon";
 import { TabLabel } from "../../../shared/ui/TabLabel";
-import { useT } from "../../../shared/i18n";
+import { useT, t } from "../../../shared/i18n";
 
 type Props = {
   files: FilePaneTab[];
@@ -71,11 +71,12 @@ type SurfaceTabMenu = {
   fileId: string;
 };
 
-const REVEAL_LABEL = IS_MAC
-  ? "Reveal in Finder"
-  : IS_WIN
-    ? "Reveal in File Explorer"
-    : "Open Containing Folder";
+const revealLabel = (): string =>
+  IS_MAC
+    ? t("ui.shared.revealInFinder")
+    : IS_WIN
+      ? t("ui.shared.revealInFileExplorer")
+      : t("ui.shared.openContainingFolder");
 
 export function surfaceTabMenuItems(
   file: FilePaneTab,
@@ -84,12 +85,12 @@ export function surfaceTabMenuItems(
   const close: ExplorerMenuItem = {
     kind: "item",
     id: "close",
-    label: "Close",
+    label: t("ui.shared.close"),
   };
   const closeOthers: ExplorerMenuItem = {
     kind: "item",
     id: "close-others",
-    label: "Close Others",
+    label: t("ui.shared.closeOthers"),
     disabled: !canCloseOthers,
   };
   if (!isFilesystemTab(file) || isChangesTab(file)) {
@@ -97,16 +98,16 @@ export function surfaceTabMenuItems(
   }
 
   return [
-    { kind: "item", id: "open-default", label: "Open in Default App" },
-    { kind: "item", id: "reveal", label: REVEAL_LABEL },
+    { kind: "item", id: "open-default", label: t("ui.shared.openInDefaultApp") },
+    { kind: "item", id: "reveal", label: revealLabel() },
     { kind: "sep" },
-    { kind: "item", id: "copy-path", label: "Copy Path" },
+    { kind: "item", id: "copy-path", label: t("ui.shared.copyPath") },
     {
       kind: "item",
       id: "copy-relative-path",
-      label: "Copy Relative Path",
+      label: t("ui.shared.copyRelativePath"),
     },
-    { kind: "item", id: "copy-name", label: "Copy File Name" },
+    { kind: "item", id: "copy-name", label: t("ui.shared.copyFileName") },
     { kind: "sep" },
     close,
     closeOthers,
@@ -129,29 +130,31 @@ export function surfaceTabPresentation(
   if (isChangesTab(file)) {
     const staged = file.changeKind === "staged";
     return {
-      name: staged ? "Staged Changes" : "Changes",
-      label: staged ? "Staged Changes" : "Changes",
+      name: staged ? t("changes.stagedChanges") : t("changes.title"),
+      label: staged ? t("changes.stagedChanges") : t("changes.title"),
       iconName: "CHANGES",
-      tooltip: staged ? "Staged changes" : "Working tree changes",
+      tooltip: staged
+        ? t("ui.workspace.stagedChangesTooltip")
+        : t("ui.workspace.workingTreeChangesTooltip"),
     };
   }
 
   if (isSessionChangesTab(file)) {
     return {
-      name: "Session Changes",
-      label: "Session Changes",
+      name: t("ui.workspace.sessionChanges"),
+      label: t("ui.workspace.sessionChanges"),
       iconName: "CHANGES",
-      tooltip: "Changes captured for this session only",
+      tooltip: t("ui.workspace.sessionChangesTooltip"),
     };
   }
 
   if (isAgentTab(file)) {
-    const name = file.path.trim() || "Agent";
+    const name = file.path.trim() || t("ui.workspace.agentFallback");
     return {
       name,
       label: name,
       iconName: "AGENT",
-      tooltip: `${name} — orchestration agent`,
+      tooltip: t("ui.workspace.agentTooltip", { name }),
     };
   }
 
@@ -168,20 +171,20 @@ export function surfaceTabPresentation(
   const review = isReviewTab(file);
   const terminal = isTerminalTab(file);
   const name = isPlanTab(file)
-    ? file.plan.title.trim() || "Plan"
+    ? file.plan.title.trim() || t("ui.workspace.planFallback")
     : terminal
       ? terminalTabLabel(file)
       : basename(file.path);
   return {
     name,
-    label: review ? `${name} (Working Tree)` : name,
+    label: review ? t("ui.workspace.tabWorkingTree", { name }) : name,
     iconName: isPlanTab(file) ? "plan.md" : name,
     tooltip: isPlanTab(file)
       ? name
       : terminal
         ? `${name} — ${file.cwd}`
         : review
-          ? `${file.path} (Working Tree)`
+          ? t("ui.workspace.tabWorkingTree", { name: file.path })
           : file.path,
   };
 }
@@ -189,7 +192,11 @@ export function surfaceTabPresentation(
 /** Tab tooltip: the path, then what is wrong with it. */
 export function appendProblems(title: string, errors: number): string {
   if (!errors) return title;
-  return `${title} — ${errors} ${errors === 1 ? "problem" : "problems"}`;
+  const suffix = t(
+    errors === 1 ? "ui.shared.problemTooltip" : "ui.shared.problemsTooltip",
+    { count: errors },
+  );
+  return `${title} — ${suffix}`;
 }
 
 export function SurfaceTabs({

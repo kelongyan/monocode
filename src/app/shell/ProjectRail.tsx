@@ -434,7 +434,7 @@ export function ProjectRail({
               }}
               active={inboxActive}
               dot={inboxUnseen}
-              ariaLabel={inboxUnseen ? "Inbox, new items" : "Inbox"}
+              ariaLabel={inboxUnseen ? t("shell.inboxNewItems") : t("inbox.title")}
             />
             {notesEnabled ? (
               <RailAction

@@ -1,8 +1,13 @@
+/**
+ * Dictionary keys per app view; render sites translate them with `t()` so the
+ * tab labels follow the locale. The ids (and the `AppView` union derived from
+ * them) are stable protocol-ish values and must not change.
+ */
 export const APP_VIEW_LABELS = {
-  search: "Search",
-  inbox: "Inbox",
-  notes: "Notes",
-  automations: "Automations",
+  search: "shell.search",
+  inbox: "inbox.title",
+  notes: "ui.notes.notes",
+  automations: "automations.title",
 } as const;
 
 export type AppView = keyof typeof APP_VIEW_LABELS;

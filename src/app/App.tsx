@@ -11791,7 +11791,7 @@ function Workspace({
               id: appViewTabId(view),
               appView: view,
               project: "",
-              title: APP_VIEW_LABELS[view],
+              title: t(APP_VIEW_LABELS[view]),
               more: [],
               sessionCount: 0,
               harnesses: [],

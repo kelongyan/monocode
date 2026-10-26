@@ -244,7 +244,7 @@ import {
   remotePath,
   remoteProjectFor,
 } from "../../features/connections/model/remoteProjects";
-import { useT } from "../../shared/i18n";
+import { useT, type MessageKey } from "../../shared/i18n";
 
 const MIN_WIDTH = 260;
 /** The inset sidebar's one-line rows stay legible narrower. */
@@ -264,12 +264,12 @@ let rememberedWidth = DEFAULT_WIDTH;
 
 type SidebarTab = SidebarTabId;
 
-const TAB_LABELS: Record<SidebarTab | RightPanelTab, string> = {
-  sessions: "Sessions",
-  inbox: "Inbox",
-  files: "Explorer",
-  changes: "Changes",
-  graph: "History",
+const TAB_LABELS: Record<SidebarTab | RightPanelTab, MessageKey> = {
+  sessions: "shell.sessions",
+  inbox: "inbox.title",
+  files: "explorer.title",
+  changes: "changes.title",
+  graph: "shell.history",
 };
 
 const COMPACT_TAB_ICONS: Record<SidebarTab, typeof PanelLeft> = {
@@ -2066,13 +2066,13 @@ function SidebarComponent({
   const hasChangeStats = changeAdditions > 0 || changeDeletions > 0;
   const changesLabel = hasChangeStats
     ? [
-        "Changes",
+        t("changes.title"),
         changeAdditions > 0 ? `+${changeAdditions}` : "",
         changeDeletions > 0 ? `-${changeDeletions}` : "",
       ]
         .filter(Boolean)
         .join(" ")
-    : "Changes";
+    : t("changes.title");
 
   const workspaceTabItems = visibleTabs.map((itemId) => {
     const active = tab === itemId;
@@ -2105,7 +2105,7 @@ function SidebarComponent({
             <DiffStat additions={changeAdditions} deletions={changeDeletions} />
           ) : (
             <span className="block truncate leading-label">
-              {TAB_LABELS[itemId]}
+              {t(TAB_LABELS[itemId])}
             </span>
           )}
         </button>
@@ -2442,7 +2442,7 @@ function SidebarComponent({
       }
       items={[
         onOpenInbox && {
-          label: "Inbox",
+          label: t("inbox.title"),
           icon: Inbox,
           active: inboxActive,
           dot: inboxUnseen,
@@ -2458,13 +2458,13 @@ function SidebarComponent({
         },
         notesEnabled &&
           onOpenNotes && {
-            label: "Notes",
+            label: t("ui.notes.notes"),
             icon: StickyNote,
             active: notesActive,
             onClick: onOpenNotes,
           },
         onOpenAutomations && {
-          label: "Automations",
+          label: t("automations.title"),
           icon: Zap,
           active: automationsActive,
           onClick: onOpenAutomations,
@@ -3468,7 +3468,7 @@ function SidebarProjectPicker({
         ) : null}
         {onOpenInbox ? (
           <IconButton
-            label={inboxUnseen ? "Inbox, new items" : "Inbox"}
+            label={inboxUnseen ? t("shell.inboxNewItems") : t("inbox.title")}
             active={inboxActive}
             onClick={onOpenInbox}
             onOpenContextMenu={(x, y) => {
@@ -3719,9 +3719,9 @@ function CompactProjectRail({
                   ? changesLabel
                   : itemId === "sessions" && hasUnseenFinished
                     ? "Sessions, new replies"
-                    : TAB_LABELS[itemId]
+                    : t(TAB_LABELS[itemId])
               }
-              tipLabel={TAB_LABELS[itemId]}
+              tipLabel={t(TAB_LABELS[itemId])}
               diff={
                 itemId === "changes"
                   ? { additions: changeAdditions, deletions: changeDeletions }
@@ -3745,7 +3745,7 @@ function CompactProjectRail({
           onClick={action(searchActive, onSearch)}
         />
         <CompactRailAction
-          label={inboxUnseen ? "Inbox, new items" : "Inbox"}
+          label={inboxUnseen ? t("shell.inboxNewItems") : t("inbox.title")}
           icon={Inbox}
           active={inboxActive}
           dot={inboxUnseen}
@@ -4200,7 +4200,7 @@ function RightPanel({
                   />
                 ) : (
                   <span className="block truncate leading-label">
-                    {TAB_LABELS[itemId]}
+                    {t(TAB_LABELS[itemId])}
                   </span>
                 )}
               </button>

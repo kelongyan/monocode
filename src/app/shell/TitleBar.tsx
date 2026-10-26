@@ -67,7 +67,7 @@ import {
   APP_VIEW_LABELS,
   type AppView,
 } from "../../features/workspace/model/appViewTabs";
-import { useT } from "../../shared/i18n";
+import { useT, t, useLocale } from "../../shared/i18n";
 
 const APP_VIEW_ICONS = {
   search: Search,
@@ -186,7 +186,7 @@ export function tabCopy(tab: Tab): {
   tooltip: string;
 } {
   if (tab.appView) {
-    const headline = APP_VIEW_LABELS[tab.appView];
+    const headline = t(APP_VIEW_LABELS[tab.appView]);
     return { headline, meta: "", tooltip: headline };
   }
   if (tab.mono) return { headline: tab.title, meta: "", tooltip: tab.title };
@@ -194,7 +194,7 @@ export function tabCopy(tab: Tab): {
   const conversation = tab.title.trim();
   const file = tab.files[0] ?? "";
   const sessions = sessionMeta(tab);
-  const untitled = "New session";
+  const untitled = t("shell.newSession");
 
   let headline: string;
   const metaParts: string[] = [];
@@ -226,7 +226,7 @@ export function tabCopy(tab: Tab): {
   if (conversation) tooltipParts.push(conversation);
   tooltipParts.push(...tab.more);
   if (tab.files.length > 0) tooltipParts.push(tab.files.join(", "));
-  if (tab.dirty) tooltipParts.push("Unsaved changes");
+  if (tab.dirty) tooltipParts.push(t("shell.unsavedChanges"));
 
   return { headline, meta, tooltip: tooltipParts.join(" · ") };
 }
@@ -785,6 +785,7 @@ function TitleBarComponent({
   onSelectProject,
 }: Props) {
   const t = useT();
+  const locale = useLocale();
   const trafficLightsVisible = useTrafficLightsVisible();
   const tabIds = tabs.map((tab) => tab.id);
   const { displayed, tabNodeRef, finishMotion } = useTabCloseMotion(tabs);
@@ -904,7 +905,7 @@ function TitleBarComponent({
   const systemTitle = useMemo(() => {
     const activeName = activeTab
       ? activeTab.appView
-        ? APP_VIEW_LABELS[activeTab.appView]
+        ? t(APP_VIEW_LABELS[activeTab.appView])
         : activeTab.mono
           ? activeTab.title
           : activeTab.files[0]
@@ -919,7 +920,7 @@ function TitleBarComponent({
       return `${project} — MonoCode`;
     }
     return "MonoCode";
-  }, [activeTab, cwd]);
+  }, [activeTab, cwd, locale]);
 
   useEffect(() => {
     document.title = systemTitle;
