@@ -27,6 +27,30 @@
   }
 }
 
+/* Bundled Chinese UI font: HarmonyOS Sans SC. Regular/Medium/Bold cover the
+   weights the app uses (400/500/700; Tailwind's font-semibold=600 matches up
+   to Bold per the CSS font-matching rules). Latin glyphs are included. The
+   ttf files live under public/fonts/ so the WebView loads them from the app
+   origin (`font-src 'self'` in the CSP); LICENSE.txt ships alongside. */
+@font-face {
+  font-family: "HarmonyOS Sans SC";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/HarmonyOS_Sans_SC_Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "HarmonyOS Sans SC";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/HarmonyOS_Sans_SC_Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "HarmonyOS Sans SC";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/HarmonyOS_Sans_SC_Bold.ttf") format("truetype");
+}
+
 @theme {
   /* Preserve descenders in compact labels, including two 10px lines in a 30px tab. */
   --leading-label: 1.4;
@@ -72,6 +96,9 @@
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
   --font-sans:
+    /* Bundled HarmonyOS Sans SC leads; the old stack stays as the fallback in
+       case the font asset fails to load. */
+    "HarmonyOS Sans SC",
     system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
     /* CJK fallbacks, so Chinese text keeps proper glyph shapes and metrics
