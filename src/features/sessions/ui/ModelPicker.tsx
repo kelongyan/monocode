@@ -52,7 +52,12 @@ import { Popover } from "../../../shared/ui/Popover";
 import { MOD } from "../../../platform/tauri/platform";
 import { keybindingPressed } from "../../settings/model/settings";
 import "./ModelPicker.css";
-import { useT } from "../../../shared/i18n";
+import { useT, t } from "../../../shared/i18n";
+import {
+  modelChoiceLabel,
+  modelSettingLabel,
+  modelNameLabel,
+} from "../model/modelText";
 
 type Props = {
   harness: HarnessId;
@@ -222,8 +227,8 @@ function pillSettings(model: AgentModel): ModelSetting[] {
 
 function settingLabel(setting: ModelSetting): string {
   return setting.id === "effort" || setting.id === "reasoning"
-    ? "Effort"
-    : setting.label;
+    ? t("composer.modelSettings.effortShort")
+    : modelSettingLabel(setting);
 }
 
 function settingValue(
@@ -238,9 +243,8 @@ function settingValueLabel(
   values: Record<string, string>,
 ): string {
   const value = settingValue(setting, values);
-  return (
-    setting.options.find((option) => option.value === value)?.label ?? value
-  );
+  const option = setting.options.find((option) => option.value === value);
+  return option ? modelChoiceLabel(setting, option) : value;
 }
 
 function recentMenuModels(
@@ -740,14 +744,16 @@ export function ModelPicker({
         title={
           triggerLabel
             ? `${triggerLabel} · ${triggerTitle}`
-            : `${triggerTitle} · Recent models: right-click or ${MOD}.`
+            : `${triggerTitle} · ${t("composer.recentModelsHint", { mod: MOD })}`
         }
         aria-label={
           triggerLabel ??
           `${HARNESS_TITLE[current.harness]}${
             current.provider ? `, ${current.provider.name},` : ""
-          } ${current.name}${
-            triggerEffortLabel ? `, effort ${triggerEffortLabel}` : ""
+          } ${modelNameLabel(current)}${
+            triggerEffortLabel
+              ? `, ${t("composer.effortAria", { value: triggerEffortLabel })}`
+              : ""
           }`
         }
         aria-keyshortcuts={`${MOD}.`}
@@ -867,7 +873,9 @@ export function ModelPicker({
                         harness={current.harness}
                         className="size-3.5 shrink-0"
                       />
-                      <span className="min-w-0 truncate">{current.name}</span>
+                      <span className="min-w-0 truncate">
+                        {modelNameLabel(current)}
+                      </span>
                     </span>
                     <ChevronRight
                       className="size-3.5 shrink-0 text-content/45"
@@ -982,7 +990,7 @@ export function ModelPicker({
                   >
                     {tileTone ? <EffortTileShimmer /> : null}
                     <span className="min-w-0 flex-1 truncate">
-                      {option.label}
+                      {modelChoiceLabel(submenu.setting, option)}
                     </span>
                     {selected ? (
                       <Check
@@ -1065,7 +1073,7 @@ export function ModelPicker({
                 />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[13px] leading-4">
-                    {item.name}
+                    {modelNameLabel(item)}
                   </span>
                   <span className="block truncate text-[11px] leading-4 text-content/45">
                     {HARNESS_TITLE[item.harness]}
@@ -1254,9 +1262,13 @@ function TogglePill({
       <button
         type="button"
         role="switch"
-        aria-label={setting.label}
+        aria-label={modelSettingLabel(setting)}
         aria-checked={on}
-        title={`${setting.label}: ${on ? "On" : "Off"}`}
+        title={`${modelSettingLabel(setting)}: ${
+          on
+            ? t("composer.modelSettings.choices.toggle.true")
+            : t("composer.modelSettings.choices.toggle.false")
+        }`}
         data-model-control
         onMouseDown={(event) => event.preventDefault()}
         onClick={toggle}

@@ -204,7 +204,7 @@ import {
   type InboxSessionPortal,
 } from "./InboxDiscussionPanel";
 import { inboxAskKey } from "../model/inboxAsk";
-import { useT } from "../../../shared/i18n";
+import { useT, type MessageKey, type MessageVars } from "../../../shared/i18n";
 
 const MIN_WIDTH = 240;
 const MAX_WIDTH = 420;
@@ -1694,61 +1694,59 @@ function githubPrActionCopy(
   action: GithubPrAction,
   baseRef: string,
   headRef: string,
+  t: (key: MessageKey, vars?: MessageVars) => string,
 ): { title: string; detail: string; confirm: string; progress: string } {
-  const source = headRef ? `“${headRef}”` : "this branch";
-  const destination = baseRef ? `“${baseRef}”` : "the base branch";
+  const source = headRef ? `“${headRef}”` : t("inbox.pr.thisBranch");
+  const destination = baseRef ? `“${baseRef}”` : t("inbox.pr.theBaseBranch");
   switch (action) {
     case "merge":
       return {
-        title: "Merge this pull request?",
-        detail: `Every commit from ${source} will be added to ${destination} with a merge commit.`,
-        confirm: "Merge pull request",
-        progress: "Merging…",
+        title: t("inbox.pr.merge.title"),
+        detail: t("inbox.pr.merge.detail", { source, destination }),
+        confirm: t("inbox.pr.merge.confirm"),
+        progress: t("inbox.pr.merge.progress"),
       };
     case "squash":
       return {
-        title: "Squash and merge?",
-        detail: `The commits from ${source} will be combined into one commit on ${destination}.`,
-        confirm: "Squash and merge",
-        progress: "Merging…",
+        title: t("inbox.pr.squash.title"),
+        detail: t("inbox.pr.squash.detail", { source, destination }),
+        confirm: t("inbox.pr.squash.confirm"),
+        progress: t("inbox.pr.squash.progress"),
       };
     case "rebase":
       return {
-        title: "Rebase and merge?",
-        detail: `The commits from ${source} will be rebased individually onto ${destination}.`,
-        confirm: "Rebase and merge",
-        progress: "Merging…",
+        title: t("inbox.pr.rebase.title"),
+        detail: t("inbox.pr.rebase.detail", { source, destination }),
+        confirm: t("inbox.pr.rebase.confirm"),
+        progress: t("inbox.pr.rebase.progress"),
       };
     case "draft":
       return {
-        title: "Convert to draft?",
-        detail:
-          "Reviewers will see that this pull request is not ready to merge.",
-        confirm: "Convert to draft",
-        progress: "Converting…",
+        title: t("inbox.pr.draft.title"),
+        detail: t("inbox.pr.draft.detail"),
+        confirm: t("inbox.pr.draft.confirm"),
+        progress: t("inbox.pr.draft.progress"),
       };
     case "ready":
       return {
-        title: "Mark as ready for review?",
-        detail:
-          "Reviewers will see that this pull request is ready for feedback.",
-        confirm: "Ready for review",
-        progress: "Updating…",
+        title: t("inbox.pr.ready.title"),
+        detail: t("inbox.pr.ready.detail"),
+        confirm: t("inbox.pr.ready.confirm"),
+        progress: t("inbox.pr.ready.progress"),
       };
     case "close":
       return {
-        title: "Close this pull request?",
-        detail:
-          "The pull request will close without merging. You can reopen it later.",
-        confirm: "Close pull request",
-        progress: "Closing…",
+        title: t("inbox.pr.close.title"),
+        detail: t("inbox.pr.close.detail"),
+        confirm: t("inbox.pr.close.confirm"),
+        progress: t("inbox.pr.close.progress"),
       };
     case "reopen":
       return {
-        title: "Reopen this pull request?",
-        detail: "The pull request will return to the open state.",
-        confirm: "Reopen pull request",
-        progress: "Reopening…",
+        title: t("inbox.pr.reopen.title"),
+        detail: t("inbox.pr.reopen.detail"),
+        confirm: t("inbox.pr.reopen.confirm"),
+        progress: t("inbox.pr.reopen.progress"),
       };
   }
 }
@@ -1826,7 +1824,7 @@ export function GithubPrActions({
   };
 
   const confirmCopy = confirmation
-    ? githubPrActionCopy(confirmation.action, baseRef, headRef)
+    ? githubPrActionCopy(confirmation.action, baseRef, headRef, t)
     : null;
   const stateButton = `${ACTION_OUTLINE} ${PR_ACTION_PRESS} disabled:cursor-default disabled:opacity-40`;
 

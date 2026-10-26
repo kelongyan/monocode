@@ -2722,7 +2722,7 @@ function SidebarComponent({
                     >
                       {t("ui.shell.thisProjectsMachineIsntConnectedOn")}</p>
                   ) : (
-                    <SessionsEmpty message="Sessions you start will show up here" />
+                    <SessionsEmpty message={t("shell.sessionsEmptyHint")} />
                   )}
                 </div>
               ) : (

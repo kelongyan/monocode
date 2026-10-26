@@ -9,19 +9,7 @@ import {
 } from "../model/monoHabits";
 import { when } from "./HabitPage";
 import { AutoTextarea, PageHeader, Property, Section } from "./monoPanelParts";
-import { useT } from "../../../shared/i18n";
-
-const KINDS = [
-  { value: "daily", label: "Daily" },
-  { value: "weekdays", label: "Weekdays" },
-  { value: "weekly", label: "Weekly" },
-  { value: "hourly", label: "Hourly" },
-] as const;
-
-const DAYS = AUTOMATION_WEEKDAYS.map((label, value) => ({
-  value: String(value),
-  label,
-}));
+import { useT, messages } from "../../../shared/i18n";
 
 const MINUTES = [0, 15, 30, 45].map((value) => ({
   value: String(value),
@@ -143,12 +131,25 @@ function ScheduleFields({
 }) {
   const t = useT();
   const kind = schedule.scheduleKind;
+  const kinds = [
+    { value: "daily", label: t("automations.triggerEvents.time.daily") },
+    { value: "weekdays", label: t("automations.triggerEvents.time.weekdays") },
+    { value: "weekly", label: t("automations.triggerEvents.time.weekly") },
+    { value: "hourly", label: t("automations.triggerEvents.time.hourly") },
+  ];
+  const days = AUTOMATION_WEEKDAYS.map((_, value) => ({
+    value: String(value),
+    label:
+      messages().automations.dayNames[
+        String(value) as "0" | "1" | "2" | "3" | "4" | "5" | "6"
+      ],
+  }));
   return (
     <span className="flex flex-wrap items-center gap-1.5 py-0.5">
       <SearchableSelect
         label={t("monos.repeats")}
         value={kind}
-        options={KINDS}
+        options={kinds}
         variant="pill"
         searchable={false}
         onChange={(value) =>
@@ -164,7 +165,7 @@ function ScheduleFields({
           <SearchableSelect
             label={t("ui.monos.day")}
             value={String(schedule.dayOfWeek)}
-            options={DAYS}
+            options={days}
             variant="pill"
             searchable={false}
             onChange={(value) =>

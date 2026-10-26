@@ -3,6 +3,7 @@ import type { DockSide, ProjectTerminalDock } from "../../projects/model/project
 import { sessionNeedsInput, type Session } from "./session";
 import { stopStreaming } from "../../../integrations/harness/core/apply";
 import type { ProjectReturnMemory } from "../../projects/model/projectReturn";
+import { t } from "../../../shared/i18n";
 
 export const INTERRUPT_MESSAGE =
   "Turn interrupted when MonoCode quit.";
@@ -63,9 +64,9 @@ export function inFlightRefs(
 
 export function quitWhileBusyMessage(count: number): string {
   if (count === 1) {
-    return "1 chat is still running. Quit anyway? It will resume when you reopen MonoCode.";
+    return t("dialogs.quitWhileBusyOne");
   }
-  return `${count} chats are still running. Quit anyway? They will resume when you reopen MonoCode.`;
+  return t("dialogs.quitWhileBusyMany", { count });
 }
 
 /**

@@ -299,8 +299,8 @@ export function MonoProjectCommit({
       ? Promise.resolve(true)
       : confirmNative(
           kind === "pr"
-            ? `Create a pull request from default branch "${index.branch}"?`
-            : `Push to default branch "${index.branch}"?`,
+            ? t("dialogs.prFromDefault", { branch: index.branch })
+            : t("dialogs.pushDefault", { branch: index.branch }),
         );
 
   const openCreatedPr = async () => {

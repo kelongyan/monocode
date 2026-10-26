@@ -100,7 +100,7 @@ import {
   subscribeSessionFolders,
 } from "../../sessions/model/sessionFolders";
 import { loadModelControls, subscribeModelControls } from "../../settings/model/settings";
-import { useT } from "../../../shared/i18n";
+import { useT, t, messages } from "../../../shared/i18n";
 import {
   loadTabGroupColors,
   loadTabGroupCustomColors,
@@ -648,7 +648,7 @@ function AutomationPicker({
                     : "text-content/55 hover:bg-content/8 hover:text-content"
                 }`}
               >
-                {option.label}
+                {templateCategoryLabel(option.id)}
               </button>
             );
           })}
@@ -686,10 +686,11 @@ function AutomationPicker({
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[13px] font-medium text-content">
-                      {template.name}
+                      {templateCopy(template.id)?.name ?? template.name}
                     </span>
                     <span className="mt-1 block text-[12px] leading-snug text-content/50">
-                      {template.description}
+                      {templateCopy(template.id)?.description ??
+                        template.description}
                     </span>
                   </span>
                 </div>
@@ -699,7 +700,8 @@ function AutomationPicker({
                     className="size-3"
                   />
                   <span className="min-w-0 truncate">
-                    {template.triggerLabel}
+                    {templateCopy(template.id)?.trigger ??
+                      template.triggerLabel}
                   </span>
                 </span>
               </button>
@@ -779,12 +781,12 @@ function RunStatusPill({ status }: { status: AutomationRun["status"] }) {
 }
 
 function runStatusLabel(status: AutomationRun["status"]): string {
-  if (status === "succeeded") return "Succeeded";
-  if (status === "failed") return "Failed";
-  if (status === "skipped") return "Skipped";
-  if (status === "cancelled") return "Cancelled";
-  if (status === "running") return "Running";
-  return "Pending";
+  if (status === "succeeded") return t("automations.runStatus.succeeded");
+  if (status === "failed") return t("automations.runStatus.failed");
+  if (status === "skipped") return t("automations.runStatus.skipped");
+  if (status === "cancelled") return t("automations.runStatus.cancelled");
+  if (status === "running") return t("automations.runStatus.running");
+  return t("automations.runStatus.pending");
 }
 
 function runStatusTone(status: AutomationRun["status"]): string {
@@ -799,29 +801,34 @@ function runTriggerMeta(
   run: AutomationRun,
   draft: AutomationDraft,
 ): { kind: AutomationTriggerKind; label: string } {
-  if (run.trigger === "manual") return { kind: "time", label: "Test run" };
+  if (run.trigger === "manual") {
+    return { kind: "time", label: t("automations.testRun") };
+  }
   if (run.trigger === "event") {
     const kind = run.eventKind ?? draft.triggerKind;
     const event = run.event ?? draft.triggerEvent;
     return {
       kind,
       label:
-        findTriggerEvent(kind, event)?.label ??
-        triggerName(kind),
+        findTriggerEventLabel(kind, event) ??
+        triggerCategoryLabel(kind),
     };
   }
   const times = draft.triggers.filter((trigger) => trigger.kind === "time");
   if (times[0]) {
     return {
       kind: "time",
-      label: `Scheduled · ${automationScheduleLabel(times[0])}`,
+      label: t("automations.scheduledWith", {
+        schedule: automationScheduleLabel(times[0]),
+      }),
     };
   }
   const first = draft.triggers[0];
-  if (!first) return { kind: "time", label: "Scheduled" };
-  const event =
-    findTriggerEvent(first.kind, first.event)?.label ?? triggerName(first.kind);
-  return { kind: first.kind, label: event };
+  if (!first) return { kind: "time", label: t("automations.scheduled") };
+  const label =
+    findTriggerEventLabel(first.kind, first.event) ??
+    triggerCategoryLabel(first.kind);
+  return { kind: first.kind, label };
 }
 
 function AutomationEditor({
@@ -1260,7 +1267,9 @@ function AutomationEditor({
                           title={
                             ready
                               ? undefined
-                              : `Connect ${option.label} in Settings`
+                              : t("automations.connectInSettings", {
+                                  provider: option.label,
+                                })
                           }
                           onMouseEnter={() =>
                             setTriggerCategory(ready ? option.value : null)
@@ -1285,7 +1294,7 @@ function AutomationEditor({
                             className="size-3.5 shrink-0"
                           />
                           <span className="min-w-0 flex-1 truncate">
-                            {option.label}
+                            {triggerCategoryLabel(option.value)}
                           </span>
                           {ready ? (
                             <ChevronRight className="size-3.5 text-content/45" />
@@ -1319,7 +1328,9 @@ function AutomationEditor({
                   width={220}
                   maxHeight={360}
                   role="menu"
-                  aria-label={`${triggerName(triggerCategory)} events`}
+                  aria-label={t("automations.eventsAria", {
+                    provider: triggerCategoryLabel(triggerCategory),
+                  })}
                   layer={LAYER.submenu}
                   data-trigger-submenu
                   onDismiss={(reason) => {
@@ -1335,7 +1346,8 @@ function AutomationEditor({
                       onClick={() => selectTrigger(triggerCategory, event)}
                       className="flex h-9 w-full items-center rounded-lg px-2 text-left text-[13px] text-content/75 hover:bg-content/5 hover:text-content"
                     >
-                      {event.label}
+                      {findTriggerEventLabel(triggerCategory, event.value) ??
+                        event.label}
                     </button>
                   ))}
                 </Popover>
@@ -1738,28 +1750,44 @@ function TriggerMark({
   return <InboxProviderMark provider={kind} className={className} />;
 }
 
-function triggerName(kind: AutomationTriggerKind): string {
-  return (
-    TRIGGER_CATEGORIES.find((option) => option.value === kind)?.label ?? kind
-  );
-}
-
-function findTriggerEvent(
+function findTriggerEventLabel(
   kind: AutomationTriggerKind,
   value: string,
-): TriggerEvent | undefined {
-  return TRIGGER_EVENTS[kind].find((event) => event.value === value);
+): string | undefined {
+  const groups = messages().automations.triggerEvents as Record<
+    AutomationTriggerKind,
+    Record<string, string | undefined>
+  >;
+  return groups[kind]?.[value];
+}
+
+function templateCopy(
+  id: string,
+): { name: string; description: string; trigger: string } | undefined {
+  const templates = messages().automations.templates as Record<
+    string,
+    { name: string; description: string; trigger: string } | undefined
+  >;
+  return templates[id];
+}
+
+function templateCategoryLabel(id: AutomationTemplateCategoryId): string {
+  return messages().automations.templateCategories[id] ?? id;
+}
+
+function triggerCategoryLabel(kind: AutomationTriggerKind): string {
+  return messages().automations.triggerCategories[kind] ?? kind;
 }
 
 function triggerLabel(automation: Automation): string {
   const triggers = automationTriggers(automation);
-  if (triggers.length === 0) return "No trigger";
+  if (triggers.length === 0) return t("automations.noTrigger");
   const first = triggers[0]!;
   const label =
     first.kind === "time"
       ? automationScheduleLabel(first)
-      : (findTriggerEvent(first.kind, first.event)?.label ??
-        triggerName(first.kind));
+      : (findTriggerEventLabel(first.kind, first.event) ??
+        triggerCategoryLabel(first.kind));
   return triggers.length > 1 ? `${label} +${triggers.length - 1}` : label;
 }
 
@@ -1849,9 +1877,11 @@ function TimeTriggerSentence({
   onChange: (trigger: AutomationTrigger) => void;
 }) {
   const t = useT();
-  const dayOptions = AUTOMATION_WEEKDAYS.map((label, value) => ({
+  const dayOptions = AUTOMATION_WEEKDAYS.map((_, value) => ({
     value: String(value),
-    label,
+    label: messages().automations.dayNames[
+      String(value) as "0" | "1" | "2" | "3" | "4" | "5" | "6"
+    ],
   }));
   const minuteOptions = [0, 15, 30, 45].map((value) => ({
     value: String(value),
@@ -1916,15 +1946,15 @@ function EventTriggerSentence({
   const t = useT();
   const stem =
     trigger.event === "push_to_branch"
-      ? "Push"
-      : (findTriggerEvent(trigger.kind, trigger.event)?.label ?? trigger.event);
+      ? t("automations.pushEvent")
+      : (findTriggerEventLabel(trigger.kind, trigger.event) ?? trigger.event);
   const push = trigger.event === "push_to_branch";
   return (
     <>
       <span>{stem}</span>
       {push ? (
         <>
-          <span>on</span>
+          <span>{t("automations.pushOn")}</span>
           <TriggerPill
             label={t("automations.branch")}
             value={trigger.branch}
@@ -1932,17 +1962,19 @@ function EventTriggerSentence({
             placeholder={t("automations.selectBranch")}
             disabled={!projectChosen}
             emptyLabel={
-              projectChosen ? "No branches found" : "Choose a project first"
+              projectChosen
+                ? t("automations.noBranches")
+                : t("automations.chooseProjectFirst")
             }
             onChange={(value) => onChange({ ...trigger, branch: value })}
           />
         </>
       ) : null}
-      <span>by</span>
+      <span>{t("automations.pushBy")}</span>
       <TriggerPill
         label={t("automations.actor")}
         value={trigger.actor || "anyone"}
-        options={[{ value: "anyone", label: "Anyone" }]}
+        options={[{ value: "anyone", label: t("automations.anyone") }]}
         onChange={(value) => onChange({ ...trigger, actor: value })}
       />
     </>

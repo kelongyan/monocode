@@ -24,7 +24,15 @@ import {
   resolveTabGroupMascot,
 } from "../../workspace/model/tabGroups";
 import type { RecentProject } from "../../projects/model/recents";
-import { useT } from "../../../shared/i18n";
+import { useT, type MessageKey } from "../../../shared/i18n";
+
+const CATEGORY_KEYS: Record<NotificationCategory, MessageKey> = {
+  pullRequests: "ui.notifications.categories.pullRequests",
+  issues: "ui.notifications.categories.issues",
+  agentFinished: "ui.notifications.categories.agentFinished",
+  agentInput: "ui.notifications.categories.agentInput",
+  reminders: "ui.notifications.categories.reminders",
+};
 
 type Props = {
   cwd: string;
@@ -326,12 +334,15 @@ export function ProjectNotificationSettings({
                             key={category.id}
                             className="flex min-h-11 cursor-pointer items-center justify-between gap-6 border-b border-content/5 py-3.5 text-[13px] text-content last:border-b-0 hover:text-content/75"
                           >
-                            <span>{category.label}</span>
+                            <span>{t(CATEGORY_KEYS[category.id])}</span>
                             <span className="relative flex shrink-0">
                               <input
                                 type="checkbox"
                                 role="switch"
-                                aria-label={`${category.label} for ${project.name}`}
+                                aria-label={t("ui.notifications.categories.categoryFor", {
+                                  category: t(CATEGORY_KEYS[category.id]),
+                                  project: project.name,
+                                })}
                                 aria-describedby={
                                   muted ? muteHintId : undefined
                                 }

@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { t } from "../../../shared/i18n";
+import { t, messages } from "../../../shared/i18n";
 import { intlLocale } from "../../../shared/lib/intlLocale";
 import type { HarnessId, RuntimeMode } from "../../sessions/model/session";
 
@@ -342,11 +342,23 @@ export function automationScheduleLabel(
 ): string {
   const time = formatClock(automation.time);
   if (automation.scheduleKind === "hourly") {
-    return `Hourly at :${String(automation.minute).padStart(2, "0")}`;
+    return t("automations.schedule.hourly", {
+      minute: String(automation.minute).padStart(2, "0"),
+    });
   }
-  if (automation.scheduleKind === "daily") return `Daily at ${time}`;
-  if (automation.scheduleKind === "weekdays") return `Weekdays at ${time}`;
-  return `${AUTOMATION_WEEKDAYS[automation.dayOfWeek] ?? "Weekly"} at ${time}`;
+  if (automation.scheduleKind === "daily") {
+    return t("automations.schedule.daily", { time });
+  }
+  if (automation.scheduleKind === "weekdays") {
+    return t("automations.schedule.weekdays", { time });
+  }
+  const day = messages().automations.dayNames[
+    String(automation.dayOfWeek) as "0" | "1" | "2" | "3" | "4" | "5" | "6"
+  ];
+  return t("automations.schedule.weekly", {
+    day: day ?? t("automations.triggerEvents.time.weekly"),
+    time,
+  });
 }
 
 export function newAutomationDraft(

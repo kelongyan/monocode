@@ -2,6 +2,7 @@ import { BundleType, getBundleType, getVersion } from "@tauri-apps/api/app";
 import { ask, message } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { check, type DownloadEvent, type Update } from "@tauri-apps/plugin-updater";
+import { t } from "../../shared/i18n";
 import { announceUpdateAvailable } from "../../features/settings/model/sounds";
 import { rememberInstalledUpdate } from "./updateNotice";
 
@@ -115,7 +116,7 @@ export async function runUpdateFlow(
       const current: UpdaterSnapshot = { phase: "current", currentVersion };
       onProgress?.(current);
       if (manual) {
-        await message("You're on the latest version.", { title: "MonoCode" });
+        await message(t("dialogs.updater.latest"), { title: "MonoCode" });
       }
       return current;
     }
@@ -134,8 +135,12 @@ export async function runUpdateFlow(
     const notes = update.body?.trim();
     const detail = notes ? `\n\n${notes}` : "";
     const yes = await ask(
-      `MonoCode ${update.version} is available (you have ${currentVersion}).${detail}\n\nInstall now?`,
-      { title: "Update available", kind: "info" },
+      t("dialogs.updater.available", {
+        version: update.version,
+        current: currentVersion,
+        notes: detail,
+      }),
+      { title: t("dialogs.updater.availableTitle"), kind: "info" },
     );
     if (!yes) return available;
 
@@ -147,7 +152,7 @@ export async function runUpdateFlow(
       onProgress?.(idle);
       if (manual) {
         await message(
-          `Automatic updates aren't configured for this build.\n\nDownload releases at ${RELEASES_URL}`,
+          t("dialogs.updater.notConfigured", { url: RELEASES_URL }),
           { title: "MonoCode" },
         );
       }
@@ -161,7 +166,7 @@ export async function runUpdateFlow(
       onProgress?.(idle);
       if (manual) {
         await message(
-          `Automatic updates aren't available for this install yet.\n\nDownload releases at ${RELEASES_URL}`,
+          t("dialogs.updater.notAvailableYet", { url: RELEASES_URL }),
           { title: "MonoCode" },
         );
       }
@@ -172,7 +177,7 @@ export async function runUpdateFlow(
     const failed: UpdaterSnapshot = { phase: "error", currentVersion, error };
     onProgress?.(failed);
     if (manual) {
-      await message(`Couldn't check for updates.\n\n${error}`, {
+      await message(t("dialogs.updater.checkFailed", { error }), {
         title: "MonoCode",
       });
     }
@@ -240,7 +245,9 @@ export async function installPendingUpdate(
       error,
     };
     onProgress?.(failed);
-    await message(`Couldn't install the update.\n\n${error}`, { title: "MonoCode" });
+    await message(t("dialogs.updater.installFailed", { error }), {
+      title: "MonoCode",
+    });
     return failed;
   }
 }

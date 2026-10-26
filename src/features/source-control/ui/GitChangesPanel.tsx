@@ -475,8 +475,8 @@ function ChangedFiles({
     const branch = index.branch;
     return confirmNative(
       kind === "pr"
-        ? `Create a pull request from default branch "${branch}"?`
-        : `Push to default branch "${branch}"?`,
+        ? t("dialogs.prFromDefault", { branch })
+        : t("dialogs.pushDefault", { branch }),
     );
   };
 
@@ -490,9 +490,9 @@ function ChangedFiles({
       const untracked = file.status === "untracked";
       const ok = await confirmNative(
         untracked
-          ? `Delete untracked file ${name}?`
-          : `Discard changes in ${name}? This cannot be undone.`,
-        untracked ? "Delete" : "Discard",
+          ? t("dialogs.deleteUntracked", { name })
+          : t("dialogs.discardFile", { name }),
+        untracked ? t("dialogs.delete") : t("dialogs.discard"),
       );
       if (!ok) return;
     }
@@ -518,11 +518,11 @@ function ChangedFiles({
       const untrackedOnly = n === 1 && only?.status === "untracked";
       const ok = await confirmNative(
         untrackedOnly
-          ? `Delete untracked file ${basename(only.relative)}?`
+          ? t("dialogs.deleteUntracked", { name: basename(only.relative) })
           : n === 1 && only
-            ? `Discard changes in ${basename(only.relative)}? This cannot be undone.`
-            : `Discard all unstaged changes in ${n} files? This cannot be undone.`,
-        untrackedOnly ? "Delete" : "Discard",
+            ? t("dialogs.discardFile", { name: basename(only.relative) })
+            : t("dialogs.discardAll", { count: n }),
+        untrackedOnly ? t("dialogs.delete") : t("dialogs.discard"),
       );
       if (!ok) return;
     }
@@ -607,10 +607,7 @@ function ChangedFiles({
 
   const confirmAmend = async () => {
     if (!amend || !index?.headPushed) return true;
-    return confirmNative(
-      "Amend a commit that is already pushed? MonoCode cannot push the result. You will need a force push from the terminal.",
-      "Amend",
-    );
+    return confirmNative(t("dialogs.amendPushed"), t("dialogs.amend"));
   };
 
   const commit = async (push: boolean, createPr = false) => {

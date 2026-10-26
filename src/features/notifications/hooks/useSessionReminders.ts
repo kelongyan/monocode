@@ -23,6 +23,7 @@ import {
   type ReminderTarget,
   type SessionReminder,
 } from "../../sessions/model/sessionReminders";
+import { t } from "../../../shared/i18n";
 
 export function useSessionReminders(
   onOpenSession: (sessionId: string) => Promise<void>,
@@ -93,7 +94,7 @@ export function useSessionReminders(
   }, [configure]);
 
   const report = (error: unknown) => {
-    void message(String(error), { title: "Reminder", kind: "error" });
+    void message(String(error), { title: t("dialogs.reminder"), kind: "error" });
   };
 
   const schedule = useCallback(

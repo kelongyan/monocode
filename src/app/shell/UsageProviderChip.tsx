@@ -1043,7 +1043,7 @@ function BankedResetRow({
   return (
     <article className="rounded-lg bg-content/[0.04] px-2.5 py-2 ring-1 ring-inset ring-content/[0.06]">
       <h4 className="text-[10px] font-medium leading-4 text-content/70">
-        {credit?.title ?? `Banked reset ${index + 1}`}
+        {credit?.title ?? t("ui.providers.usage.bankedReset", { index: index + 1 })}
       </h4>
       {credit?.description ? (
         <p className="mt-0.5 text-[10px] leading-4 text-content/45">
@@ -1060,10 +1060,12 @@ function BankedResetRow({
           }
         >
           {credit?.expiresAt == null
-            ? "Expiry not provided"
+            ? t("ui.providers.usage.expiryNotProvided")
             : credit.expiresAt <= now
-              ? "Expires now"
-              : `Expires in ${formatResetDuration(credit.expiresAt - now)}`}
+              ? t("ui.providers.usage.expiresNow")
+              : t("ui.providers.usage.expiresIn", {
+                  duration: formatResetDuration(credit.expiresAt - now),
+                })}
         </p>
         {action === "using" ? (
           <span className="inline-flex shrink-0 items-center gap-1.5 text-[10px] text-content/45">

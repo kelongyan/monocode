@@ -3706,7 +3706,7 @@ function ProviderAccountsSettings() {
       setError(
         caught instanceof Error
           ? caught.message
-          : "Could not save this account",
+          : t("dialogs.couldNotSaveAccount"),
       );
     } finally {
       setWorking(null);
@@ -3716,12 +3716,14 @@ function ProviderAccountsSettings() {
   const removeAccount = async (account: ProviderAccount) => {
     if (account.isDefault || working) return;
     const confirmed = await ask(
-      `Remove “${account.label}”? Its stored credentials will be deleted and any running turns for this account will stop. Existing conversations stay in history, but cannot continue until you switch accounts.`,
+      t("dialogs.removeAccount", { name: account.label }),
       {
-        title: `Remove ${HARNESS_TITLE[account.provider]} account`,
+        title: t("dialogs.removeAccountTitle", {
+          provider: HARNESS_TITLE[account.provider],
+        }),
         kind: "warning",
-        okLabel: "Remove account",
-        cancelLabel: "Cancel",
+        okLabel: t("dialogs.removeAccountOk"),
+        cancelLabel: t("dialogs.cancel"),
       },
     );
     if (!confirmed) return;

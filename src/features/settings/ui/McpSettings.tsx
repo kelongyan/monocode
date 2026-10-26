@@ -32,12 +32,25 @@ import {
   type McpServerRow,
   type McpSettingsSnapshot,
 } from "../model/mcpSettingsCache";
-import { useT } from "../../../shared/i18n";
+import { useT, type MessageKey } from "../../../shared/i18n";
 
 type Scope = McpConnection["scope"];
 type ServerRow = McpServerRow;
 type Filter = "all" | McpConnection["provider"];
 type Provider = McpConnection["provider"];
+
+const SCOPE_KEYS: Record<Scope, MessageKey> = {
+  local: "ui.settings.mcpScopes.local",
+  project: "ui.settings.mcpScopes.project",
+  user: "ui.settings.mcpScopes.user",
+};
+
+/** Composed statuses get labels; anything from `claude mcp list` passes through. */
+function mcpStatusLabel(status: string, t: (key: MessageKey) => string): string {
+  if (status === "Disabled") return t("ui.settings.mcpStatuses.disabled");
+  if (status === "Configured") return t("ui.settings.mcpStatuses.configured");
+  return status;
+}
 const PROVIDERS: Provider[] = [
   "claude",
   "claude_desktop",
@@ -416,9 +429,13 @@ function McpConnections({
       ? server.scope
       : (removeScopes[server.name] ?? "local");
     if (
-      !(await ask(`Remove ${server.name} from ${selectedScope} scope?`, {
-        title: "Remove MCP server",
-      }))
+      !(await ask(
+        t("dialogs.mcpRemove", {
+          name: server.name,
+          scope: t(SCOPE_KEYS[selectedScope]),
+        }),
+        { title: t("dialogs.mcpRemoveTitle") },
+      ))
     )
       return;
     setBusy(server.name);
@@ -552,8 +569,9 @@ function McpConnections({
                   {server.name}
                 </div>
                 <div className="mt-1 text-[12px] leading-relaxed text-content/45">
-                  {MCP_PROVIDER_LABELS[server.provider]} · {server.scope} ·{" "}
-                  {server.transport || "MCP"} · {server.status}
+                  {MCP_PROVIDER_LABELS[server.provider]} ·{" "}
+                  {t(SCOPE_KEYS[server.scope])} · {server.transport || "MCP"} ·{" "}
+                  {mcpStatusLabel(server.status, t)}
                 </div>
                 {server.configPath ? (
                   <div

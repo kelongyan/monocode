@@ -163,6 +163,7 @@ export function UsageMeter({
   className?: string;
 }) {
   const showRemaining = useShowRemainingUsage();
+  const t = useT();
   const pct = clampUsedPercent(window.usedPercent);
   const remaining = 100 - pct;
   const shown = showRemaining ? remaining : pct;
@@ -171,7 +172,7 @@ export function UsageMeter({
     window.resetsAt == null
       ? formatWindowLabel(window.windowMinutes)
       : window.resetsAt <= now
-        ? "reset due"
+        ? t("ui.providers.usage.resetDue")
         : formatResetDuration(window.resetsAt - now);
   return (
     <div
@@ -179,7 +180,9 @@ export function UsageMeter({
       title={
         window.resetsAt == null
           ? undefined
-          : `Resets ${new Date(window.resetsAt).toLocaleString()}`
+          : t("ui.providers.usage.resetsAt", {
+              time: new Date(window.resetsAt).toLocaleString(),
+            })
       }
     >
       <div className="flex items-baseline justify-between gap-2 text-[10px] leading-3">

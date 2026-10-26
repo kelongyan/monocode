@@ -34,6 +34,9 @@
 | `data-*` 属性与 CSS 类 | 250 处 `data-*` | 浏览器测试与样式依赖 |
 | localStorage / 设置 key | `monocode.*`（约 48 个） | 改名即丢用户数据 |
 | Rust `Err(...)` | 用于错误码映射 | 应先映射成 code 再翻译 |
+| 自动化模板 `prompt`（阶段 7 确认） | `features/automations/model/automationTemplates.ts` 的 `prompt` 字段 | 发给 AI 的指令，翻译改变 agent 行为 |
+| release notes 正文（阶段 7 确认） | `src/app/model/releaseNotes.ts` 渲染的 CHANGELOG 切片 | 上游内容，标题已走 `dialogs.releaseNotesTitle` |
+| CLI/协议原始输出（阶段 7 确认） | git stderr、`claude mcp list` 状态、`harness.rs` 错误详情、host 协议错误 | 诊断信息，报障需要原文可对照 |
 
 ### 需要翻译（分层）
 
@@ -427,9 +430,40 @@ CI 新增独立 job `i18n`（advisory）。**故意不放进三平台 `check` �
 
 **决策**：按「先交付检测脚本 + 软告警」收尾阶段 6，960 处作为已知存量记录在案，后续按模块增量清理。清理到 0 后再把 CI 切到 `check:i18n:strict`。
 
+### 阶段 7：扫描器盲区清理（对话框与常量层）— ✅ 已完成（2026-10-26）
+
+阶段 0–6 与批次 1–9 收尾后，`check:i18n` 零报告、词典中英同值仅 14 条，但界面上仍能看到英文。排查结论：残留不在词典层，而在 AST 扫描器的四类盲区。
+
+| 盲区 | 为什么漏 | 典型位置 |
+| --- | --- | --- |
+| `ask()`/`message()` 的字符串参数 | 扫描器只看 JSX 文本与白名单属性，函数实参不在其中 | `updater.ts` 对话框族、`InboxView.tsx` PR 合并确认、`appLifecycle.ts` 退出确认 |
+| `.ts` 常量数组 | 扫描器只收 `.tsx` | `models.ts` 的 Reasoning/High、`automationTemplates.ts`、`notificationPreferences.ts` |
+| 白名单外的 JSX 自定义 props | `message=`/`body=` 不在属性白名单 | `Sidebar.tsx`、`SessionPane.tsx`、`MonoSettingsDialog.tsx` |
+| 原生层 | 不在 TS 扫描范围 | NSIS 安装器语言、`menu.rs`（macOS 专属）、Rust 错误串透传 |
+
+**扫描器扩展**（`scripts/check-i18n.mjs`）：新增 `findDialogCopy()` 检测 `ask/message/toast/notify` 的字符串字面量参数与选项对象里的 `title/okLabel/cancelLabel`，对 `.ts` 与 `.tsx` 统一生效；`VISIBLE_ATTRS` 加入 `message`、`body`；排除 `integrations/harness/providers/`（协议常量）与测试文件。品牌词天然不命中（`looksLikeCopy` 要求多词散文、句读或首字母大写单词，"MonoCode" 混合大小写不匹配）。`i18nGuard.test.ts` 增 2 条用例锁定新检测的两个方向。
+
+**改造方式（可插拔查表，不改数据）**：
+- 模型设置：新建 `src/features/sessions/model/modelText.ts`，按 `setting.id` + `choice.value` 查 `composer.modelSettings.*`，未收录的（host 实时目录、provider 协议字段）回退原英文——`models.ts`/`remoteModels.ts` 数据未动，host 包零增量，测试夹具零改动。伪模型名（Default/Configured model/Adaptive）按 `model.id` 查 `composer.modelSettings.models.*`。
+- 自动化：`AutomationsView.tsx` 与 `automations.ts` 改走 `automations.templates.*`、`triggerCategories`、`triggerEvents`、`dayNames`、`runStatus`、`schedule.*`；`AUTOMATION_TEMPLATES` 数据不动（`prompt` 保留英文，见禁止翻译清单）。`NewHabitPage` 的模块级 `KINDS`/`DAYS` 移入组件内求值（切语言即时生效）。
+- 对话框：`dialogs.*` 新命名空间（约 60 条）覆盖退出/重载/关窗/更新族/会话操作/账号移除/MCP 移除/终端关闭/PR 合并确认族（`githubPrActionCopy` 改为接收 `t`）。英文值全部与原文逐字节一致，固定英文 locale 的既有测试零改动。
+
+**本阶段新增的「故意保留英文」判定**：
+
+| 内容 | 理由 |
+| --- | --- |
+| 自动化模板 `prompt`、release notes 的 CHANGELOG 正文 | AI 输入 / 上游内容 |
+| git CLI stderr、`claude mcp list` 原始输出、Rust 低频错误详情、host 协议错误 | 诊断信息，报障时原文有用 |
+| 模型产品名（Claude Sonnet 5、GPT-5.4…）、品牌与平台名（GitHub/Linear/Jira/GitLab/MCP/ADO/Ultracode/Ultrathink）、`LOCALE_LABEL` 的 "English" | 专有名词 |
+| MCP 作用域协议值（local/project/user）在数据层 | UI 展示层经 `ui.settings.mcpScopes` 翻译，数据不动 |
+
+**验证**：`NODE_OPTIONS=--no-experimental-webstorage npm run check:web` 全绿（507 文件 / 5550+ 用例，含新增 2 条 guard 用例）；`check:i18n:strict` 零报告；`npm run host:build` 通过且词典未泄入 host bundle（grep 0 命中）；`host/providers.test.ts` 通过；词典叶子 1,375 → 1,602（+227），同值 21 条全部为品牌/协议保留。`test:browser` 本机未跑成（Playwright 浏览器修订与本地安装不符，直连与代理下载均失败）；本批为纯文案层改动，浏览器测试断言几何与 `data-*`、不依赖文案，建议在网络通畅的机器跑一次 chromium+webkit 作最终确认。真机中文冒烟：需人工过一遍退出确认、更新弹窗、PR 合并确认、自动化模板页、Grok 模型档位、中文星期选择器。
+
+**遗留**（与 5.1 一致，无新增）：NSIS 安装包语言（打包发布环节）、`menu.rs`（macOS）、中文视觉回归。Rust 高频错误码映射（CLI not found 等）按「不硬翻译」原则暂不处理。
+
 ## 5.1 交付状态与遗留项
 
-阶段 0–6 与存量清理全部完成。
+阶段 0–6 与存量清理全部完成；阶段 7 清理了扫描器四类盲区（对话框实参、`.ts` 常量、白名单外 props、原生层文案入口），`check:i18n` 与词典同值清单已复核为「仅品牌/协议保留」。
 
 ```
 阶段 0  i18n 地基 + 语言开关
@@ -440,11 +474,12 @@ CI 新增独立 job `i18n`（advisory）。**故意不放进三平台 `check` �
 阶段 5  侧栏/标题栏/输入框/模型选择 + 格式化（locale 感知）
 阶段 6  AST 防回退检测
 批次 1–9  清理全部 960 处存量文案
+阶段 7  扫描器盲区清理：对话框族、模型设置、自动化模板/触发器、通知分类、账号用量、props 与终端/更新确认（+227 词条）
 ```
 
-**最终状态**：`npm run check:i18n` **零报告**。整个渲染层的用户可见文案都经过 `t()`，中英双词典键集合一致（`tsc` 强制）。CI 已切换到 `check:i18n:strict` 硬门禁，并纳入 `check:web`。
+**最终状态**：`npm run check:i18n` **零报告**。整个渲染层的用户可见文案都经过 `t()`，中英双词典键集合一致（`tsc` 强制）。CI 已切换到 `check:i18n:strict` 硬门禁，并纳入 `check:web`；扫描范围自阶段 7 起覆盖 `.ts`+`.tsx` 的对话框实参与扩展后的可见属性白名单。
 
-**词典规模**：约 850 条词条，分 17 个 `ui.*` 命名空间（sessions / sourceControl / shell / inbox / settings / connections / files / monos / projects / quickComposer / shared / notes / automations / skills / orchestration / workspace / notifications / providers / terminal / artifacts / search）+ 设置面板、菜单、时间短语等结构化命名空间。
+**词典规模**：叶子 1,602 条（阶段 7 后），分 `ui.*` 21 个功能命名空间 + `dialogs`、`composer.modelSettings`、`automations`、`inbox.pr`、`monos`、`shell`、`window`、`menu`、`time`、`accessPicker`、`transcript`、`changes`、`explorer`、`runtimeMode`、`settings.*` 等结构化命名空间；中英同值 21 条均为品牌/协议/命令示例。
 
 **遗留（按优先级）**：
 

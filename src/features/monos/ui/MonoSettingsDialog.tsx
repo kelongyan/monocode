@@ -249,10 +249,10 @@ function GeneralSection({
           <GroupHeading title={t("monos.conversationTitle")} />
           <ConfirmReset
             label={t("monos.resetConversation")}
-            title={`Reset ${agent.name}'s conversation?`}
-            body="All messages in this Mono's conversation will be deleted and any active reply will be stopped. This can't be undone."
-            kept="Its soul, memory and habits will be kept."
-            failure="Could not reset the conversation."
+            title={t("monos.resetConversationTitle", { name: agent.name })}
+            body={t("monos.resetConversationBody")}
+            kept={t("monos.resetConversationKept")}
+            failure={t("monos.resetConversationFailed")}
             onConfirm={onReset}
           >
             {(open, ref) => (

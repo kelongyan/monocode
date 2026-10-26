@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { looksLikeCopy } from "../../../scripts/check-i18n.mjs";
+import {
+  findDialogCopy,
+  looksLikeCopy,
+} from "../../../scripts/check-i18n.mjs";
 
 /**
  * The guard is only useful if it agrees with a human about what is copy. These
@@ -30,5 +33,31 @@ describe("looksLikeCopy", () => {
     expect(looksLikeCopy("—")).toBe(false);
     expect(looksLikeCopy("0")).toBe(false);
     expect(looksLikeCopy("%")).toBe(false);
+  });
+});
+
+describe("findDialogCopy", () => {
+  it("flags literal dialog text and option labels", () => {
+    expect(findDialogCopy(`ask("Merge this pull request?")`)).toHaveLength(1);
+    expect(
+      findDialogCopy("message(`Could not ${mode} this conversation.`)"),
+    ).toHaveLength(1);
+    expect(
+      findDialogCopy(`ask(msg, { title: "Update available" })`),
+    ).toHaveLength(1);
+    expect(
+      findDialogCopy(`ask(msg, { okLabel: "Close window" })`),
+    ).toHaveLength(1);
+  });
+
+  it("ignores translated strings, variables, and brand titles", () => {
+    expect(findDialogCopy(`ask(t("dialogs.quit"))`)).toHaveLength(0);
+    expect(findDialogCopy(`ask(quitWhileBusyMessage(1))`)).toHaveLength(0);
+    expect(findDialogCopy(`ask("Delete?", { title: "MonoCode" })`)).toHaveLength(
+      1,
+    );
+    expect(findDialogCopy(`message("", text)`)).toHaveLength(0);
+    expect(findDialogCopy(`message(session.id, "/compact")`)).toHaveLength(0);
+    expect(findDialogCopy(`host.message("hello")`)).toHaveLength(0);
   });
 });

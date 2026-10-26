@@ -2952,10 +2952,9 @@ function Workspace({
   const onOpenWhatsNew = useCallback((version: string) => {
     const document = releaseNotesForVersion(version);
     if (!document) {
-      void message(
-        "Release notes for this version are not available in this build.",
-        { title: "MonoCode" },
-      );
+      void message(t("dialogs.releaseNotesUnavailable"), {
+        title: "MonoCode",
+      });
       return;
     }
     setWhatsNewVersion(document.source.version);
@@ -5819,7 +5818,9 @@ function Workspace({
             if (
               unsaved &&
               !(await confirmDiscardUnsaved(
-                `${removalMode === "archive" ? "Archive" : "Delete"} this conversation with unsaved files?`,
+                removalMode === "archive"
+                  ? t("dialogs.archiveWithUnsaved")
+                  : t("dialogs.deleteWithUnsaved"),
               ))
             )
               return false;
@@ -5836,7 +5837,7 @@ function Workspace({
             await onRemoveWorktree(seed.cwd, deleteWorktreePath, false);
           } catch (error) {
             void message(
-              `The session was deleted. Its worktree was kept.\n\n${String(error)}\n\nYou can manage it in Settings → Worktrees.`,
+              t("dialogs.worktreeKept", { error: String(error) }),
               { title: "MonoCode", kind: "warning" },
             );
           }
@@ -5845,10 +5846,18 @@ function Workspace({
       } catch (error) {
         if (origin === "cli") throw error;
         const detail = error instanceof Error ? error.message : String(error);
-        void message(`Could not ${mode} this conversation.\n\n${detail}`, {
-          title: "MonoCode",
-          kind: "error",
-        });
+        void message(
+          t(
+            mode === "archive"
+              ? "dialogs.couldNotArchive"
+              : "dialogs.couldNotDelete",
+            { error: detail },
+          ),
+          {
+            title: "MonoCode",
+            kind: "error",
+          },
+        );
         return false;
       } finally {
         removingSessionIds.current.delete(sessionId);
@@ -5880,7 +5889,7 @@ function Workspace({
         return true;
       } catch (error) {
         void message(
-          `Could not unarchive this conversation.\n\n${String(error)}`,
+          t("dialogs.couldNotUnarchive", { error: String(error) }),
           {
             title: "MonoCode",
             kind: "error",
@@ -6011,7 +6020,7 @@ function Workspace({
           );
           void refreshHistory(sidebarCwd);
           void message(
-            `Could not update this conversation's GitHub link.\n\n${String(error)}`,
+            t("dialogs.githubLinkFailed", { error: String(error) }),
             { title: "MonoCode", kind: "error" },
           );
         },
@@ -6062,7 +6071,7 @@ function Workspace({
       if (!mono) return;
       const { name } = monoLook(mono);
       const confirmed = await ask(
-        `Delete ${name}? Its conversation will be deleted and its habits stop. This can’t be undone.`,
+        t("dialogs.deleteMono", { name }),
         { title: "MonoCode", kind: "warning" },
       );
       if (!confirmed) return;
@@ -7693,7 +7702,7 @@ function Workspace({
             },
             settings: { choices: [], maxWorkers: 2 },
             status: "planning",
-            title: "Orchestration plan",
+            title: t("dialogs.orchestrationPlan"),
             summary: "",
             tasks: [],
           }
@@ -13270,7 +13279,7 @@ function Workspace({
             entry.id === shellId
               ? {
                   ...entry,
-                  title: "New remote session",
+                  title: t("dialogs.newRemoteSession"),
                   blocks: [],
                   busy: false,
                 }

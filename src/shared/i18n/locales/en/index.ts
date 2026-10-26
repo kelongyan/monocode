@@ -15,6 +15,7 @@ export const en = {
   ui: {
     "sessions": {
       "access": "Access",
+      "exploreWithAgent": "Explore this item with your agent.",
       "fileLinkActions": "File link actions",
       "markdownPreview": "Markdown preview",
       "markdownSource": "Markdown source",
@@ -254,7 +255,7 @@ export const en = {
       "selectedProjectFolder": "Selected project folder",
       "locked": "Locked",
       "revealFolder": "Reveal folder",
-      "newWorktreesAreCreatedIn": "New worktrees are created in",
+      "newWorktreesAreCreatedIn": "New worktrees are created in",
       "alsoDeleteSessions": "Also delete associated sessions",
       "branchLabel": "Branch",
       "branchType": "Branch type",
@@ -345,7 +346,7 @@ export const en = {
       "confirm": "Confirm",
       "projectGroupActions": "Project group actions",
       "muteProjectNotifications": "Mute project notifications",
-      "releaseNotesForThisVersionAre": "Release notes for this version are not available in this build.",
+      "releaseNotesForThisVersionAre": "Release notes for this version are not available in this build.",
       "projectTools": "Project tools",
       "releaseNotes": "Release notes",
       "releaseNotesUnavailable": "Release notes for this version are not available in this build.",
@@ -431,7 +432,7 @@ export const en = {
       "cleanUpThisSession": "Clean up this session",
       "archiveSession": "Archive session",
       "deleteSession": "Delete session",
-      "delete": "Delete…",
+      "delete": "Delete…",
       "activity": "Activity",
       "cancelReply": "Cancel reply",
       "comment": "comment",
@@ -457,6 +458,15 @@ export const en = {
       "pasteAServerConfigurationAndChoose": "Paste a server configuration and choose where to add it.",
       "provider": "Provider",
       "scope": "Scope",
+      "mcpScopes": {
+        "local": "local",
+        "project": "project",
+        "user": "user",
+      },
+      "mcpStatuses": {
+        "disabled": "Disabled",
+        "configured": "Configured",
+      },
       "name": "Name",
       "optionalForAnMcpserversBlock": "(optional for an mcpServers block)",
       "jsonConfiguration": "JSON configuration",
@@ -616,14 +626,14 @@ export const en = {
       "invalidTail": "is not valid as a file or folder name. Please choose a different name.",
       "stagedLineEnding": "Staged line-ending changes. Line breaks are normalized in this view.",
       "unstagedLineEnding": "Unstaged line-ending changes. Line breaks are normalized in this view.",
-      "saveFailed": "Save failed: {error}",
+      "saveFailed": "Save failed: {error}",
       "couldNotOpen": "Couldn’t open",
       "jumpBetweenChanges": "Jump between changes",
       "previousChange": "Previous change",
       "nextChange": "Next change",
       "saving": "Saving…",
       "saved": "Saved",
-    },
+    },
     "monos": {
       "cancel": "Cancel",
       "itHasntRunYet": "It hasn't run yet.",
@@ -645,7 +655,7 @@ export const en = {
       "general": "General",
       "reset": "Reset",
       "create": "Create",
-      "day": "Day",
+      "day": "Day",
       "askForDocument": "Ask {name} to write something up, like a plan or a summary, and it shows up here.",
       "askForHabit": "Ask {name} to put recurring work on a schedule, like a morning digest or a weekly report.",
       "askForSession": "Ask {name} to start a session on one of your projects, like a bug fix or a review, and it shows up here.",
@@ -756,7 +766,7 @@ export const en = {
       "noDescription": "No description",
       "tags": "Tags",
       "addNoteTag": "Add note tag",
-      "addTag": "Add tag…",
+      "addTag": "Add tag…",
       "couldNotSaveNote": "Could not save note: {error}",
     },
     "automations": {
@@ -882,6 +892,14 @@ export const en = {
       "stopThisSessionAndPauseQueued": "Stop this session and pause queued work",
       "stopping": "Stopping…",
       "stoppingWorkKeepsYourConversationsSaved": "Stopping work keeps your conversations saved.",
+      "categories": {
+        "pullRequests": "Pull requests / Merge requests",
+        "issues": "Issues and Linear tasks",
+        "agentFinished": "Agent finished",
+        "agentInput": "Agent approvals and questions",
+        "reminders": "Reminders",
+        "categoryFor": "{category} for {project}",
+      },
     },
     "providers": {
       "harnessUpdates": "Harness updates",
@@ -893,6 +911,22 @@ export const en = {
       "refreshUsageLimits": "Refresh usage limits",
       "extraUsageBalance": "Extra usage balance",
       "extra": "Extra",
+      "usage": {
+        "checking": "Checking…",
+        "exhausted": "Exhausted",
+        "low": "Running low",
+        "notSignedIn": "Not signed in",
+        "unavailable": "Usage unavailable",
+        "ready": "Ready",
+        "percentLeft": "{percent}% left",
+        "backIn": "back in {duration}",
+        "resetDue": "reset due",
+        "resetsAt": "Resets {time}",
+        "expiryNotProvided": "Expiry not provided",
+        "expiresNow": "Expires now",
+        "expiresIn": "Expires in {duration}",
+        "bankedReset": "Banked reset {index}",
+      },
     },
     "terminal": {
       "resizeTerminal": "Resize terminal",
@@ -987,6 +1021,11 @@ export const en = {
     groupInFolder: "Group in a folder",
     conversationTitle: "Conversation",
     resetConversation: "Reset conversation",
+    resetConversationTitle: "Reset {name}'s conversation?",
+    resetConversationBody:
+      "All messages in this Mono's conversation will be deleted and any active reply will be stopped. This can't be undone.",
+    resetConversationKept: "Its soul, memory and habits will be kept.",
+    resetConversationFailed: "Could not reset the conversation.",
     resetConversationDescription:
       "Clear all messages and start fresh. Its soul, memory and habits stay.",
     changeMascotAndColor: "Change mascot and color",
@@ -1623,6 +1662,7 @@ export const en = {
     unsavedChanges: "Unsaved changes",
     closeTab: "Close Tab",
     developmentBuild: "Development build",
+    sessionsEmptyHint: "Sessions you start will show up here",
   },
   /** Relative dates and other time phrases. */
   time: {
@@ -1633,6 +1673,70 @@ export const en = {
     resetsIn: "Resets in {duration}",
     startedSessions: "Started {count} sessions.",
   },
+  /** Native dialog and toast copy that bypasses JSX. */
+  dialogs: {
+    quit: "Quit",
+    reload: "Reload",
+    delete: "Delete",
+    discard: "Discard",
+    amend: "Amend",
+    cancel: "Cancel",
+    reminder: "Reminder",
+    reloadDiscard: "Reload MonoCode and discard unsaved changes?",
+    closeWindowBody:
+      "Close this window and stop its running chats? Other windows will stay open.",
+    quitWhileBusyOne:
+      "1 chat is still running. Quit anyway? It will resume when you reopen MonoCode.",
+    quitWhileBusyMany:
+      "{count} chats are still running. Quit anyway? They will resume when you reopen MonoCode.",
+    archiveWithUnsaved: "Archive this conversation with unsaved files?",
+    deleteWithUnsaved: "Delete this conversation with unsaved files?",
+    couldNotArchive: "Could not archive this conversation.\n\n{error}",
+    couldNotDelete: "Could not delete this conversation.\n\n{error}",
+    couldNotUnarchive: "Could not unarchive this conversation.\n\n{error}",
+    worktreeKept:
+      "The session was deleted. Its worktree was kept.\n\n{error}\n\nYou can manage it in Settings → Worktrees.",
+    githubLinkFailed:
+      "Could not update this conversation's GitHub link.\n\n{error}",
+    deleteMono:
+      "Delete {name}? Its conversation will be deleted and its habits stop. This can’t be undone.",
+    removeAccountTitle: "Remove {provider} account",
+    removeAccount:
+      "Remove “{name}”? Its stored credentials will be deleted and any running turns for this account will stop. Existing conversations stay in history, but cannot continue until you switch accounts.",
+    removeAccountOk: "Remove account",
+    couldNotSaveAccount: "Could not save this account",
+    mcpRemoveTitle: "Remove MCP server",
+    mcpRemove: "Remove {name} from {scope} scope?",
+    orchestrationPlan: "Orchestration plan",
+    newRemoteSession: "New remote session",
+    releaseNotesTitle: "What's new in MonoCode {version}",
+    releaseNotesUnavailable:
+      "Release notes for this version are not available in this build.",
+    prFromDefault: 'Create a pull request from default branch "{branch}"?',
+    pushDefault: 'Push to default branch "{branch}"?',
+    deleteUntracked: "Delete untracked file {name}?",
+    discardFile: "Discard changes in {name}? This cannot be undone.",
+    discardAll:
+      "Discard all unstaged changes in {count} files? This cannot be undone.",
+    amendPushed:
+      "Amend a commit that is already pushed? MonoCode cannot push the result. You will need a force push from the terminal.",
+    updater: {
+      latest: "You're on the latest version.",
+      availableTitle: "Update available",
+      available:
+        "MonoCode {version} is available (you have {current}).{notes}\n\nInstall now?",
+      notConfigured:
+        "Automatic updates aren't configured for this build.\n\nDownload releases at {url}",
+      notAvailableYet:
+        "Automatic updates aren't available for this install yet.\n\nDownload releases at {url}",
+      checkFailed: "Couldn't check for updates.\n\n{error}",
+      installFailed: "Couldn't install the update.\n\n{error}",
+    },
+    terminalRunning:
+      '"{process}" is still running in {label}. Close this terminal anyway?',
+    terminalsRunning:
+      "These terminals are still running:\n{list}\n\nClose them anyway?",
+  },
   /** Composer input and its pickers. */
   composer: {
     addFilesOrMode: "Add files or choose a mode",
@@ -1640,10 +1744,41 @@ export const en = {
     stop: "Stop",
     modelAndSettings: "Model and settings",
     recentlyUsedModels: "Recently used models",
+    recentModelsHint: "Recent models: right-click or {mod}.",
+    effortAria: "effort {value}",
     models: "Models",
     providers: "Providers",
     favorites: "Favorites",
     searchModels: "Search models",
+    /** Model picker settings, keyed by setting id and choice value. */
+    modelSettings: {
+      effort: "Reasoning",
+      effortShort: "Effort",
+      serviceTier: "Service Tier",
+      fast: "Fast",
+      thinking: "Thinking",
+      context: "Context",
+      choices: {
+        effort: {
+          xhigh: "Extra High",
+          high: "High",
+          medium: "Medium",
+          low: "Low",
+          max: "Max",
+          ultracode: "Ultracode",
+          ultrathink: "Ultrathink",
+          none: "None",
+          minimal: "Minimal",
+        },
+        serviceTier: { default: "Standard", fast: "Fast" },
+        toggle: { true: "On", false: "Off" },
+      },
+      models: {
+        default: "Default",
+        configured: "Configured model",
+        adaptive: "Adaptive",
+      },
+    },
   },
 
   /** Window chrome buttons. */
@@ -1685,6 +1820,61 @@ export const en = {
     summary: "Summary",
     code: "Code",
     diffContext: "Diff context",
+    /** Pull-request merge confirmation and related copy. */
+    pr: {
+      thisBranch: "this branch",
+      theBaseBranch: "the base branch",
+      newProjectChat: "New project chat",
+      untitledChat: "Untitled chat",
+      merge: {
+        title: "Merge this pull request?",
+        detail:
+          "Every commit from {source} will be added to {destination} with a merge commit.",
+        confirm: "Merge pull request",
+        progress: "Merging…",
+      },
+      squash: {
+        title: "Squash and merge?",
+        detail:
+          "The commits from {source} will be combined into one commit on {destination}.",
+        confirm: "Squash and merge",
+        progress: "Merging…",
+      },
+      rebase: {
+        title: "Rebase and merge?",
+        detail:
+          "The commits from {source} will be rebased individually onto {destination}.",
+        confirm: "Rebase and merge",
+        progress: "Merging…",
+      },
+      draft: {
+        title: "Convert to draft?",
+        detail:
+          "Reviewers will see that this pull request is not ready to merge.",
+        confirm: "Convert to draft",
+        progress: "Converting…",
+      },
+      ready: {
+        title: "Mark as ready for review?",
+        detail:
+          "Reviewers will see that this pull request is ready for feedback.",
+        confirm: "Ready for review",
+        progress: "Updating…",
+      },
+      close: {
+        title: "Close this pull request?",
+        detail:
+          "The pull request will close without merging. You can reopen it later.",
+        confirm: "Close pull request",
+        progress: "Closing…",
+      },
+      reopen: {
+        title: "Reopen this pull request?",
+        detail: "The pull request will return to the open state.",
+        confirm: "Reopen pull request",
+        progress: "Reopening…",
+      },
+    },
   },
   /** Source control panel. */
   changes: {
@@ -1727,6 +1917,167 @@ export const en = {
     branch: "Branch",
     selectBranch: "Select a branch",
     actor: "Actor",
+    /** Automation template gallery. */
+    templateCategories: {
+      popular: "Popular",
+      review: "Code Review",
+      security: "Security",
+      incidents: "Incidents & Triage",
+      research: "Data & Research",
+      environment: "Environment",
+    },
+    templates: {
+      "find-critical-bugs": {
+        name: "Find critical bugs",
+        description:
+          "Analyze recent commits for high-severity correctness bugs and submit safe fixes",
+        trigger: "Weekdays at 09:00",
+      },
+      "scan-vulnerabilities": {
+        name: "Scan codebase for vulnerabilities",
+        description:
+          "Review the full repository on a schedule and alert on validated high-impact security issues",
+        trigger: "Monday at 10:00",
+      },
+      "generate-docs": {
+        name: "Generate docs",
+        description:
+          "Create and update developer documentation for recently changed or under-documented code",
+        trigger: "Monday at 09:00",
+      },
+      "add-test-coverage": {
+        name: "Add test coverage",
+        description:
+          "Review recent changes and add tests for high-risk logic that lacks adequate coverage",
+        trigger: "Weekdays at 11:00",
+      },
+      "review-pull-requests": {
+        name: "Review pull requests",
+        description:
+          "When a pull request is opened, review the diff for bugs, regressions, and missing tests",
+        trigger: "Pull request opened",
+      },
+      "review-draft-prs": {
+        name: "Review draft PRs",
+        description:
+          "Give early feedback when a draft pull request is opened so issues are caught before review",
+        trigger: "Draft opened",
+      },
+      "dependency-audit": {
+        name: "Audit dependencies",
+        description:
+          "Check lockfiles and manifests for vulnerable, abandoned, or unexpectedly upgraded packages",
+        trigger: "Monday at 09:30",
+      },
+      "secret-scan": {
+        name: "Scan for secrets",
+        description:
+          "Search the working tree and recent history for committed credentials, tokens, and keys",
+        trigger: "Monday at 09:30",
+      },
+      "triage-github-issues": {
+        name: "Triage GitHub issues",
+        description:
+          "When a GitHub issue is opened, inspect the repo and add a concrete reproduction or next step",
+        trigger: "Issue opened",
+      },
+      "triage-new-issues": {
+        name: "Triage new issues",
+        description:
+          "When a Linear issue is created, inspect the repo and add a concrete reproduction or next step",
+        trigger: "Issue created",
+      },
+      "failing-ci-watch": {
+        name: "Watch failing checks",
+        description:
+          "On a weekday morning, run the project's tests and diagnose anything that is already red",
+        trigger: "Weekdays at 08:30",
+      },
+      "weekly-changelog": {
+        name: "Weekly changelog",
+        description:
+          "Summarize the week's commits into a changelog humans can actually read",
+        trigger: "Friday at 16:00",
+      },
+      "repo-health": {
+        name: "Repo health check",
+        description:
+          "Inspect the working tree, stale branches, and obvious project-setup drift on a schedule",
+        trigger: "Monday at 09:00",
+      },
+      "install-doctor": {
+        name: "Environment doctor",
+        description:
+          "Verify the project still installs and boots from a clean working copy",
+        trigger: "Monday at 10:00",
+      },
+    },
+    triggerCategories: {
+      time: "Scheduled",
+      github: "GitHub",
+      linear: "Linear",
+      jira: "Jira",
+      gitlab: "GitLab",
+      azuredevops: "Azure DevOps",
+    },
+    triggerEvents: {
+      time: {
+        hourly: "Hourly",
+        daily: "Daily",
+        weekdays: "Weekdays",
+        weekly: "Weekly",
+      },
+      github: {
+        draft_opened: "Draft opened",
+        pull_request_opened: "Pull request opened",
+        issue_opened: "Issue opened",
+      },
+      linear: { issue_created: "Issue created" },
+      jira: { issue_created: "Issue appeared" },
+      gitlab: {
+        merge_request_opened: "Merge request opened",
+        issue_opened: "Issue opened",
+      },
+      azuredevops: {
+        pull_request_appeared: "Pull request appeared",
+        work_item_appeared: "Work item appeared",
+      },
+    },
+    noTrigger: "No trigger",
+    connectInSettings: "Connect {provider} in Settings",
+    schedule: {
+      hourly: "Hourly at :{minute}",
+      daily: "Daily at {time}",
+      weekdays: "Weekdays at {time}",
+      weekly: "{day} at {time}",
+    },
+    dayNames: {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday",
+    },
+    runStatus: {
+      succeeded: "Succeeded",
+      failed: "Failed",
+      skipped: "Skipped",
+      cancelled: "Cancelled",
+      running: "Running",
+      pending: "Pending",
+    },
+    testRun: "Test run",
+    scheduled: "Scheduled",
+    scheduledWith: "Scheduled · {schedule}",
+    pushEvent: "Push",
+    pushOn: "on",
+    pushBy: "by",
+    anyone: "Anyone",
+    noBranches: "No branches found",
+    chooseProjectFirst: "Choose a project first",
+    eventsAria: "{provider} events",
   },
   /** Runtime permission modes, shown on the access picker and in Settings. */  runtimeMode: {
     supervised: {

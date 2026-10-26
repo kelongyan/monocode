@@ -920,7 +920,7 @@ const LocalSessionPane = memo(function LocalSessionPane({
                 </div>
               ) : session.inboxAsk ? (
                 <div className="scrollbar-none h-full min-h-0 overflow-y-auto">
-                  <DiscussionEmpty message="Explore this item with your agent." />
+                  <DiscussionEmpty message={t("ui.sessions.exploreWithAgent")} />
                 </div>
               ) : (
                 <EmptySession

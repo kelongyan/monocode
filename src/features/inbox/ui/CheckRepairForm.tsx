@@ -59,17 +59,17 @@ export function CheckRepairForm({
   const listRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const choices = [
-    { id: "", title: "New project chat" },
+    { id: "", title: t("inbox.pr.newProjectChat") },
     ...repair.sessions.filter((session) =>
-      (session.title || "Untitled chat")
+      (session.title || t("inbox.pr.untitledChat"))
         .toLocaleLowerCase()
         .includes(query.trim().toLocaleLowerCase()),
     ),
   ];
   const selectedTitle = sessionId
     ? repair.sessions.find((session) => session.id === sessionId)?.title ||
-      "Untitled chat"
-    : "New project chat";
+      t("inbox.pr.untitledChat")
+    : t("inbox.pr.newProjectChat");
   useEffect(() => {
     searchRef.current?.focus();
   }, []);
@@ -236,7 +236,7 @@ export function CheckRepairForm({
               id={`${listId}-${index}`}
               type="button"
               role="option"
-              aria-label={session.title || "Untitled chat"}
+              aria-label={session.title || t("inbox.pr.untitledChat")}
               aria-selected={selected}
               disabled={busy}
               data-active={index === active}
@@ -251,9 +251,9 @@ export function CheckRepairForm({
               />
               <span
                 className="min-w-0 flex-1 truncate"
-                title={session.title || "Untitled chat"}
+                title={session.title || t("inbox.pr.untitledChat")}
               >
-                {session.title || "Untitled chat"}
+                {session.title || t("inbox.pr.untitledChat")}
               </span>
               {selected ? (
                 <Check

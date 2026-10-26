@@ -59,6 +59,9 @@ Desktop.ini
 # Local document preview mockup
 /work/mono-document-preview.html
 
+# Local project rules (never commit)
+/RULE.md
+
 # i18n batch working files
 batch-*.json
 dict-*.json
