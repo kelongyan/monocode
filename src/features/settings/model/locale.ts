@@ -1,24 +1,15 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
-import { isLocale, type Locale } from "../../../shared/i18n/types";
+import type { Locale } from "../../../shared/i18n/types";
 
-const LOCALE_KEY = "monocode.locale";
-
-/** The saved interface language, defaulting to English on first run. */
+/**
+ * The interface language is locked to Simplified Chinese in this fork.
+ *
+ * `en` stays in the dictionaries as the key source and for tests, but the
+ * renderer never selects it. The old saved `monocode.locale` is ignored so a
+ * machine that once picked English still boots Chinese after this change.
+ */
 export function loadLocale(): Locale {
-  try {
-    const raw = localStorage.getItem(LOCALE_KEY);
-    return isLocale(raw) ? raw : "en";
-  } catch {
-    return "en";
-  }
-}
-
-export function saveLocale(locale: Locale): void {
-  try {
-    localStorage.setItem(LOCALE_KEY, locale);
-  } catch {
-    // private mode / quota
-  }
+  return "zh-CN";
 }
 
 /**

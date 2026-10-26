@@ -136,7 +136,6 @@ const SETTINGS_ENTRY_ROWS: SettingsEntryRow[] = [
   { id: "file-tabs", section: "general" },
   { id: "tab-animations", section: "general" },
   ...(IS_WIN ? [{ id: "close-to-tray", section: "general" } as const] : []),
-  { id: "language", section: "appearance" },
   { id: "theme", section: "appearance" },
   { id: "workspace-theme", section: "appearance" },
   { id: "accent-color", section: "appearance" },

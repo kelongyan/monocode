@@ -3,25 +3,20 @@ import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setLocale } from "../../../shared/i18n";
-import { loadLocale, saveLocale } from "./locale";
+import { loadLocale } from "./locale";
 
-describe("locale persistence", () => {
+describe("locale lock", () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  it("defaults to English when nothing is saved", () => {
-    expect(loadLocale()).toBe("en");
-  });
-
-  it("round-trips a saved locale", () => {
-    saveLocale("zh-CN");
+  it("always reports Simplified Chinese", () => {
     expect(loadLocale()).toBe("zh-CN");
   });
 
-  it("ignores an unknown saved value", () => {
-    localStorage.setItem("monocode.locale", "fr");
-    expect(loadLocale()).toBe("en");
+  it("ignores a stale saved value", () => {
+    localStorage.setItem("monocode.locale", "en");
+    expect(loadLocale()).toBe("zh-CN");
   });
 });
 

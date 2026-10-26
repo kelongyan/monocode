@@ -57,6 +57,13 @@
       "entitlements": "Entitlements.plist",
       "signingIdentity": "-"
     },
+    "windows": {
+      "nsis": {
+        "languages": [
+          "SimpChinese"
+        ]
+      }
+    },
     "linux": {
       "rpm": {
         "depends": [

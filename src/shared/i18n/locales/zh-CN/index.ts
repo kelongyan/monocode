@@ -1178,10 +1178,6 @@ export const zhCN: Dictionary = {
         label: "关闭到托盘",
         keywords: "minimize background quit exit window taskbar windows 最小化 后台 退出 窗口 任务栏",
       },
-      language: {
-        label: "语言",
-        keywords: "locale translation english chinese 语言 中文 翻译",
-      },
       theme: {
         label: "主题",
         keywords: "dark light system appearance mode 深色 浅色 跟随系统 外观",
@@ -1345,12 +1341,6 @@ export const zhCN: Dictionary = {
         label: "在侧栏显示归档",
         keywords: "hidden conversations list 隐藏 对话 列表",
       },
-    },
-    language: {
-      group: "界面",
-      label: "语言",
-      description: "MonoCode 界面使用的语言。",
-      hint: "应用于整个应用。",
     },
     options: {
       system: "跟随系统",

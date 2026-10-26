@@ -1195,10 +1195,6 @@ export const en = {
         label: "Close to tray",
         keywords: "minimize background quit exit window taskbar windows",
       },
-      language: {
-        label: "Language",
-        keywords: "locale translation english chinese 语言 中文",
-      },
       theme: {
         label: "Theme",
         keywords: "dark light system appearance mode",
@@ -1362,12 +1358,6 @@ export const en = {
         label: "Show archived in the sidebar",
         keywords: "hidden conversations list",
       },
-    },
-    language: {
-      group: "Interface",
-      label: "Language",
-      description: "The language MonoCode uses for its interface.",
-      hint: "Applies to the whole app.",
     },
     /** Shared picker option labels. */
     options: {

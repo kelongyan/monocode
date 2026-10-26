@@ -26,9 +26,12 @@ enum Locale {
 
 impl Locale {
     fn from_tag(tag: &str) -> Self {
+        // This fork ships Chinese as the only interface language, so anything
+        // but an explicit `en` tag (which the renderer no longer sends) maps
+        // to Chinese.
         match tag {
-            "zh-CN" => Self::ZhCn,
-            _ => Self::En,
+            "en" => Self::En,
+            _ => Self::ZhCn,
         }
     }
 
@@ -47,7 +50,7 @@ impl Locale {
     }
 }
 
-static LOCALE: Mutex<Locale> = Mutex::new(Locale::En);
+static LOCALE: Mutex<Locale> = Mutex::new(Locale::ZhCn);
 
 pub fn install(app: &AppHandle) -> tauri::Result<()> {
     let locale = *LOCALE.lock().expect("tray locale lock");
