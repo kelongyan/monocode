@@ -231,7 +231,7 @@ export function AddRemoteProjectDialog({
                 disabled={opening || !path.trim()}
                 className="rounded-md bg-selection px-3 py-1.5 text-[12px] font-medium hover:bg-selection-hover disabled:opacity-40"
               >
-                {opening ? "Opening…" : "Open"}
+                {opening ? t("ui.connections.opening") : t("ui.inbox.open")}
               </button>
             </div>
           </>

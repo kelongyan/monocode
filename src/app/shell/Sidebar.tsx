@@ -528,7 +528,7 @@ function SidebarComponent({
     },
   ) => {
     if (!remote.machine || !hostProject) {
-      window.alert("Connect this project's machine to change its sessions.");
+      window.alert(t("dialogs.connectMachineToChangeSessions"));
       return;
     }
     try {
@@ -539,18 +539,24 @@ function SidebarComponent({
       });
       refreshRemoteProjectSessions();
     } catch (error) {
-      window.alert(`Could not update this session.\n\n${String(error)}`);
+      window.alert(
+        t("dialogs.couldNotUpdateSession", { error: String(error) }),
+      );
     }
   };
   const remoteDelete = async (sessionIds: readonly string[]) => {
     if (sessionIds.length === 0) return;
     if (!remote.machine || !hostProject) {
-      window.alert("Connect this project's machine to delete its sessions.");
+      window.alert(t("dialogs.connectMachineToDeleteSessions"));
       return;
     }
     if (
       !window.confirm(
-        `Delete ${sessionIds.length === 1 ? "this conversation" : `${sessionIds.length} conversations`}? This can’t be undone.`,
+        sessionIds.length === 1
+          ? t("dialogs.deleteConversationConfirm")
+          : t("dialogs.deleteConversationsConfirm", {
+              count: sessionIds.length,
+            }),
       )
     )
       return;
@@ -564,7 +570,9 @@ function SidebarComponent({
       }
       refreshRemoteProjectSessions();
     } catch (error) {
-      window.alert(`Could not delete this session.\n\n${String(error)}`);
+      window.alert(
+        t("dialogs.couldNotDeleteSession", { error: String(error) }),
+      );
       refreshRemoteProjectSessions();
     }
   };
@@ -2713,8 +2721,8 @@ function SidebarComponent({
                       className={`${inset ? "px-2" : "px-3"} py-2 text-[12px] text-content/50`}
                     >
                       {searchNarrowed
-                        ? "No matching sessions"
-                        : "No sessions match these filters"}
+                        ? t("ui.shell.noMatchingSessions")
+                        : t("ui.shell.noSessionsMatchFilters")}
                     </p>
                   ) : remoteProject && !remote.machine ? (
                     <p
@@ -3131,8 +3139,8 @@ function SidebarComponent({
           items={sessionMenuItems}
           ariaLabel={
             multipleMenuSessions
-              ? `${menuSessionIds.length} selected session actions`
-              : "Session actions"
+              ? t("ui.shell.selectedSessionActionsAria", { count: menuSessionIds.length })
+              : t("ui.shell.sessionActions")
           }
           onPick={onSessionMenuPick}
           onClose={closeSessionMenu}
@@ -3453,13 +3461,13 @@ function SidebarProjectPicker({
       />
       <div className="ml-auto flex items-center">
         {onNew ? (
-          <IconButton label={`New tab (${MOD}T)`} onClick={onNew}>
+          <IconButton label={t("ui.shell.newTabShortcut", { mod: MOD })} onClick={onNew}>
             <Plus className="size-3.5" strokeWidth={1.75} />
           </IconButton>
         ) : null}
         {onSearch ? (
           <IconButton
-            label={`Search (${MOD}K)`}
+            label={t("ui.shell.searchWithShortcut", { mod: MOD })}
             active={searchActive}
             onClick={onSearch}
           >
@@ -3718,7 +3726,7 @@ function CompactProjectRail({
                 itemId === "changes"
                   ? changesLabel
                   : itemId === "sessions" && hasUnseenFinished
-                    ? "Sessions, new replies"
+                    ? t("ui.shell.sessionsNewReplies")
                     : t(TAB_LABELS[itemId])
               }
               tipLabel={t(TAB_LABELS[itemId])}
@@ -4331,7 +4339,7 @@ function SidebarNavList({
             onClick={search.onClick}
             active={search.active}
             shortcut={`${MOD}K`}
-            ariaLabel={`Search (${MOD}K)`}
+            ariaLabel={t("ui.shell.searchWithShortcut", { mod: MOD })}
           />
           <div className="mt-0.5" />
         </>
@@ -4345,7 +4353,7 @@ function SidebarNavList({
             shortcut={shortcut}
             active={active}
             dot={dot}
-            ariaLabel={dot ? `${label}, new items` : undefined}
+            ariaLabel={dot ? t("ui.shell.newItemsAria", { name: label }) : undefined}
             onClick={onClick}
             onOpenContextMenu={onOpenContextMenu}
           />
@@ -4362,6 +4370,7 @@ function WorkspaceTitleActions({
   onSearch?: () => void;
   onNew?: () => void;
 }) {
+  const t = useT();
   if (!onSearch && !onNew) return null;
   return (
     <div
@@ -4369,12 +4378,12 @@ function WorkspaceTitleActions({
       data-tauri-drag-region="false"
     >
       {onSearch ? (
-        <IconButton label={`Go to File (${MOD}P)`} onClick={onSearch}>
+        <IconButton label={t("ui.shell.goToFileShortcut", { mod: MOD })} onClick={onSearch}>
           <Search className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       ) : null}
       {onNew ? (
-        <IconButton label={`New session (${MOD}T)`} onClick={onNew}>
+        <IconButton label={t("ui.shell.newSessionShortcut", { mod: MOD })} onClick={onNew}>
           <Plus className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       ) : null}
@@ -4981,7 +4990,7 @@ export const SessionCard = memo(function SessionCard({
       {needsApproval ? (
         <>
           <CircleAlert className="size-3" strokeWidth={1.75} />
-          <span>{orchestration ? "Needs input" : "Need approval"}</span>
+          <span>{orchestration ? t("ui.shell.needsInput") : t("ui.shell.needApproval")}</span>
         </>
       ) : busy ? (
         <>
@@ -5007,7 +5016,7 @@ export const SessionCard = memo(function SessionCard({
   const linkedWorkItem = session.linkedWorkItem;
   const linkedUpdateDot = linkedUpdate ? (
     <span
-      title={`Linked ${linkedWorkItem?.kind === "pr" ? "PR" : "issue"} updated since this session`}
+      title={t("ui.shell.linkedWorkItemUpdated", { kind: linkedWorkItem?.kind === "pr" ? "PR" : "issue" })}
       aria-label={t("shell.linkedItemUpdated")}
       className="size-1.5 shrink-0 rounded-full bg-accent"
     />
@@ -5017,8 +5026,15 @@ export const SessionCard = memo(function SessionCard({
       type="button"
       data-no-drag
       data-tauri-drag-region="false"
-      title={`Open ${linkedWorkItem.kind === "pr" ? "PR" : "issue"} #${linkedWorkItem.number} beside this session (${MOD}-click for GitHub)`}
-      aria-label={`Open ${linkedWorkItem.kind === "pr" ? "PR" : "issue"} #${linkedWorkItem.number}`}
+      title={t("ui.shell.openWorkItemBeside", {
+        kind: linkedWorkItem.kind === "pr" ? "PR" : "issue",
+        number: linkedWorkItem.number,
+        mod: MOD,
+      })}
+      aria-label={t("ui.shell.openWorkItemAria", {
+        kind: linkedWorkItem.kind === "pr" ? "PR" : "issue",
+        number: linkedWorkItem.number,
+      })}
       onPointerDown={(event) => event.stopPropagation()}
       onClick={(event) => {
         event.preventDefault();
@@ -5397,7 +5413,9 @@ export const SessionCard = memo(function SessionCard({
                       <CircleAlert
                         role="img"
                         aria-label={
-                          orchestration ? "Needs input" : "Needs approval"
+                          orchestration
+                            ? t("ui.shell.needsInput")
+                            : t("ui.sessions.needsApproval")
                         }
                         className="size-3.5 text-amber-400"
                         strokeWidth={1.75}

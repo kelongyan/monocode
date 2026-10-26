@@ -233,7 +233,7 @@ function GeneralSection({
         {/* Hidden sessions have no sidebar folder to go in. */}
         <SwitchRow
           label={t("monos.groupInFolder")}
-          description={`Sessions it starts go in a “${agent.name}” folder in your project sidebar.`}
+          description={t("monos.groupInFolderDescription", { name: agent.name })}
           on={shown && folders}
           disabled={!shown}
           onChange={(on) =>

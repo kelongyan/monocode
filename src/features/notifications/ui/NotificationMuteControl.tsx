@@ -72,7 +72,9 @@ export function NotificationMuteControl({ projectIds, onChanged }: Props) {
         ref={trigger}
         type="button"
         aria-label={
-          muted.length ? "Change mute duration" : "Mute notifications"
+          muted.length
+            ? t("ui.notifications.changeMuteDuration")
+            : t("ui.notifications.muteNotifications")
         }
         aria-haspopup={open === "custom" ? "dialog" : "menu"}
         aria-expanded={open !== null}
@@ -81,7 +83,7 @@ export function NotificationMuteControl({ projectIds, onChanged }: Props) {
         onClick={() => setOpen(open ? null : "menu")}
       >
         <BellOff className="size-3.5" aria-hidden="true" />
-        {muted.length ? "Muted" : "Mute"}
+        {muted.length ? t("ui.notifications.muted") : t("ui.notifications.mute")}
         <ChevronDown className="size-3 text-content/40" aria-hidden="true" />
       </SecondaryButton>
       {error ? (

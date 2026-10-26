@@ -257,7 +257,7 @@ export function GitChangesPanel({
                   title={
                     canPull
                       ? undefined
-                      : "This branch needs a remote and upstream before it can pull"
+                      : t("ui.sourceControl.pullNeedsUpstream")
                   }
                   onClick={() => void pull()}
                   className="flex h-7 w-full items-center gap-2 rounded-lg px-2 text-left text-[12px] text-content hover:bg-content/10 disabled:opacity-40"
@@ -270,7 +270,7 @@ export function GitChangesPanel({
                   ) : (
                     <RefreshCw className="size-3.5" strokeWidth={1.75} />
                   )}
-                  {busy === "pull" ? "Pulling…" : "Pull"}
+                  {busy === "pull" ? t("ui.sourceControl.pulling") : t("ui.sourceControl.pull")}
                 </button>
               </Popover>
             ) : null}
@@ -705,8 +705,8 @@ function ChangedFiles({
             value={message}
             placeholder={
               amend
-                ? `Amend message (${MOD}↩ to amend)`
-                : `Message (${MOD}↩ to commit)`
+                ? t("ui.sourceControl.amendMessagePlaceholder", { mod: MOD })
+                : t("ui.sourceControl.messagePlaceholder", { mod: MOD })
             }
             disabled={!canEditMessage}
             onChange={(event) => setMessage(event.target.value)}
@@ -726,13 +726,13 @@ function ChangedFiles({
             type="button"
             title={
               busy === "generate"
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("ui.sourceControl.cancelGenerateCommitMessage")
+                : t("ui.sourceControl.generateCommitMessage")
             }
             aria-label={
               busy === "generate"
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("ui.sourceControl.cancelGenerateCommitMessage")
+                : t("ui.sourceControl.generateCommitMessage")
             }
             disabled={busy !== "generate" && !canGenerate}
             onClick={() =>
@@ -768,7 +768,7 @@ function ChangedFiles({
             }`}
           >
             <Check className="size-3.5" strokeWidth={2} />
-            {amend ? "Amend Commit" : "Commit"}
+            {amend ? t("ui.sourceControl.amendCommit") : t("ui.sourceControl.commit")}
           </button>
 
           <button
@@ -858,8 +858,8 @@ function ChangedFiles({
             {index
               ? index.ahead > 0 || index.behind > 0
                 ? syncStatusLabel(index)
-                : "No uncommitted changes"
-              : "Loading changes…"}
+                : t("ui.sourceControl.noUncommittedChanges")
+              : t("ui.sourceControl.loadingChanges")}
           </p>
         ) : (
           <>
@@ -1144,7 +1144,9 @@ export function GitSyncActions({
         >
           <ExternalLink className="size-3.5 shrink-0" strokeWidth={1.75} />
           <span className="min-w-0 truncate">
-            {pr?.number ? `View PR #${pr.number}` : "View PR"}
+            {pr?.number
+              ? t("ui.sourceControl.viewPrNumber", { number: pr.number })
+              : t("ui.sourceControl.viewPr")}
           </span>
         </button>
       ) : null}
@@ -1171,6 +1173,7 @@ export function FileSection({
   headerActions: { title: string; icon: ReactNode; onClick: () => void }[];
   children: ReactNode;
 }) {
+  const t = useT();
   return (
     <div>
       <div className="flex h-7 items-center gap-1 px-1.5">
@@ -1198,7 +1201,11 @@ export function FileSection({
           </span>
         </button>
         <IconAction
-          title={view === "tree" ? "View as List" : "View as Tree"}
+          title={
+            view === "tree"
+              ? t("ui.sourceControl.viewAsList")
+              : t("ui.sourceControl.viewAsTree")
+          }
           onClick={onToggleView}
         >
           {view === "tree" ? (
@@ -1341,6 +1348,7 @@ function ChangeDirRow({
   dir: ChangeDir;
   depth: number;
 }) {
+  const t = useT();
   const key = `${kind}:${dir.path}`;
   const [open, setOpen] = useState(() => !collapsedDirs.has(key));
   const toggle = () => {
@@ -1375,7 +1383,11 @@ function ChangeDirRow({
         </button>
         <div className="hidden shrink-0 items-center group-focus-within:flex group-hover:flex">
           <IconAction
-            title={`${kind === "staged" ? "Unstage" : "Stage"} Changes in ${dir.path}`}
+            title={
+              kind === "staged"
+                ? t("ui.sourceControl.unstageChangesIn", { path: dir.path })
+                : t("ui.sourceControl.stageChangesIn", { path: dir.path })
+            }
             disabled={rest.busy !== null}
             onClick={() =>
               rest.onFolderAction(

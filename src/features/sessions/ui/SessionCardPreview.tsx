@@ -98,8 +98,8 @@ export function SessionCardPreview({
         <Detail
           label={
             session.worktreeCwd || session.worktreeRemoved
-              ? "Worktree"
-              : "Directory"
+              ? t("ui.sessions.worktree")
+              : t("ui.sessions.directory")
           }
         >
           {session.worktreeRemoved ? (
@@ -134,7 +134,9 @@ export function SessionCardPreview({
         {session.linkedWorkItem ? (
           <Detail
             label={
-              session.linkedWorkItem.kind === "pr" ? "Pull request" : "Issue"
+              session.linkedWorkItem.kind === "pr"
+                ? t("ui.sessions.pullRequest")
+                : t("ui.sessions.issue")
             }
           >
             {session.linkedWorkItem.repo} #{session.linkedWorkItem.number}

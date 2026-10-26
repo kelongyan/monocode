@@ -43,7 +43,7 @@ export function ProviderSignInDialog({ harness, onClose }: Props) {
     <Modal
       onClose={onClose}
       title={t("ui.sessions.authenticationRequired")}
-      description={`Sign in to continue using ${HARNESS_TITLE[harness]}.`}
+      description={t("ui.sessions.signInToContinueUsing", { name: HARNESS_TITLE[harness] })}
       size="sm"
       minimalHeader
     >

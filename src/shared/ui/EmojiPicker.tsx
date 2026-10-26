@@ -158,7 +158,7 @@ export function EmojiPickerPopover({
             <Picker.ActiveEmoji>
               {({ emoji }) => (
                 <p className="min-w-0 flex-1 truncate px-1 text-[12px] text-content/55">
-                  {emoji ? emoji.label : "Pick an emoji"}
+                  {emoji ? emoji.label : t("ui.shared.pickAnEmoji")}
                 </p>
               )}
             </Picker.ActiveEmoji>
@@ -168,7 +168,9 @@ export function EmojiPickerPopover({
                 <button
                   key={icon}
                   type="button"
-                  aria-label={`Jump to category ${index + 1}`}
+                  aria-label={t("ui.shared.jumpToCategory", {
+                    index: index + 1,
+                  })}
                   onClick={() => jumpTo(index)}
                   style={{ fontFamily: EMOJI_FONT }}
                   className="grid h-7 min-w-0 flex-1 place-items-center rounded-md text-[15px] leading-none opacity-70 grayscale hover:bg-content/10 hover:opacity-100 hover:grayscale-0"

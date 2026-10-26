@@ -137,7 +137,10 @@ export function LinkedWorkItemUpdateNotice({
 
   return (
     <section
-      aria-label={`New activity on ${kindLabel} ${card.number}`}
+      aria-label={t("ui.inbox.newActivityOnAria", {
+        kind: kindLabel,
+        number: card.number,
+      })}
       aria-live="polite"
       className="pointer-events-auto absolute top-3 right-3 z-40 isolate w-[min(320px,calc(100%_-_24px))] overflow-hidden rounded-xl border border-content/10 text-content shadow-xl"
     >
@@ -153,7 +156,10 @@ export function LinkedWorkItemUpdateNotice({
           <button
             type="button"
             title={t("ui.inbox.dismiss")}
-            aria-label={`Dismiss updates for ${kindLabel} ${card.number}`}
+            aria-label={t("ui.inbox.dismissUpdatesForAria", {
+              kind: kindLabel,
+              number: card.number,
+            })}
             onClick={dismiss}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 hover:bg-content/10 hover:text-content"
           >

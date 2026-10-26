@@ -317,7 +317,9 @@ export function InboxCommentForm({
           value={draft}
           disabled={posting}
           placeholder={
-            replyTo ? `Write a reply (${MOD}↩)` : `Leave a comment (${MOD}↩)`
+            replyTo
+              ? t("ui.inbox.writeReplyShortcut", { mod: MOD })
+              : t("ui.inbox.leaveCommentShortcut", { mod: MOD })
           }
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={onKeyDown}
@@ -329,7 +331,7 @@ export function InboxCommentForm({
             disabled={!canPost}
             className="inline-flex h-7 items-center rounded-md bg-content px-3 text-[12px] text-background-base hover:bg-content/80 disabled:cursor-default disabled:opacity-40"
           >
-            {posting ? "Posting..." : replyTo ? "Reply" : "Comment"}
+            {posting ? t("ui.inbox.posting") : replyTo ? t("ui.inbox.reply") : t("ui.inbox.submitComment")}
           </button>
         </div>
       </div>
@@ -410,14 +412,14 @@ function InboxComment({
                 type="button"
                 title={
                   provider === "linear"
-                    ? "Open in Linear"
+                    ? t("ui.inbox.openInLinear")
                     : provider === "jira"
-                      ? "Open in Jira"
+                      ? t("ui.inbox.openInJira")
                       : provider === "gitlab"
-                        ? "Open on GitLab"
+                        ? t("ui.inbox.openOnGitlab")
                         : provider === "azuredevops"
-                          ? "Open on ADO"
-                          : "Open on GitHub"
+                          ? t("ui.inbox.openOnAdo")
+                          : t("ui.inbox.openOnGithub")
                 }
                 onClick={() => void openUrl(comment.url)}
                 className="hover:text-content"
@@ -515,6 +517,7 @@ const CLAMPED_BODY_PX = 180;
 
 /** Bot reviews and long write-ups start clamped so the timeline stays scannable. */
 function CollapsibleBody({ children }: { children: ReactNode }) {
+  const t = useT();
   const inner = useRef<HTMLDivElement>(null);
   const [overflows, setOverflows] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -551,7 +554,7 @@ function CollapsibleBody({ children }: { children: ReactNode }) {
           onClick={() => setExpanded((current) => !current)}
           className="mt-1.5 text-[12px] text-content/50 hover:text-content"
         >
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? t("ui.inbox.showLess") : t("ui.inbox.showMore")}
         </button>
       ) : null}
     </>
@@ -787,6 +790,7 @@ function InboxCommitStop({
   commit: InboxCommit;
   last: boolean;
 }) {
+  const t = useT();
   return (
     <li className="flex gap-3">
       {/* The rail runs through commit dots, so a push reads as one stretch. */}
@@ -798,7 +802,7 @@ function InboxCommitStop({
       <div className={`min-w-0 flex-1 ${last ? "" : TIMELINE_GAP}`}>
         <button
           type="button"
-          title={commit.url ? "Open commit" : commit.messageHeadline}
+          title={commit.url ? t("ui.inbox.openCommit") : commit.messageHeadline}
           disabled={!commit.url}
           onClick={() => void openUrl(commit.url)}
           className="group flex h-5 w-full min-w-0 items-center gap-3 text-left text-[12px]"

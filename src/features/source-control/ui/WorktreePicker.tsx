@@ -135,8 +135,8 @@ export function WorktreePicker({
         }
         title={
           worktreeRemoved
-            ? "Select a branch or worktree to continue this session"
-            : `Working copy: ${prettyCwd(executionCwd)}`
+            ? t("ui.sourceControl.selectBranchOrWorktreeToContinueSession")
+            : t("ui.sourceControl.workingCopyNamed", { path: prettyCwd(executionCwd) })
         }
         aria-label={t("ui.sourceControl.chooseWorkingCopy")}
         aria-haspopup="dialog"
@@ -157,9 +157,9 @@ export function WorktreePicker({
                 : branches.current
               : settled
                 ? inWorktree
-                  ? "Worktree unavailable"
-                  : "No repo"
-                : "Loading…"
+                  ? t("ui.sourceControl.worktreeUnavailable")
+                  : t("ui.sourceControl.noRepo")
+                : t("ui.shared.loading")
         }
         worktree={!worktreeRemoved && inWorktree}
       />
@@ -249,11 +249,11 @@ export function WorktreePicker({
                 )}
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[12px]">
-                    {tree.branch ?? `Detached ${tree.head.slice(0, 7)}`}
+                    {tree.branch ?? t("ui.sourceControl.detachedHash", { hash: tree.head.slice(0, 7) })}
                   </span>
                   <span className="block truncate text-[10px] text-content/40">
-                    {tree.isMain ? "Project folder" : prettyCwd(tree.path)}
-                    {tree.missing ? " · Missing" : ""}
+                    {tree.isMain ? t("ui.sourceControl.projectFolder") : prettyCwd(tree.path)}
+                    {tree.missing ? t("ui.sourceControl.missingSuffix") : ""}
                   </span>
                 </span>
                 {!worktreeRemoved &&

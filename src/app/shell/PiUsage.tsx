@@ -32,8 +32,8 @@ export function PiUsage({
         className="inline-flex items-center gap-1.5 whitespace-nowrap"
         title={
           !model || model === "pi:default"
-            ? "Send a message so Pi can report its configured provider."
-            : "Subscription usage is not supported for this Pi provider."
+            ? t("ui.shell.sendMessageForPiProvider")
+            : t("ui.shell.subscriptionUsageNotSupported")
         }
       >
         <HarnessIcon harness="pi" className="size-3 shrink-0" />

@@ -70,6 +70,7 @@ export function MonoSessionList({
   filters?: SessionSidebarFilters;
   onOpenSession: (sessionId: string) => void | Promise<void>;
 }) {
+  const t = useT();
   const launchesKey = JSON.stringify(
     launches.map((entry) => [entry.sessionId, entry.cwd]),
   );
@@ -271,11 +272,11 @@ export function MonoSessionList({
     return (
       <EmptyState icon={Search}>
         {needle
-          ? "No sessions match this search."
+          ? t("ui.monos.noSessionsMatchSearch")
           : hasActiveSessionFilters(filters)
-            ? "No sessions match these filters."
+            ? t("ui.monos.noSessionsMatchFilters")
             : // Every one it started is gone; the filter still lists them.
-              `The sessions ${agent.name} started have since been deleted.`}
+              t("ui.monos.startedSessionsDeleted", { name: agent.name })}
       </EmptyState>
     );
 

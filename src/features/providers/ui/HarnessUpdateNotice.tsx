@@ -185,8 +185,8 @@ export function HarnessUpdateNotice({
         <div className="flex items-center gap-2 border-b border-stroke px-3 py-2">
           <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
             {updates.length === 1
-              ? "Harness update available"
-              : "Harness updates available"}
+              ? t("ui.providers.harnessUpdateAvailable")
+              : t("ui.providers.harnessUpdatesAvailable")}
           </span>
           {pending.length > 1 ? (
             <button
@@ -218,8 +218,8 @@ export function HarnessUpdateNotice({
         </div>
         <p className="border-t border-stroke px-3 py-2 text-[11px] text-content/50">
           {anyUpdated
-            ? "Model picker refreshed with the new version’s models."
-            : "New models often need the latest version."}
+            ? t("ui.providers.modelPickerRefreshed")
+            : t("ui.providers.newModelsNeedLatestVersion")}
         </p>
       </div>
     </section>,
@@ -265,9 +265,9 @@ function HarnessUpdateRow({
                   <Loader className="size-3 animate-spin" />
                   {t("ui.providers.updating")}</>
               ) : state.status === "failed" ? (
-                "Retry"
+                t("ui.providers.retry")
               ) : (
-                "Update"
+                t("ui.providers.update")
               )}
             </button>
           </>

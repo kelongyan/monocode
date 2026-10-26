@@ -144,7 +144,9 @@ function SkillList({
   if (skills.length === 0) {
     return (
       <p className="px-3 py-2.5 text-[12px] text-content/50">
-        {query.trim() ? "No matching commands or skills" : "No commands yet"}
+        {query.trim()
+          ? t("ui.skills.noMatchingCommandsOrSkills")
+          : t("ui.skills.noCommandsYet")}
       </p>
     );
   }
@@ -299,7 +301,7 @@ export function CreateSkillForm({
           disabled={!valid || busy}
           className="rounded-md bg-content/20 px-2 py-1 text-[12px] text-content disabled:opacity-40"
         >
-          {busy ? "Creating…" : "Create"}
+          {busy ? t("ui.skills.creating") : t("ui.skills.create")}
         </button>
       </div>
     </form>

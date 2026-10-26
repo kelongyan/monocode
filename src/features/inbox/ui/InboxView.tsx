@@ -1061,28 +1061,28 @@ export function InboxView({
             {narrowedByUser
               ? searchNarrowed
                 ? isTrackerSource(source)
-                  ? `No matching ${INBOX_SOURCE_LABELS[source]} issues`
+                  ? t("ui.inbox.noMatchingSourceIssues", { source: INBOX_SOURCE_LABELS[source] })
                   : source === "gitlab"
-                    ? "No matching issues or merge requests"
-                    : "No matching issues or pull requests"
+                    ? t("ui.inbox.noMatchingIssuesOrMergeRequests")
+                    : t("ui.inbox.noMatchingIssuesOrPullRequests")
                 : isTrackerSource(source)
-                  ? `No ${INBOX_SOURCE_LABELS[source]} issues match these filters`
+                  ? t("ui.inbox.noSourceIssuesMatchFilters", { source: INBOX_SOURCE_LABELS[source] })
                   : source === "gitlab" || source === "azuredevops"
                     ? activeFilters.assignedToMe
-                      ? "Nothing needs your attention"
+                      ? t("ui.inbox.nothingNeedsYourAttention")
                       : source === "gitlab"
-                        ? "No GitLab items match these filters"
-                        : "No ADO items match these filters"
-                    : "No issues or pull requests match these filters"
+                        ? t("ui.inbox.noGitlabItemsMatchFilters")
+                        : t("ui.inbox.noAdoItemsMatchFilters")
+                    : t("ui.inbox.noIssuesOrPullRequestsMatchFilters")
               : isTrackerSource(source)
-                ? `No ${INBOX_SOURCE_LABELS[source]} issues`
+                ? t("ui.inbox.noSourceIssues", { source: INBOX_SOURCE_LABELS[source] })
                 : source === "gitlab"
                   ? projects.length === 0
-                    ? "Open a project to fill the inbox"
-                    : "No matching issues or merge requests"
+                    ? t("ui.inbox.openProjectToFillInbox")
+                    : t("ui.inbox.noMatchingIssuesOrMergeRequests")
                   : projects.length === 0
-                    ? "Open a project to fill the inbox"
-                    : "No matching issues or pull requests"}
+                    ? t("ui.inbox.openProjectToFillInbox")
+                    : t("ui.inbox.noMatchingIssuesOrPullRequests")}
           </p>
         ) : (
           <ul className="flex flex-col gap-0.5 p-1.5">
@@ -1347,7 +1347,7 @@ export function LinkedWorkItemPanel({
   const contentKey = item ? inboxItemKey(item) : error ? "error" : "loading";
   const [revealedKey, setRevealedKey] = useState<string | null>(null);
 
-  const kindLabel = target.kind === "pr" ? "Pull request" : "Issue";
+  const kindLabel = target.kind === "pr" ? t("ui.inbox.pullRequest") : t("ui.inbox.issue");
   return (
     <aside
       ref={resize.setPaneRef}
@@ -1365,7 +1365,7 @@ export function LinkedWorkItemPanel({
     >
       <div
         role="separator"
-        aria-label={`Resize linked ${kindLabel.toLowerCase()} panel`}
+        aria-label={t("ui.inbox.resizeLinkedPanel", { kind: kindLabel.toLowerCase() })}
         aria-orientation="vertical"
         onPointerDown={resize.onPointerDown}
         onDoubleClick={resize.onDoubleClick}
@@ -1380,7 +1380,7 @@ export function LinkedWorkItemPanel({
       >
         <div className="absolute top-[5px] right-2 z-30">
           <IconButton
-            label={`Close ${kindLabel.toLowerCase()} panel`}
+            label={t("ui.inbox.closeKindPanel", { kind: kindLabel.toLowerCase() })}
             onClick={onClose}
           >
             <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -1845,7 +1845,7 @@ export function GithubPrActions({
           >
             <GitMerge className="size-3.5" strokeWidth={1.75} />
             {selectedMerge?.action === "merge"
-              ? "Merge pull request"
+              ? t("inbox.mergePullRequest")
               : selectedMerge?.label}
           </button>
           <button
@@ -2651,9 +2651,9 @@ export function InboxDetail({
       <span className="shrink-0">
         {item.kind === "pr"
           ? gitlab
-            ? "Merge request"
-            : "Pull request"
-          : "Issue"}
+            ? t("ui.inbox.mergeRequest")
+            : t("ui.inbox.pullRequest")
+          : t("ui.inbox.issue")}
       </span>
       <span className="shrink-0 tabular-nums">{inboxItemRef(item)}</span>
       <span
@@ -2669,7 +2669,7 @@ export function InboxDetail({
       {panel ? (
         <button
           type="button"
-          title={item.url ? externalActionLabel : "No link available"}
+          title={item.url ? externalActionLabel : t("ui.inbox.noLinkAvailable")}
           aria-label={externalActionLabel}
           disabled={!item.url}
           onClick={() => void openUrl(item.url)}
@@ -2813,7 +2813,7 @@ export function InboxDetail({
                       <button
                         key={session.id}
                         type="button"
-                        title={`Open thread: ${title}`}
+                        title={t("ui.inbox.openThread", { title })}
                         onClick={() => void onOpenSession?.(session.id)}
                         className="inline-flex min-w-0 max-w-64 items-center gap-1 rounded-md bg-content/5 px-2 py-1 text-[11px] text-content/70 hover:bg-content/10 hover:text-content"
                       >
@@ -2859,7 +2859,7 @@ export function InboxDetail({
                       }}
                       className={`${ACTION_FILLED} disabled:cursor-default disabled:opacity-40`}
                     >
-                      {starting ? "Sending..." : "Send to agent"}
+                      {starting ? t("ui.inbox.sending") : t("ui.inbox.sendToAgent")}
                     </button>
                     {chooseStartProject ? (
                       <InboxProjectPicker
@@ -2890,7 +2890,7 @@ export function InboxDetail({
                 {panel ? null : (
                   <button
                     type="button"
-                    title={item.url ? externalActionLabel : "No link available"}
+                    title={item.url ? externalActionLabel : t("ui.inbox.noLinkAvailable")}
                     disabled={!item.url}
                     onClick={() => void openUrl(item.url)}
                     className={`${ACTION_GHOST} disabled:opacity-40`}
@@ -2909,7 +2909,9 @@ export function InboxDetail({
                 <div
                   role="tablist"
                   aria-label={
-                    gitlab ? "Merge request sections" : "Pull request sections"
+                    gitlab
+                      ? t("ui.inbox.mergeRequestSections")
+                      : t("ui.inbox.pullRequestSections")
                   }
                   className="flex items-stretch gap-4"
                 >
@@ -3106,6 +3108,7 @@ export function InboxDetail({
 }
 
 function CopyBranchNameButton({ branch }: { branch: string }) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | null>(null);
 
@@ -3119,8 +3122,8 @@ function CopyBranchNameButton({ branch }: { branch: string }) {
   return (
     <button
       type="button"
-      title={copied ? "Copied" : "Copy branch name"}
-      aria-label={copied ? "Copied" : "Copy branch name"}
+      title={copied ? t("ui.shared.copied") : t("ui.inbox.copyBranchName")}
+      aria-label={copied ? t("ui.shared.copied") : t("ui.inbox.copyBranchName")}
       className="shrink-0 rounded p-0.5 text-content/40 hover:bg-content/8 hover:text-content/70"
       onClick={() => {
         void copyText(branch).then(
@@ -3202,6 +3205,7 @@ function InboxProjectPicker({
   value: string;
   onChange: (path: string) => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
@@ -3243,7 +3247,7 @@ function InboxProjectPicker({
       >
         {selected ? <InboxProjectMark project={selected} /> : null}
         <span className="min-w-0 truncate">
-          {selected?.name ?? "Choose project"}
+          {selected?.name ?? t("ui.projects.chooseProject")}
         </span>
         <ChevronDown
           className="size-3 shrink-0 text-content/45"

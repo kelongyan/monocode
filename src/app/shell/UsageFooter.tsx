@@ -556,6 +556,7 @@ function SessionChip({
   session: UsageFooterSession;
   inset: boolean;
 }) {
+  const t = useT();
   const trigger = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const [loginState, setLoginState] = useState<ProviderSignInState>("idle");
@@ -611,17 +612,21 @@ function SessionChip({
         ref={trigger}
         type="button"
         className={USAGE_CHIP_CLASSES[inset ? "inset" : "footer"]}
-        aria-label={`${HARNESS_TITLE[session.harness]} sign-in required`}
+        aria-label={t("ui.shell.signInRequiredNamed", {
+          name: HARNESS_TITLE[session.harness],
+        })}
         aria-expanded={open}
         aria-haspopup="dialog"
-        title={`${HARNESS_TITLE[session.harness]} sign-in required`}
+        title={t("ui.shell.signInRequiredNamed", {
+          name: HARNESS_TITLE[session.harness],
+        })}
         onClick={() => setOpen((value) => !value)}
       >
         <HarnessIcon harness={session.harness} className="size-3 shrink-0" />
         <span>{HARNESS_LABEL[session.harness]}</span>
         {authRequired ? (
           <span className="text-[10px] text-amber-600 dark:text-amber-300">
-            sign in
+            {t("ui.shell.signInInline")}
           </span>
         ) : null}
       </button>

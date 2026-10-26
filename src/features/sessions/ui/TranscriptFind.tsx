@@ -195,13 +195,13 @@ export function TranscriptFind({
           className="min-w-[10ch] shrink-0 whitespace-nowrap text-right font-mono text-[11px] tabular-nums text-content/50"
         >
           {searching
-            ? "Searching…"
+            ? t("ui.sessions.searching")
             : searchError
-              ? "Search failed"
+              ? t("ui.sessions.searchFailed")
               : query.trim()
                 ? matches.length
                   ? `${Math.min(active, matches.length - 1) + 1} of ${matches.length}`
-                  : "No results"
+                  : t("ui.sessions.noResults")
                 : ""}
         </span>
         <FindButton

@@ -414,8 +414,8 @@ export function SurfaceTabs({
               </button>
               <button
                 type="button"
-                title={`Close ${label}`}
-                aria-label={`Close ${label}`}
+                title={t("ui.workspace.closeTabAria", { name: label })}
+                aria-label={t("ui.workspace.closeTabAria", { name: label })}
                 data-no-drag
                 onPointerDown={(event) => event.stopPropagation()}
                 onClick={(event) => {

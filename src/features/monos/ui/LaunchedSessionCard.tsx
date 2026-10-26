@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { projectName } from "../../../shared/lib/paths";
+import { useT } from "../../../shared/i18n";
 import {
   Chatting,
   CheckCircle,
@@ -92,6 +93,7 @@ export function LaunchedSessionCard({
   open?: boolean;
   onOpen?: () => void;
 }) {
+  const t = useT();
   const title = sessionDisplayTitle(
     view?.title ?? launch.title,
     launch.harness,
@@ -102,7 +104,14 @@ export function LaunchedSessionCard({
       type="button"
       data-launched-session={launch.sessionId}
       data-state={view?.state}
-      aria-label={`Open session ${title}${status ? `, ${status.label.toLowerCase()}` : ""}`}
+      aria-label={
+        status
+          ? t("ui.monos.openSessionStatusAria", {
+              title,
+              status: status.label.toLowerCase(),
+            })
+          : t("ui.monos.openSessionAria", { title })
+      }
       aria-pressed={open}
       title={status?.label}
       onClick={onOpen}

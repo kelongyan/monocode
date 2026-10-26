@@ -100,8 +100,10 @@ export function WorktreesPage({
           type="button"
           title={
             loadError
-              ? `Refresh failed: ${loadError}. Click to retry.`
-              : "Refresh worktrees"
+              ? t("ui.sourceControl.refreshFailedRetry", {
+                  error: String(loadError),
+                })
+              : t("ui.sourceControl.refreshWorktrees")
           }
           aria-label={t("ui.sourceControl.refreshWorktrees")}
           disabled={!project}
@@ -164,27 +166,40 @@ export function WorktreesPage({
                     <GitBranch className="size-3 shrink-0" />
                     <span className="min-w-0 break-all">
                       {tree.branch
-                        ? `Current branch: ${tree.branch}`
-                        : `Detached at ${tree.head.slice(0, 7)}`}
+                        ? t("ui.sourceControl.currentBranchNamed", {
+                            branch: tree.branch,
+                          })
+                        : t("ui.sourceControl.detachedAt", {
+                            hash: tree.head.slice(0, 7),
+                          })}
                     </span>
                   </p>
                   <p className="mt-2 flex flex-wrap gap-x-3 text-[11px] text-content/55">
                     <span>
-                      {count} session{count === 1 ? "" : "s"} in this worktree
+                      {t(
+                        count === 1
+                          ? "ui.sourceControl.oneSessionHere"
+                          : "ui.sourceControl.sessionsHere",
+                        { count },
+                      )}
                     </span>
                     <span className={tree.dirty ? "text-amber-400" : ""}>
                       {tree.missing
-                        ? "Missing folder"
+                        ? t("ui.sourceControl.missingFolder")
                         : tree.dirty == null
-                          ? "Status unavailable"
+                          ? t("ui.sourceControl.statusUnavailable")
                           : tree.dirty
-                            ? "Uncommitted changes"
-                            : "Clean"}
+                            ? t("ui.sourceControl.uncommittedChanges")
+                            : t("ui.sourceControl.clean")}
                     </span>
                     {!!tree.unpushed && (
                       <span>
-                        {tree.unpushed} unpublished commit
-                        {tree.unpushed === 1 ? "" : "s"}
+                        {t(
+                          tree.unpushed === 1
+                            ? "ui.sourceControl.unpublishedCommit"
+                            : "ui.sourceControl.unpublishedCommits",
+                          { count: tree.unpushed },
+                        )}
                       </span>
                     )}
                     {tree.locked && <span>{t("ui.sourceControl.locked")}</span>}
@@ -193,7 +208,9 @@ export function WorktreesPage({
                 <button
                   type="button"
                   disabled={tree.missing}
-                  aria-label={`Reveal ${tree.branch ?? "worktree"}`}
+                  aria-label={t("ui.sourceControl.revealAria", {
+                    name: tree.branch ?? "worktree",
+                  })}
                   title={t("ui.sourceControl.revealFolder")}
                   onClick={() =>
                     void revealPath(tree.path).catch((e) => setError(String(e)))
@@ -205,8 +222,10 @@ export function WorktreesPage({
                 <button
                   type="button"
                   disabled={!!blocked || refreshingAfterFailure || !!loadError}
-                  aria-label={`Delete ${tree.branch ?? "worktree"}`}
-                  title={blocked ?? "Delete worktree"}
+                  aria-label={t("ui.sourceControl.deleteAria", {
+                    name: tree.branch ?? "worktree",
+                  })}
+                  title={blocked ?? t("ui.sourceControl.deleteWorktree")}
                   onClick={() => {
                     setError(undefined);
                     setDeleting(tree);

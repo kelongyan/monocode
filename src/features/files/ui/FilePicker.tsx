@@ -218,7 +218,7 @@ export function FilePicker({
       <div className="absolute inset-0" onMouseDown={onClose} />
       <div
         role="dialog"
-        aria-label={paletteMode ? "Command Palette" : "Go to File"}
+        aria-label={paletteMode ? t("ui.files.commandPalette") : t("ui.files.goToFile")}
         data-file-picker
         onMouseDown={(e) => e.stopPropagation()}
         className="absolute left-1/2 top-[12%] flex w-[min(560px,calc(100vw-24px))] -translate-x-1/2 flex-col overflow-hidden rounded-lg border border-content/10 bg-content/5 backdrop-blur-xl"
@@ -231,7 +231,7 @@ export function FilePicker({
               type="text"
               value={query}
               placeholder={t("ui.files.goToFileTypeForCommands")}
-              aria-label={paletteMode ? "Command Palette" : "Go to File"}
+              aria-label={paletteMode ? t("ui.files.commandPalette") : t("ui.files.goToFile")}
               spellCheck={false}
               autoComplete="off"
               autoCorrect="off"

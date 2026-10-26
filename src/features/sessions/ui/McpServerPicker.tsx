@@ -146,7 +146,9 @@ export function McpServerPicker({
           </p>
         ) : servers.length === 0 ? (
           <p className="px-2 py-2 text-[12px] text-content/50">
-            {query ? "No matching MCP servers" : "No MCP servers found"}
+            {query
+              ? t("ui.sessions.noMatchingMcpServers")
+              : t("ui.sessions.noMcpServersFound")}
           </p>
         ) : (
           servers.map((server, index) => {
@@ -190,10 +192,10 @@ export function McpServerPicker({
                   className={`max-w-[40%] shrink-0 truncate text-[11px] ${server.availability === "authentication" ? "text-amber-400" : "text-content/45"}`}
                 >
                   {server.availability === "authentication"
-                    ? "Needs authentication"
+                    ? t("ui.sessions.needsAuthentication")
                     : server.availability === "unavailable"
                       ? server.detail
-                      : "Available"}
+                      : t("ui.sessions.mcpAvailable")}
                 </span>
               </button>
             );

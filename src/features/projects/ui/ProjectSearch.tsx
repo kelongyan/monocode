@@ -224,16 +224,16 @@ export function ProjectSearch({
         <input
           value={include}
           onChange={(event) => setInclude(event.target.value)}
-          placeholder="files to include"
-          aria-label="files to include"
+          placeholder={t("ui.projects.filesToInclude")}
+          aria-label={t("ui.projects.filesToInclude")}
           spellCheck={false}
           className="w-full rounded-md border border-content/10 bg-content/5 px-2 py-1.5 text-[11px] text-content outline-none placeholder:text-content/35"
         />
         <input
           value={exclude}
           onChange={(event) => setExclude(event.target.value)}
-          placeholder="files to exclude"
-          aria-label="files to exclude"
+          placeholder={t("ui.projects.filesToExclude")}
+          aria-label={t("ui.projects.filesToExclude")}
           spellCheck={false}
           className="w-full rounded-md border border-content/10 bg-content/5 px-2 py-1.5 text-[11px] text-content outline-none placeholder:text-content/35"
         />
@@ -250,9 +250,18 @@ export function ProjectSearch({
         ) : query.trim() ? (
           <span>
             {matchCount === 0
-              ? "No results"
-              : `${matchCount} result${matchCount === 1 ? "" : "s"} in ${fileCount} file${fileCount === 1 ? "" : "s"}`}
-            {truncated ? " (limited)" : ""}
+              ? t("ui.projects.noResults")
+              : t(
+                  matchCount === 1
+                    ? fileCount === 1
+                      ? "ui.projects.resultInFile"
+                      : "ui.projects.resultInFiles"
+                    : fileCount === 1
+                      ? "ui.projects.resultsInFile"
+                      : "ui.projects.resultsInFiles",
+                  { results: matchCount, files: fileCount },
+                )}
+            {truncated ? t("ui.projects.truncatedSuffix") : ""}
           </span>
         ) : (
           <span>{t("ui.projects.typeToSearchAcrossTheProject")}</span>

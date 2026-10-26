@@ -207,7 +207,7 @@ export function CwdPicker({
       <button
         type="button"
         title={cwd}
-        aria-label={`Project ${label}`}
+        aria-label={t("ui.projects.projectNamed", { label })}
         aria-expanded={open}
         aria-haspopup="menu"
         disabled={!enabled}
@@ -281,7 +281,7 @@ export function CwdPicker({
             {previewRecents.length > 0 || mode === "move" ? (
               <>
                 <p className="px-2.5 pb-1 pt-2 text-[10px] uppercase tracking-widest text-content/50">
-                  {mode === "move" ? "Move to project" : "Recent projects"}
+                  {mode === "move" ? t("ui.projects.moveToProject") : t("ui.projects.recentProjects")}
                 </p>
                 {mode === "move" && previewRecents.length === 0 ? (
                   <p className="px-2.5 py-2 text-[13px] text-content/50">

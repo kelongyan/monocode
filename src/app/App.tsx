@@ -6102,7 +6102,9 @@ function Workspace({
       if (sessionIds.length === 0) return;
       if (
         !window.confirm(
-          `Delete ${sessionIds.length} selected conversations? This can’t be undone.`,
+          t("dialogs.deleteSelectedConversations", {
+            count: sessionIds.length,
+          }),
         )
       )
         return;

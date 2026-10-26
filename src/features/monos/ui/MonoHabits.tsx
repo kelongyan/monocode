@@ -145,7 +145,7 @@ export function HabitRow({
                 {t("ui.monos.runningNow2")}<RunningFor since={runningSince} />
               </>
             ) : starting ? (
-              "Starting…"
+              t("ui.monos.starting")
             ) : habit.enabled ? (
               habitScheduleLabel(habit.schedule)
             ) : (
@@ -157,7 +157,11 @@ export function HabitRow({
       <span className="flex shrink-0 items-center pr-2 opacity-0 transition-opacity group-hover/habit:opacity-100 focus-within:opacity-100">
         <HabitButton
           label={
-            running ? "Already running" : starting ? "Starting" : "Run now"
+            running
+              ? t("ui.monos.alreadyRunning")
+              : starting
+                ? t("ui.monos.starting2")
+                : t("ui.monos.runNow")
           }
           disabled={running || starting}
           onClick={() => actions.runNow(habit.id)}
@@ -165,7 +169,7 @@ export function HabitRow({
           <Zap className="size-3.5" strokeWidth={1.75} />
         </HabitButton>
         <HabitButton
-          label={habit.enabled ? "Pause" : "Resume"}
+          label={habit.enabled ? t("ui.monos.pause") : t("ui.monos.resume")}
           onClick={() => actions.toggle(habit.id)}
         >
           {habit.enabled ? (

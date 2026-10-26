@@ -440,7 +440,7 @@ export function MonoProjectCommit({
             ref={messageRef}
             rows={1}
             value={message}
-            placeholder={`Message (${MOD}↩ to commit)`}
+            placeholder={t("ui.monos.commitMessagePlaceholder", { mod: MOD })}
             disabled={!!busy && busy !== "generate"}
             onChange={(event) => setMessage(event.target.value)}
             onKeyDown={(event) => {
@@ -459,13 +459,13 @@ export function MonoProjectCommit({
             type="button"
             aria-label={
               busy === "generate"
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("ui.monos.cancelCommitMessageGeneration")
+                : t("ui.monos.generateCommitMessage")
             }
             title={
               busy === "generate"
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("ui.monos.cancelCommitMessageGeneration")
+                : t("ui.monos.generateCommitMessage")
             }
             disabled={
               busy === "generate" ? false : !!busy || staged.length === 0
@@ -572,7 +572,10 @@ export function MonoProjectCommit({
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none py-1">
         {changed.length === 0 ? (
           <p role="status" className="px-3 py-2 text-[12px] text-content/45">
-            {status ?? (index ? "No uncommitted changes" : "Loading changes…")}
+            {status ??
+              (index
+                ? t("ui.monos.noUncommittedChanges")
+                : t("ui.monos.loadingChanges"))}
           </p>
         ) : (
           <>

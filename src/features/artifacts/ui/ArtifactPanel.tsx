@@ -47,10 +47,16 @@ export function ArtifactReader({
     return () => window.removeEventListener("keydown", escape);
   }, [leave]);
 
-  const label = artifact ? artifactLabel(artifact.kind) : "Document";
+  const label = artifact
+    ? artifactLabel(artifact.kind)
+    : t("ui.artifacts.document");
   const noun = label.toLowerCase();
   const onDelete = async () => {
-    if (!artifact || deleting || !window.confirm(`Delete “${artifact.title}”?`))
+    if (
+      !artifact ||
+      deleting ||
+      !window.confirm(t("ui.artifacts.confirmDeleteNamed", { title: artifact.title }))
+    )
       return;
     setDeleting(true);
     setError(null);
@@ -58,7 +64,7 @@ export function ArtifactReader({
       await deleteArtifact(artifact.id);
       if (mounted.current) leave();
     } catch {
-      setError(`Could not delete this ${noun}.`);
+      setError(t("ui.artifacts.couldNotDeleteNamed", { noun }));
     } finally {
       setDeleting(false);
     }
@@ -66,18 +72,18 @@ export function ArtifactReader({
   const actions = artifact ? (
     <>
       <IconButton
-        label={`Delete ${noun}`}
+        label={t("ui.artifacts.deleteNamed", { name: noun })}
         disabled={deleting}
         onClick={() => void onDelete()}
       >
         <Trash2 className="size-3.5" />
       </IconButton>
       <IconButton
-        label={copied ? "Copied" : `Copy ${noun}`}
+        label={copied ? t("ui.artifacts.copied") : t("ui.artifacts.copyNamed", { name: noun })}
         onClick={() =>
           void copyMessage(artifact.body).then(
             () => setCopied(true),
-            () => setError(`Could not copy this ${noun}.`),
+            () => setError(t("ui.artifacts.couldNotCopyNamed", { noun })),
           )
         }
       >

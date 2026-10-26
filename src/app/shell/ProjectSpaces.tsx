@@ -145,7 +145,7 @@ export function ProjectSpacesBar({
       </nav>
       <div className="flex w-7 justify-end">
         {onOpenProject ? (
-          <IconButton label={`Open project (${MOD}O)`} onClick={onOpenProject}>
+          <IconButton label={t("ui.shell.openProjectShortcut", { mod: MOD })} onClick={onOpenProject}>
             <Plus className="size-3.5" strokeWidth={1.75} />
           </IconButton>
         ) : null}

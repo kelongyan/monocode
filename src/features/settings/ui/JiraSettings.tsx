@@ -109,7 +109,7 @@ export function JiraSettings() {
             </p>
           </div>
           <SecondaryButton onClick={() => void disconnect()} disabled={busy}>
-            {busy ? "Disconnecting" : "Disconnect"}
+            {busy ? t("ui.settings.disconnecting") : t("ui.settings.disconnect")}
           </SecondaryButton>
         </div>
       ) : (
@@ -171,7 +171,7 @@ export function JiraSettings() {
               type="submit"
               disabled={busy || !site.trim() || !email.trim() || !token.trim()}
             >
-              {busy ? "Connecting" : "Connect"}
+              {busy ? t("ui.settings.connecting") : t("ui.inbox.connect")}
             </SecondaryButton>
             <button
               type="button"

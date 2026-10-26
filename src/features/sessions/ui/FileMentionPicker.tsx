@@ -66,20 +66,24 @@ export function FileMentionPicker({
       {files.length === 0 ? (
         <p className="px-3 py-2.5 text-[12px] text-content/50">
             {loading
-              ? "Indexing files…"
+              ? t("ui.sessions.indexingFiles")
               : query.trim()
                 ? includeNotes
-                  ? "No matching files or notes"
-                  : "No matching files or folders"
+                  ? t("ui.sessions.noMatchingFilesOrNotes")
+                  : t("ui.sessions.noMatchingFilesOrFolders")
                 : includeNotes
-                  ? "No files or notes found"
-                  : "No files or folders found"}
+                  ? t("ui.sessions.noFilesOrNotesFound")
+                  : t("ui.sessions.noFilesOrFoldersFound")}
         </p>
       ) : (
         <div
           ref={lockOverscroll}
           role="listbox"
-          aria-label={includeNotes ? "Files and notes" : "Files and folders"}
+          aria-label={
+            includeNotes
+              ? t("ui.sessions.filesAndNotes")
+              : t("ui.sessions.filesAndFolders")
+          }
           onMouseMove={onListMouseMove}
           className="max-h-[min(240px,40vh)] overflow-y-auto overscroll-none px-1 py-1"
         >

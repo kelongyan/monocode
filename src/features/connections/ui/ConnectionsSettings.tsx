@@ -276,7 +276,7 @@ export function ConnectionsSettings() {
                       : machine.endpoint}
                   </div>
                   <div className="mt-1 text-[12px] text-content/50">
-                    {status[machine.id] ?? "Checking connection…"}
+                    {status[machine.id] ?? t("ui.connections.checkingConnection")}
                   </div>
                   {machine.ssh && needsUpdate[machine.id] ? (
                     <div className="mt-1 text-[11px] text-content/45">
@@ -305,7 +305,7 @@ export function ConnectionsSettings() {
                 <button
                   disabled={busy || revoking}
                   className="rounded p-2 text-content/40 hover:bg-selection hover:text-content disabled:opacity-40"
-                  aria-label={`Remove ${machine.name}`}
+                  aria-label={t("common.removeNamed", { name: machine.name })}
                   title={t("ui.connections.removeConnection")}
                   onClick={() => {
                     setError("");
@@ -438,7 +438,7 @@ export function ConnectionsSettings() {
             >
               {t("ui.connections.cancel")}</button>
             <button className={button} disabled={busy || !target.trim()}>
-              {busy ? "Connecting…" : "Connect"}
+              {busy ? t("ui.connections.connecting") : t("ui.inbox.connect")}
             </button>
           </div>
         </form>
@@ -451,7 +451,7 @@ export function ConnectionsSettings() {
         >
           <div className="flex items-center gap-2 text-[13px]">
             <Loader className="size-4 animate-spin" />
-            {job?.message ?? "Starting connection…"}
+            {job?.message ?? t("ui.connections.startingConnection")}
           </div>
           {job?.prompt && (
             <form
@@ -479,7 +479,9 @@ export function ConnectionsSettings() {
               )}
               <div className="flex gap-2">
                 <button className={button} disabled={answering}>
-                  {job.prompt.confirm ? "Trust host and continue" : "Continue"}
+                  {job.prompt.confirm
+                    ? t("ui.connections.trustHostAndContinue")
+                    : t("ui.sessions.continue")}
                 </button>
                 {job.prompt.confirm && (
                   <button

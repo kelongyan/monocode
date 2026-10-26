@@ -221,7 +221,7 @@ export function ProjectTerminalDock({
         trailing={
           <div className="flex shrink-0 items-center gap-0.5 pr-1.5">
             <IconButton
-              label={`New Terminal (${MOD}\`)`}
+              label={t("ui.terminal.newTerminalShortcut", { mod: MOD })}
               onClick={onAddTerminal}
             >
               <Plus className="size-3.5" strokeWidth={1.75} />
@@ -239,7 +239,7 @@ export function ProjectTerminalDock({
             </IconButton>
             </div>
             <IconButton
-              label={`Hide Terminal (${MOD}J)`}
+              label={t("ui.terminal.hideTerminalShortcut", { mod: MOD })}
               onClick={onHide}
             >
               <HideIcon className="size-3.5" strokeWidth={1.75} />

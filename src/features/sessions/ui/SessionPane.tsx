@@ -859,7 +859,7 @@ const LocalSessionPane = memo(function LocalSessionPane({
           </span>
           <button
             type="button"
-            title={`Close Pane (${MOD}W)`}
+            title={t("ui.sessions.closePaneShortcut", { mod: MOD })}
             aria-label={t("ui.sessions.closePane")}
             data-no-drag
             className="grid size-5 shrink-0 place-items-center rounded text-content/50 hover:bg-content/10 hover:text-content"

@@ -66,7 +66,7 @@ export function ContextMeter({
         <button
           type="button"
           title={t("ui.sessions.contextUsage")}
-          aria-label={`${headline}, ${detail}. Open context actions`}
+          aria-label={t("ui.sessions.openContextActionsAria", { headline, detail })}
           aria-expanded={actionsOpen}
           onClick={() => setOpen((value) => !value)}
           className="-m-1 grid rounded-sm p-1 outline-none focus-visible:ring-1 focus-visible:ring-accent"
@@ -92,8 +92,8 @@ export function ContextMeter({
               disabled={compactDisabled}
               title={
                 compactDisabled
-                  ? "Wait for the current operation to finish"
-                  : "Compact this conversation's context"
+                  ? t("ui.sessions.waitForOperationToFinish")
+                  : t("ui.sessions.compactThisContext")
               }
               onClick={() => {
                 setOpen(false);

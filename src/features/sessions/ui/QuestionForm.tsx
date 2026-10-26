@@ -177,8 +177,13 @@ export function QuestionForm({ prompt, onReply, onInteraction }: Props) {
               title={t("ui.sessions.interactToKeepThisQuestionOpen")}
             >
               {prompt.autoResolveAt - now > 60_000
-                ? "Optional question"
-                : `Continues without an answer in ${Math.max(0, Math.ceil((prompt.autoResolveAt - now) / 1000))}s`}
+                ? t("ui.sessions.optionalQuestion")
+                : t("ui.sessions.continueWithoutAnswerIn", {
+                    seconds: Math.max(
+                      0,
+                      Math.ceil((prompt.autoResolveAt - now) / 1000),
+                    ),
+                  })}
             </span>
           ) : null}
           {index > 0 ? (

@@ -2115,17 +2115,17 @@ export function Composer({
               defaultValue={mountDraft}
               placeholder={
                 worktreeRemoved
-                  ? "Select a branch or worktree to continue…"
+                  ? t("ui.sessions.selectBranchOrWorktreeToContinue")
                   : inboxCard
-                    ? "Add a note, or send to start…"
+                    ? t("ui.sessions.addNoteOrSend")
                     : noteCard
-                      ? "Add a message, or send…"
+                      ? t("ui.sessions.addMessageOrSend")
                       : handoffCard
-                        ? "Add context, or send to continue…"
+                        ? t("ui.sessions.addContextOrSend")
                         : (placeholder ??
                           (shell
-                            ? "Ask, build, / for commands, @ for references... "
-                            : "Ask, build, / for commands, @ for references... "))
+                            ? t("ui.sessions.askBuildPlaceholder")
+                            : t("ui.sessions.askBuildPlaceholder")))
               }
               aria-label={inputAriaLabel}
               disabled={disabled}
@@ -2209,10 +2209,10 @@ export function Composer({
                       <span className="block text-[13px]">{t("ui.sessions.uploadFile")}</span>
                       <span className="block truncate whitespace-nowrap text-[11px] leading-4 text-content/45">
                         {attachmentsSupported
-                          ? "Attach files or images"
+                          ? t("ui.sessions.attachFilesOrImages")
                           : remote && !remoteFeatures?.attachments
-                            ? "Update this machine’s host to attach files"
-                            : `${HARNESS_TITLE[harness]} does not support attachments`}
+                            ? t("ui.sessions.updateHostToAttachFiles")
+                            : t("ui.sessions.harnessWithoutAttachments", { name: HARNESS_TITLE[harness] })}
                       </span>
                     </span>
                   </button>
@@ -2448,7 +2448,7 @@ export function Composer({
                 disabled={disabled}
                 hasValue={hasValue && !worktreeRemoved}
                 allowBusySubmit={allowBusySubmit}
-                label={draftActive ? "Save draft" : "Send"}
+                label={draftActive ? t("ui.sessions.saveDraft") : t("ui.sessions.send")}
                 onSend={() => submit(ref.current?.value ?? "")}
                 onStop={() => onStop?.()}
               />

@@ -59,8 +59,8 @@ export function GeneratedImage({ image }: { image: GeneratedImageMeta }) {
     <div className="min-w-0 px-4 pb-3 pt-3">
       <button
         type="button"
-        aria-label={`Open ${image.name} full screen`}
-        title={`Open ${image.name} full screen`}
+        aria-label={t("ui.sessions.openFullScreen", { name: image.name })}
+        title={t("ui.sessions.openFullScreen", { name: image.name })}
         onClick={() => setOpen(true)}
         className="block max-w-full cursor-zoom-in overflow-hidden rounded-xl border border-content/10 bg-content/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >

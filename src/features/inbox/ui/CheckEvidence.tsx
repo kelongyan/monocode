@@ -132,7 +132,9 @@ function CheckAnnotation({
             <button
               type="button"
               title={t("ui.inbox.viewSourceAtCommit")}
-              aria-label={`View ${location} on GitHub`}
+              aria-label={t("ui.inbox.viewOnGithubAria", {
+                location,
+              })}
               onClick={() => void openUrl(fileUrl)}
               className="-my-1 -mr-1 grid size-6 shrink-0 place-items-center rounded text-content/40 hover:bg-content/5 hover:text-content"
             >
@@ -144,7 +146,7 @@ function CheckAnnotation({
       {excerpt.length ? (
         <div
           className="overflow-x-auto py-2 font-mono text-[11px] leading-5"
-          aria-label={`Source at ${headOid}`}
+          aria-label={t("ui.inbox.sourceAtCommitAria", { commit: headOid })}
         >
           {excerpt.map((line, index) => (
             <div

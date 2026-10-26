@@ -241,8 +241,16 @@ export function TabGroupMenu({
           <div className="mb-2 flex items-center gap-2 px-0.5">
             <button
               type="button"
-              title={logoPath ? "Change project logo" : "Add project logo"}
-              aria-label={logoPath ? "Change project logo" : "Add project logo"}
+              title={
+                logoPath
+                  ? t("ui.workspace.changeProjectLogo")
+                  : t("ui.workspace.addProjectLogo")
+              }
+              aria-label={
+                logoPath
+                  ? t("ui.workspace.changeProjectLogo")
+                  : t("ui.workspace.addProjectLogo")
+              }
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
                 void (async () => {
@@ -269,7 +277,9 @@ export function TabGroupMenu({
             <div className="min-w-0 flex-1">
               <p className="text-[11px] text-content/50">{t("ui.workspace.projectLogo")}</p>
               <p className="truncate text-[12px] text-content/70">
-                {logoPath ? "Shown in tabs and composer" : "Optional — replaces folder icon"}
+                {logoPath
+                  ? t("ui.workspace.shownInTabsAndComposer")
+                  : t("ui.workspace.optionalReplacesFolderIcon")}
               </p>
             </div>
             {logoPath ? (
@@ -420,11 +430,12 @@ function MascotSwatch({
   onPick: () => void;
   children: ReactNode;
 }) {
+  const t = useT();
   return (
     <button
       type="button"
       title={title}
-      aria-label={`Mascot ${title}`}
+      aria-label={t("ui.workspace.mascotNamed", { name: title })}
       aria-pressed={selected}
       onMouseDown={(e) => e.preventDefault()}
       onClick={onPick}

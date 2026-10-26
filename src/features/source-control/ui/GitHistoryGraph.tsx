@@ -104,7 +104,9 @@ export function GitHistoryGraph({
           type="button"
           onClick={onToggleExpanded}
           aria-expanded={expanded}
-          aria-label={expanded ? "Collapse graph" : "Expand graph"}
+          aria-label={
+            expanded ? t("ui.sourceControl.collapseGraph") : t("ui.sourceControl.expandGraph")
+          }
           className={`flex w-full shrink-0 items-center gap-1 px-3 text-left leading-none hover:bg-content/5 ${
             expanded ? "h-7" : "h-full"
           }`}
@@ -149,7 +151,9 @@ export function GitHistoryGraph({
             )
           ) : commits.length === 0 ? (
             <p className="px-3 py-2 text-[12px] text-content/45">
-              {loading ? "Loading history…" : "No commits yet"}
+              {loading
+                ? t("ui.sourceControl.loadingHistory")
+                : t("ui.sourceControl.noCommitsYet")}
             </p>
           ) : items.length === 0 ? (
             <p className="px-3 py-4 text-center text-[12px] text-content/45">
@@ -248,9 +252,14 @@ function HistoryToolbar({
               <GitBranch className="size-3.5 shrink-0 text-content/45" />
               <span
                 className="truncate"
-                title={branch ?? (head ? "Detached HEAD" : "History")}
+                title={
+                  branch ??
+                  (head
+                    ? t("ui.sourceControl.detachedHead")
+                    : t("ui.sourceControl.history"))
+                }
               >
-                {branch ?? (head ? head.shortSha : "History")}
+                {branch ?? (head ? head.shortSha : t("ui.sourceControl.history"))}
               </span>
             </div>
             <div className="flex shrink-0 items-center gap-0.5">

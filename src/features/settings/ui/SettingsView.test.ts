@@ -53,6 +53,7 @@ vi.mock("../../../integrations/harness/core/availability", () => ({
   subscribeHarnessAvailability: () => () => {},
   probeHarnessAvailability: async () => {},
   harnessUnavailableHint: () => "",
+  harnessUnavailableParts: () => ({ name: "Codex", how: "" }),
 }));
 
 let container: HTMLDivElement;

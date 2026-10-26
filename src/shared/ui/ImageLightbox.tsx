@@ -193,7 +193,7 @@ export function ImageLightbox({ src, alt, onClose }: Props) {
       role="dialog"
       aria-modal="true"
       data-image-zoom
-      aria-label={`Image preview: ${alt}`}
+      aria-label={t("ui.shared.imagePreviewAria", { name: alt })}
       className="fixed inset-0 flex items-center justify-center overflow-hidden bg-black/85 p-6 backdrop-blur-sm"
       style={{ zIndex: LAYER.dialog }}
       onMouseDown={(event) => {

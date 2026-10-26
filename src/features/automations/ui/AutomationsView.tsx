@@ -360,7 +360,11 @@ function AutomationsContent({
   };
 
   const onDelete = async (automation: Automation) => {
-    if (!window.confirm(`Delete “${automation.name}” and its run history?`))
+    if (
+      !window.confirm(
+        t("automations.confirmDeleteNamed", { name: automation.name }),
+      )
+    )
       return;
     try {
       await deleteAutomation(automation.id);
@@ -447,7 +451,9 @@ function AutomationsContent({
             </ul>
           ) : (
             <p className="px-3 py-8 text-center text-[12px] text-content/45">
-              {query.trim() ? "No matching automations" : "No automations yet"}
+              {query.trim()
+                ? t("automations.noMatchingAutomations")
+                : t("automations.noAutomationsYet")}
             </p>
           )}
         </div>
@@ -549,7 +555,7 @@ function AutomationCard({
       <button
         type="button"
         aria-current={active ? "true" : undefined}
-        aria-label={`Open ${automation.name}`}
+        aria-label={t("automations.openNamed", { name: automation.name })}
         onClick={onSelect}
         className="block w-full rounded-md px-2.5 py-2 text-left"
       >
@@ -734,8 +740,8 @@ function RunRow({
         disabled={!sessionId}
         title={
           sessionId
-            ? "Open session"
-            : (run.error ?? "This run has no session yet")
+            ? t("automations.openSession")
+            : (run.error ?? t("automations.runHasNoSessionYet"))
         }
         onClick={() => {
           if (!sessionId) return;
@@ -1028,7 +1034,9 @@ function AutomationEditor({
                     onClick={onClose}
                     className={ACTION_OUTLINE}
                   >
-                    {draft.id ? "Reset" : "Cancel"}
+                    {draft.id
+                      ? t("automations.reset")
+                      : t("automations.cancel")}
                   </button>
                 ) : null}
                 {onRun ? (
@@ -1053,19 +1061,23 @@ function AutomationEditor({
                   {saving ? (
                     <LoaderCircle className="size-3.5 animate-spin" />
                   ) : null}
-                  {draft.id ? "Save" : "Create"}
+                  {draft.id ? t("automations.save") : t("automations.create")}
                 </button>
               </div>
             </div>
             <div className="flex min-w-0 items-center gap-2 overflow-hidden whitespace-nowrap text-[12px] text-content/50">
               <ToggleSwitch
-                label={draft.enabled ? "Pause automation" : "Enable automation"}
+                label={
+                  draft.enabled
+                    ? t("automations.pauseAutomation")
+                    : t("automations.enableAutomation")
+                }
                 on={draft.enabled}
                 onChange={(enabled) => update("enabled", enabled)}
                 compact
               />
               <span className="shrink-0">
-                {draft.enabled ? "Active" : "Inactive"}
+                {draft.enabled ? t("automations.active") : t("automations.inactive")}
               </span>
               <span
                 aria-hidden

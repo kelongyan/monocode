@@ -140,7 +140,7 @@ export function ProjectNotificationSettings({
                 setSelected([]);
               }}
             >
-              {selecting ? "Done" : "Select projects"}
+              {selecting ? t("ui.shell.done") : t("ui.notifications.selectProjects")}
             </SecondaryButton>
           </div>
         ) : null}
@@ -181,8 +181,8 @@ export function ProjectNotificationSettings({
                     }
                   />
                   {selectedIds.length
-                    ? `${selectedIds.length} selected`
-                    : "Select all projects"}
+                    ? t("ui.notifications.selectedCount", { count: selectedIds.length })
+                    : t("ui.notifications.selectAllProjects")}
                 </label>
                 {selectedIds.length ? (
                   <div role="group" aria-label={t("ui.notifications.muteSelectedProjects")}>
@@ -234,7 +234,7 @@ export function ProjectNotificationSettings({
                       <div className="flex min-w-[min(100%,200px)] flex-1 items-center gap-3">
                         {selecting ? (
                           <ProjectSelection
-                            label={`Select ${project.name}`}
+                            label={t("ui.notifications.selectProjectNamed", { name: project.name })}
                             checked={selectedIds.includes(project.id)}
                             onChange={(checked) =>
                               setSelected((current) =>
@@ -247,7 +247,7 @@ export function ProjectNotificationSettings({
                         ) : null}
                         <button
                           type="button"
-                          aria-label={`Notification categories for ${project.name}`}
+                          aria-label={t("ui.notifications.notificationCategoriesFor", { name: project.name })}
                           aria-expanded={isExpanded}
                           aria-controls={panelId}
                           onClick={() =>
@@ -290,13 +290,16 @@ export function ProjectNotificationSettings({
                             </p>
                             <p className="mt-1 text-[12px] leading-relaxed text-content/45">
                               {project.kind === "local"
-                                ? "Local project · "
+                                ? t("ui.notifications.localProjectPrefix")
                                 : ""}
                               {muted
-                                ? "All notifications paused"
+                                ? t("ui.notifications.allNotificationsPaused")
                                 : enabledCount === categories.length
-                                  ? "All categories enabled"
-                                  : `${enabledCount} of ${categories.length} enabled`}
+                                  ? t("ui.notifications.allCategoriesEnabled")
+                                  : t("ui.notifications.categoriesEnabledOfTotal", {
+                                      count: enabledCount,
+                                      total: categories.length,
+                                    })}
                             </p>
                           </div>
                           <ChevronRight

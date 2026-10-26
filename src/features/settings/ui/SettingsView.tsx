@@ -166,7 +166,7 @@ import {
 } from "../model/uiScale";
 import {
   getHarnessAvailabilitySnapshot,
-  harnessUnavailableHint,
+  harnessUnavailableParts,
   isHarnessAvailable,
   probeHarnessAvailability,
   subscribeHarnessAvailability,
@@ -824,7 +824,7 @@ function SettingsSearch({
               >
                 <span className="min-w-0 flex-1 truncate">{result.label}</span>
                 <span className="shrink-0 text-[11px] text-content/40">
-                  {result.settingId ? result.sectionLabel : "Page"}
+                  {result.settingId ? result.sectionLabel : t("ui.settings.page")}
                 </span>
               </button>
             ))
@@ -1001,7 +1001,9 @@ function GeneralPage({
           <Row
             id="quick-composer"
             label={t("settings.entries.quick-composer.label")}
-            description={`Press ${quickComposerShortcutLabel(loadQuickComposerShortcut())} in any app to float a prompt over it and start a session without switching to MonoCode. Change the shortcut in Keybindings. Return starts it in the background; ⌘Return starts it and brings the session forward.`}
+            description={t("ui.settings.quickComposerHotkeyDescription", {
+              shortcut: quickComposerShortcutLabel(loadQuickComposerShortcut()),
+            })}
           >
             {quickComposerError ? (
               <span className="text-[12px] text-content/45">
@@ -1430,7 +1432,7 @@ function GithubSettings() {
             {t("ui.settings.installationGuide")}</SecondaryButton>
         ) : null}
         <SecondaryButton onClick={() => void checkStatus()} disabled={checking}>
-          {checking ? "Checking" : "Check again"}
+          {checking ? t("ui.settings.checking") : t("ui.settings.checkAgain")}
         </SecondaryButton>
       </Row>
       {error ? (
@@ -2389,8 +2391,8 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
               label={t("settings.entries.dark-lightness.label")}
               description={
                 glassDisabled
-                  ? "This only affects dark mode. Your dark-mode value is preserved."
-                  : "Base brightness of the dark theme. Lower values are darker; zero is true black."
+                  ? t("ui.settings.darkLightnessAffectsDarkOnly")
+                  : t("ui.settings.darkLightnessBaseBrightness")
               }
             >
               <Slider
@@ -2409,8 +2411,8 @@ function AppearancePage({ appearance }: { appearance: AppearanceSettings }) {
             title={t("settings.pages.appearance.translucencyTitle")}
             description={
               glassDisabled
-                ? "Light mode always uses an opaque window, so these are off. Your dark-mode values are preserved."
-                : "How much of the desktop shows through MonoCode. Blur costs more to composite the higher it goes."
+                ? t("ui.settings.translucencyOffInLightMode")
+                : t("ui.settings.translucencyAmount")
             }
           >
             <Row
@@ -2809,7 +2811,7 @@ function ShortcutEditor({
         <input
           type="text"
           readOnly
-          aria-label={`Change ${name} shortcut`}
+          aria-label={t("ui.settings.changeShortcutAria", { name })}
           data-shortcut-recorder-active={recording ? "true" : undefined}
           aria-busy={busy || undefined}
           value={
@@ -2829,7 +2831,7 @@ function ShortcutEditor({
         {resetVisible ? (
           <button
             type="button"
-            aria-label={`Reset ${name} shortcut`}
+            aria-label={t("ui.settings.resetShortcutAria", { name })}
             disabled={busy}
             onClick={() => void run(onReset)}
             className="rounded-md px-1 py-1 text-content/35 hover:bg-content/10 hover:text-content disabled:opacity-50"
@@ -3121,7 +3123,7 @@ function ProviderBinaryControl({
     }
     if (!saveProviderBinaryPath(provider, value)) {
       setInspection(undefined);
-      setError("Could not save the binary path.");
+      setError(t("ui.settings.couldNotSaveBinaryPath"));
       return;
     }
     setOverridden(true);
@@ -3134,7 +3136,7 @@ function ProviderBinaryControl({
     if (!next || binaryInspectionError(provider, next)) return;
     if (!saveProviderBinaryPath(provider, null)) {
       setInspection(undefined);
-      setError("Could not save the binary path.");
+      setError(t("ui.settings.couldNotSaveBinaryPath"));
       return;
     }
     setDraft("");
@@ -3152,13 +3154,17 @@ function ProviderBinaryControl({
         type="button"
         aria-label={
           restartRequired
-            ? `Show ${title} CLI details, restart required`
-            : `Show ${title} CLI details`
+            ? t("ui.settings.showCliDetailsRestartAria", { name: title })
+            : t("ui.settings.showCliDetailsAria", { name: title })
         }
         aria-expanded={open}
         aria-controls={`${provider}-binary-popover`}
         aria-haspopup="dialog"
-        title={`${title} CLI path${restartRequired ? " — restart required" : ""}`}
+        title={
+          restartRequired
+            ? t("ui.settings.cliPathTitleRestart", { name: title })
+            : t("ui.settings.cliPathTitle", { name: title })
+        }
         onClick={() => {
           if (!open && !inspection && !working && !error) {
             void inspect(loadProviderBinaryPath(provider));
@@ -3178,7 +3184,7 @@ function ProviderBinaryControl({
         <Popover
           id={`${provider}-binary-popover`}
           role="dialog"
-          aria-label={`${title} CLI details`}
+          aria-label={t("ui.settings.cliDetailsAria", { name: title })}
           aria-busy={working}
           tabIndex={-1}
           anchor={root}
@@ -3216,12 +3222,12 @@ function ProviderBinaryControl({
                 {t("ui.settings.globalPath")}</span>
               <span className="rounded-full bg-content/10 px-1.5 py-0.5 text-[10px] text-content/50">
                 {error
-                  ? "Needs attention"
+                  ? t("ui.settings.needsAttention")
                   : restartRequired
-                    ? "Restart required"
+                    ? t("ui.settings.restartRequired")
                     : overridden
-                      ? "Configured"
-                      : "Auto-detected"}
+                      ? t("ui.settings.configured")
+                      : t("ui.settings.autoDetected")}
               </span>
             </div>
           </div>
@@ -3237,7 +3243,9 @@ function ProviderBinaryControl({
                 ref={editInput}
                 type="text"
                 value={draft}
-                placeholder={inspection?.path ?? "Auto-detected path"}
+                placeholder={
+                  inspection?.path ?? t("ui.settings.autoDetectedPath")
+                }
                 disabled={working}
                 autoFocus
                 onChange={(event) => setDraft(event.target.value)}
@@ -3280,12 +3288,14 @@ function ProviderBinaryControl({
                 <span className="block max-h-12 overflow-y-auto whitespace-pre-wrap break-all font-mono text-[10px] text-content/65">
                   {inspection?.path ??
                     (error
-                      ? "CLI could not be resolved"
-                      : "Checking the selected CLI…")}
+                      ? t("ui.settings.cliCouldNotBeResolved")
+                      : t("ui.settings.checkingCli"))}
                 </span>
                 <span className="mt-1 block max-h-10 overflow-y-auto whitespace-pre-wrap break-words text-[10px] text-content/40">
                   {inspection?.version ??
-                    (error ? "Retry to check this CLI" : "Checking version…")}
+                    (error
+                      ? t("ui.settings.retryCheckCli")
+                      : t("ui.settings.checkingVersion"))}
                 </span>
               </div>
               {error ? (
@@ -3311,19 +3321,26 @@ function ProviderBinaryControl({
                 {error ? (
                   <SecondaryButton
                     disabled={working}
-                    aria-label={`Retry ${title} ${
-                      overridden ? "configured path" : "auto-detect"
-                    }`}
+                    aria-label={t(
+                      overridden
+                        ? "ui.settings.retryConfiguredAria"
+                        : "ui.settings.retryAutoDetectAria",
+                      { name: title },
+                    )}
                     onClick={() =>
                       void inspect(overridden ? draft.trim() || null : null)
                     }
                   >
                     <RefreshCw className="size-3.5" strokeWidth={1.75} />
-                    {overridden ? "Retry configured path" : "Retry auto-detect"}
+                    {overridden
+                      ? t("ui.settings.retryConfiguredPath")
+                      : t("ui.settings.retryAutoDetect")}
                   </SecondaryButton>
                 ) : null}
                 <SecondaryButton
-                  aria-label={`Open ${title} CLI location`}
+                  aria-label={t("ui.settings.openCliLocationAria", {
+                    name: title,
+                  })}
                   disabled={!inspection}
                   onClick={() => {
                     if (inspection) {
@@ -3340,7 +3357,9 @@ function ProviderBinaryControl({
                   <ExternalLink className="size-3.5" strokeWidth={1.75} />
                   {t("ui.settings.openLocation")}</SecondaryButton>
                 <SecondaryButton
-                  aria-label={`Edit ${title} CLI path`}
+                  aria-label={t("ui.settings.editCliPathAria", {
+                    name: title,
+                  })}
                   disabled={working}
                   onClick={() => setEditing(true)}
                 >
@@ -3389,7 +3408,7 @@ function ProvidersPage({
     const options: { value: string; label: string; icon?: ReactNode }[] = [
       {
         value: GLOBAL_PROVIDER_SCOPE,
-        label: "Global",
+        label: t("settings.pages.providers.scopeGlobal"),
         icon: (
           <Globe
             className="size-3.5 shrink-0 text-content/60"
@@ -3502,8 +3521,10 @@ function ProvidersPage({
         }
         description={
           project
-            ? `These defaults apply to ${projectName(project)} only. A provider with Show in picker off is also kept out of new conversations started in this project. CLI paths remain global for MonoCode.`
-            : "A provider is listed as installed once its CLI is found on your PATH. Uninstalled CLIs stay listed but are left out of the model picker, as are installed ones with Show in picker off. The model beside a provider is what its new conversations start with; Use by default picks the provider itself. CLI paths are global for MonoCode and apply to every project."
+            ? t("settings.pages.providers.agentClisDescriptionProject", {
+                project: projectName(project),
+              })
+            : t("settings.pages.providers.agentClisDescription")
         }
       >
         {HARNESSES.map((harness) => {
@@ -3819,7 +3840,9 @@ function ProviderAccountsSettings() {
                       <button
                         type="button"
                         disabled={Boolean(working)}
-                        aria-label={`Rename ${account.label}`}
+                        aria-label={t("common.renameNamed", {
+                          name: account.label,
+                        })}
                         title={t("settings.pages.providers.renameAccountTitle")}
                         onClick={() => startRename(account)}
                         className="grid size-7 place-items-center rounded-md text-content/40 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.96] disabled:opacity-35"
@@ -3830,7 +3853,9 @@ function ProviderAccountsSettings() {
                         <button
                           type="button"
                           disabled={Boolean(working)}
-                          aria-label={`Remove ${account.label}`}
+                          aria-label={t("common.removeNamed", {
+                            name: account.label,
+                          })}
                           title={t("settings.pages.providers.removeAccountTitle")}
                           onClick={() => void removeAccount(account)}
                           className="grid size-7 place-items-center rounded-md text-content/35 transition-transform duration-150 hover:bg-red-400/10 hover:text-red-400 active:scale-[0.96] disabled:opacity-35"
@@ -3928,9 +3953,9 @@ function ProviderAccountEditor({
           {working ? <Loader className="size-3 animate-spin" /> : null}
           {adding
             ? working
-              ? "Waiting for browser…"
-              : "Sign in and add"
-            : "Save"}
+              ? t("ui.settings.waitingForBrowser")
+              : t("ui.settings.signInAndAdd")
+            : t("common.save")}
         </button>
       </div>
     </form>
@@ -4011,13 +4036,20 @@ function ProviderRow({
       }
       description={
         available
-          ? `${models.length} ${models.length === 1 ? "model" : "models"} available.`
-          : harnessUnavailableHint(harness)
+          ? t(
+              models.length === 1
+                ? "ui.settings.modelAvailable"
+                : "ui.settings.modelsAvailable",
+              { count: models.length },
+            )
+          : t("ui.shared.harnessNotFound", harnessUnavailableParts(harness))
       }
     >
       {current ? (
         <Select
-          label={`${HARNESS_TITLE[harness]} model`}
+          label={t("ui.settings.harnessModelAria", {
+            name: HARNESS_TITLE[harness],
+          })}
           value={current.id}
           onChange={(next) => onModelChange(harness, next)}
           onOpen={() => {
@@ -4038,15 +4070,19 @@ function ProviderRow({
         onClick={() => current && onDefault(harness, current.id)}
         disabled={isDefault || !current}
       >
-        {isDefault ? "Default" : "Use by default"}
+        {isDefault ? t("ui.settings.default") : t("ui.settings.useByDefault")}
       </SecondaryButton>
       {available ? (
         <div className="flex items-center gap-2">
           <span className="text-[12px] text-content/50">
-            {pickerLocked ? "Hidden globally" : "Show in picker"}
+            {pickerLocked
+              ? t("ui.settings.hiddenGlobally")
+              : t("ui.settings.showInPicker")}
           </span>
           <Toggle
-            label={`Show ${HARNESS_TITLE[harness]} in the model picker`}
+            label={t("ui.settings.showInPickerAria", {
+              name: HARNESS_TITLE[harness],
+            })}
             on={inPicker}
             onChange={onPickerVisible}
             disabled={pickerLocked}
@@ -4148,8 +4184,10 @@ function ArchivePage({
       <Group
         title={
           looksLikeProject(cwd)
-            ? `Archived in ${projectName(cwd)}`
-            : "Archived conversations"
+            ? t("ui.settings.archivedInProject", {
+                project: projectName(cwd),
+              })
+            : t("ui.settings.archivedConversations")
         }
       >
         <Row
@@ -4317,14 +4355,16 @@ function MonoRow({ mono }: { mono: Mono }) {
       }
       description={
         look.projects.length
-          ? `Works on ${monoProjectsPhrase(look.projects)}`
-          : "No projects yet"
+          ? t("ui.settings.worksOnProjects", {
+              projects: monoProjectsPhrase(look.projects),
+            })
+          : t("ui.settings.noProjectsYet")
       }
     >
       <span className="text-[12px] leading-5 text-content/50">
         {t("ui.settings.showMonoSpawnedSessionOnThe")}</span>
       <Toggle
-        label={`Show sessions started by ${look.name} in sidebar`}
+        label={t("ui.settings.showSessionsStartedByName", { name: look.name })}
         on={mono.showStartedSessionsInSidebar === true}
         onChange={(on) =>
           updateMono(mono.id, (entry) => ({
@@ -4335,8 +4375,10 @@ function MonoRow({ mono }: { mono: Mono }) {
       />
       <ConfirmReset
         label={t("settings.pages.monos.resetLabel")}
-        title={`Reset ${look.name} to its defaults?`}
-        body={`Its soul goes back to the default and its name to ${defaultMonoName(look.mascot)}. Changes to its soul can't be recovered.`}
+        title={t("ui.settings.resetMonoDefaultsConfirm", { name: look.name })}
+        body={t("ui.settings.resetMonoDefaultsBody", {
+          name: defaultMonoName(look.mascot),
+        })}
         kept="Its conversation, projects, memory and habits will be kept."
         failure="Could not reset the Mono."
         onConfirm={() => resetMonoDefaults(mono.id)}
@@ -4346,7 +4388,9 @@ function MonoRow({ mono }: { mono: Mono }) {
             ref={ref}
             type="button"
             title={t("settings.pages.monos.resetDefaultsTitle")}
-            aria-label={`Reset ${look.name} to defaults`}
+            aria-label={t("ui.settings.resetMonoDefaultsAria", {
+              name: look.name,
+            })}
             onClick={open}
             className="grid size-7 place-items-center rounded-md text-content/40 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.96]"
           >

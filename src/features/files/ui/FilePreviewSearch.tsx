@@ -388,25 +388,25 @@ export function FilePreviewSearch({
           </div>
           <FindToggle
             label="Aa"
-            title={`Match Case (${ALT}C)`}
+            title={t("ui.files.matchCaseTitle", { alt: ALT })}
             pressed={caseSensitive}
             onClick={() => toggle(setCaseSensitive)}
           />
           <FindToggle
             label="ab"
-            title={`Match Whole Word (${ALT}W)`}
+            title={t("ui.files.matchWholeWordTitle", { alt: ALT })}
             pressed={wholeWord}
             onClick={() => toggle(setWholeWord)}
           />
           <FindToggle
             label=".*"
-            title={`Use Regular Expression (${ALT}R)`}
+            title={t("ui.files.useRegularExpressionTitle", { alt: ALT })}
             pressed={regexp}
             onClick={() => toggle(setRegexp)}
           />
           <FindButton
             label={t("ui.files.previousMatch")}
-            title={`Previous Match (${MOD}${SHIFT}G)`}
+            title={t("ui.files.previousMatchShortcut", { mod: MOD, shift: SHIFT })}
             disabled={total === 0}
             onClick={() => step(-1)}
           >
@@ -414,7 +414,7 @@ export function FilePreviewSearch({
           </FindButton>
           <FindButton
             label={t("ui.files.nextMatch")}
-            title={`Next Match (${MOD}G)`}
+            title={t("ui.files.nextMatchShortcut", { mod: MOD })}
             disabled={total === 0}
             onClick={() => step(1)}
           >

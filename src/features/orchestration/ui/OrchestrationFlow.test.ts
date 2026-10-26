@@ -20,6 +20,7 @@ vi.mock("../../../integrations/harness/core/availability", () => ({
   hasProbedHarnessAvailability: () => true,
   isHarnessAvailable: () => true,
   harnessUnavailableHint: () => "",
+  harnessUnavailableParts: () => ({ name: "Codex", how: "" }),
   probeHarnessAvailability: async () => {},
   subscribeHarnessAvailability: () => () => {},
 }));

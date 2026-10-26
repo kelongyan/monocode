@@ -39,7 +39,7 @@ import {
   subscribeProjectProviders,
 } from "../model/projectProviders";
 import {
-  harnessUnavailableHint,
+  harnessUnavailableParts,
   subscribeHarnessAvailability,
   getHarnessAvailabilitySnapshot,
 } from "../../../integrations/harness/core/availability";
@@ -1054,7 +1054,12 @@ export function ModelPicker({
                 aria-checked={selected}
                 disabled={disabled}
                 title={
-                  disabled ? harnessUnavailableHint(item.harness) : undefined
+                  disabled
+                    ? t(
+                        "ui.shared.harnessNotFound",
+                        harnessUnavailableParts(item.harness),
+                      )
+                    : undefined
                 }
                 onMouseDown={(event) => event.preventDefault()}
                 onMouseEnter={() => setRecentActive(index)}
@@ -1668,12 +1673,12 @@ function ModelFlyout({
           {models.length === 0 ? (
             <div className="px-2 py-3 text-[12px] text-content/50">
               {tab === "favorites" && !query.trim()
-                ? "No favorite models"
+                ? t("composer.noFavoriteModels")
                 : tab !== "favorites" && !source.available(tab)
-                  ? harnessUnavailableHint(tab)
+                  ? t("ui.shared.harnessNotFound", harnessUnavailableParts(tab))
                   : tab === "codex" && !query.trim()
-                    ? "Loading Codex models…"
-                    : "No matching models"}
+                    ? t("composer.loadingCodexModels")
+                    : t("composer.noMatchingModels")}
             </div>
           ) : (
             groups.map((group) => (
@@ -1717,7 +1722,10 @@ function ModelFlyout({
                         disabled={disabled}
                         title={
                           disabled
-                            ? harnessUnavailableHint(item.harness)
+                            ? t(
+                                "ui.shared.harnessNotFound",
+                                harnessUnavailableParts(item.harness),
+                              )
                             : undefined
                         }
                         onMouseDown={(event) => event.preventDefault()}
@@ -1737,13 +1745,13 @@ function ModelFlyout({
                         type="button"
                         title={
                           favorited
-                            ? "Remove from favorites"
-                            : "Add to favorites"
+                            ? t("composer.removeFromFavorites")
+                            : t("composer.addToFavorites")
                         }
                         aria-label={
                           favorited
-                            ? "Remove from favorites"
-                            : "Add to favorites"
+                            ? t("composer.removeFromFavorites")
+                            : t("composer.addToFavorites")
                         }
                         onMouseDown={(event) => event.preventDefault()}
                         onClick={(event) => {

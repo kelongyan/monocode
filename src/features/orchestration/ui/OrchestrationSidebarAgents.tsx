@@ -150,7 +150,7 @@ export function OrchestrationSidebarAgents({
               <button
                 type="button"
                 title={`${task.title} · ${HARNESS_TITLE[task.harness]} · ${model} · ${label}`}
-                aria-label={`Agent details: ${task.title}`}
+                aria-label={t("ui.orchestration.agentDetailsAria", { title: task.title })}
                 aria-expanded={open}
                 onClick={() => toggle(task.sessionId, open)}
                 // Named, because the whole session card is already a `group`.
@@ -291,15 +291,18 @@ export function OrchestrationSidebarAgents({
         <div className="mt-1.5 space-y-1.5 border-t border-stroke pt-1.5">
           <p className="px-0.5 text-[11px] leading-relaxed text-content/45">
             {stopping
-              ? "Stopping interrupted work before this run can resume."
+              ? t("ui.orchestration.stoppingWorkBeforeResume")
               : leadBusy
-                ? "Waiting for the lead's interrupted turn to finish before this run can resume."
-                : "Resume continues interrupted workers from their retained checkouts and starts queued work. Policy-blocked tasks stay stopped for review."}
+                ? t("ui.orchestration.waitingForLeadTurnBeforeResume")
+                : t("ui.orchestration.resumeExplainer")}
           </p>
           {resumeBlocker && (
             <p className="px-0.5 text-[11px] leading-relaxed text-amber-400">
-              {resumeBlocker.title || "Another conversation"} is still running
-              in this project.
+              {t("ui.orchestration.resumeBlockerRunning", {
+                name:
+                  resumeBlocker.title ||
+                  t("ui.orchestration.anotherConversation"),
+              })}
             </p>
           )}
           <div className="-mr-1.5 flex items-center justify-end gap-1">
@@ -318,12 +321,16 @@ export function OrchestrationSidebarAgents({
               disabled={pending || stopping || leadBusy || !!resumeBlocker}
               title={
                 stopping
-                  ? "Wait for interrupted agents to stop"
+                  ? t("ui.orchestration.waitForAgentsToStop")
                   : leadBusy
-                    ? "Wait for the lead's interrupted turn to finish"
+                    ? t("ui.orchestration.waitForLeadTurn")
                     : resumeBlocker
-                      ? `Stop ${resumeBlocker.title || "the other conversation"} before resuming`
-                      : "Continue interrupted and queued work"
+                      ? t("ui.orchestration.stopBeforeResuming", {
+                          conversation:
+                            resumeBlocker.title ||
+                            t("ui.orchestration.theOtherConversation"),
+                        })
+                      : t("ui.orchestration.continueInterruptedWork")
               }
               onClick={() =>
                 void perform(() =>

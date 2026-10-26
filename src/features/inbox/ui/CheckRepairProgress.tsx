@@ -324,7 +324,7 @@ function RepairCard({
       <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5">
         <button
           type="button"
-          aria-label={`Repair details for ${label}`}
+          aria-label={t("ui.inbox.repairDetailsFor", { name: label })}
           aria-expanded={expanded}
           aria-controls={detailsId}
           onClick={() => setExpanded(!expanded)}
@@ -363,7 +363,7 @@ function RepairCard({
               }
               className="mt-0.5 block truncate text-[11px] text-content/65"
             >
-              {single ? single.check.name : `CI repair for ${label}`}
+              {single ? single.check.name : t("ui.inbox.ciRepairFor", { name: label })}
             </span>
           </span>
           <ChevronRight

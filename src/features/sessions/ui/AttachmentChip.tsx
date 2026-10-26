@@ -30,8 +30,12 @@ export function AttachmentChip({ attachment, onRemove, photo = false }: Props) {
         {image ? (
           <button
             type="button"
-            aria-label={`Open ${attachment.name} full screen`}
-            title={`Open ${attachment.name} full screen`}
+            aria-label={t("ui.sessions.openFullScreenAria", {
+              name: attachment.name,
+            })}
+            title={t("ui.sessions.openFullScreenAria", {
+              name: attachment.name,
+            })}
             onClick={(event) => {
               event.stopPropagation();
               setPreviewOpen(true);
@@ -67,7 +71,7 @@ export function AttachmentChip({ attachment, onRemove, photo = false }: Props) {
           <button
             type="button"
             title={t("ui.sessions.remove")}
-            aria-label={`Remove ${attachment.name}`}
+            aria-label={t("common.removeNamed", { name: attachment.name })}
             onClick={(event) => {
               event.stopPropagation();
               onRemove();

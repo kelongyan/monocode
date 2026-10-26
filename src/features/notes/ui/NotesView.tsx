@@ -310,8 +310,8 @@ export function NotesView({
         ) : visible.length === 0 ? (
           <p className="px-3 py-2 text-[12px] text-content/50">
             {query.trim()
-              ? "No matching notes"
-              : "No notes yet. Save a turn from the transcript, or create one here."}
+              ? t("ui.notes.noMatchingNotes")
+              : t("ui.notes.noNotesYet")}
           </p>
         ) : (
           <ul className="flex flex-col gap-0.5 p-1.5">
@@ -996,7 +996,7 @@ function NoteEditor({
         >
           {imageDrag || imageBusy ? (
             <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center rounded-lg bg-background-base/80 text-[12px] text-content/70 backdrop-blur-sm">
-              {imageBusy ? "Adding images…" : "Drop images here"}
+              {imageBusy ? t("ui.notes.addingImages") : t("ui.notes.dropImagesHere")}
             </div>
           ) : null}
           {mode === "source" ? (

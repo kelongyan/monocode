@@ -71,9 +71,21 @@ let inflight: Promise<void> | null = null;
  */
 const PROBE_TTL_MS = 30_000;
 
-export function harnessUnavailableHint(id: HarnessId): string {
+/**
+ * The hint's fragments, so renderer code can format the sentence through
+ * `t()` without this module importing the i18n dictionary (the headless host
+ * bundles this file and must stay dictionary-free).
+ */
+export function harnessUnavailableParts(id: HarnessId): {
+  name: string;
+  how: string;
+} {
   const { name, install } = CLI[id];
-  const how = install ? ` (\`${install}\`)` : "";
+  return { name, how: install ? ` (\`${install}\`)` : "" };
+}
+
+export function harnessUnavailableHint(id: HarnessId): string {
+  const { name, how } = harnessUnavailableParts(id);
   return `${name} not found${how}. Install it, or restart MonoCode if it is already installed.`;
 }
 

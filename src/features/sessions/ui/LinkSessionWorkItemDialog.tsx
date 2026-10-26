@@ -31,7 +31,11 @@ export function LinkSessionWorkItemDialog({
 
   return (
     <Modal
-      title={initial ? "Edit GitHub link" : "Link GitHub issue or PR"}
+      title={
+        initial
+          ? t("ui.sessions.editGithubLink")
+          : t("ui.sessions.linkGithubIssueOrPr")
+      }
       description={sessionTitle}
       size="sm"
       onClose={onClose}
@@ -88,7 +92,7 @@ export function LinkSessionWorkItemDialog({
             type="submit"
             className="rounded-md bg-accent px-3 py-1.5 font-medium text-white hover:brightness-110 active:scale-[0.97]"
           >
-            {initial ? "Update link" : "Link"}
+            {initial ? t("ui.sessions.updateLink") : t("ui.sessions.link")}
           </button>
         </div>
       </form>

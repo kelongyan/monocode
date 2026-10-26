@@ -78,10 +78,10 @@ export function MessageQueue({
             <Pause className="size-3.5" />
             <span className="min-w-0 flex-1 truncate">
               {failed
-                ? "A message couldn't be sent"
+                ? t("ui.sessions.messageCouldntBeSent")
                 : variant === "messages"
-                  ? "Messages paused"
-                  : "Queue paused because you interrupted"}
+                  ? t("ui.sessions.messagesPaused")
+                  : t("ui.sessions.queuePausedAfterInterrupt")}
             </span>
             <button
               type="button"
@@ -89,13 +89,13 @@ export function MessageQueue({
               className="flex h-6 shrink-0 items-center gap-1.5 rounded-md px-1.5 hover:bg-content/10 hover:text-content"
             >
               <Play className="size-3.5" />
-              {failed ? "Retry" : "Resume"}
+              {failed ? t("ui.sessions.retry") : t("ui.sessions.resume")}
             </button>
           </div>
         ) : null}
         {variant === "messages" && !paused ? (
           <div role="status" className="py-1 text-[11px] text-content/50">
-            {sendingId ? "Sending…" : "Waiting to send"}
+            {sendingId ? t("ui.sessions.sending") : t("ui.sessions.waitingToSend")}
           </div>
         ) : null}
         {messages.map((message, index) => {

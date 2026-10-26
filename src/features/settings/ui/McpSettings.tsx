@@ -296,7 +296,7 @@ function AddServerModal({
             disabled={busy}
             className="rounded-md border border-stroke px-3 py-1.5 text-xs hover:bg-content/5 disabled:opacity-50"
           >
-            {busy ? "Adding…" : "Add server"}
+            {busy ? t("ui.settings.adding") : t("ui.settings.addServer")}
           </button>
         </div>
       </form>
@@ -482,14 +482,14 @@ function McpConnections({
             type="button"
             aria-label={
               showAllProviders
-                ? "Show available providers"
-                : "Show all providers"
+                ? t("ui.settings.showAvailableProviders")
+                : t("ui.settings.showAllProviders")
             }
             aria-pressed={showAllProviders}
             title={
               showAllProviders
-                ? "Showing all providers"
-                : "Showing available providers"
+                ? t("ui.settings.showingAllProviders")
+                : t("ui.settings.showingAvailableProviders")
             }
             onClick={() => setShowAllProviders(!showAllProviders)}
             className={`grid size-7 place-items-center rounded-md border border-content/10 hover:bg-content/5 ${showAllProviders ? "bg-selection text-content" : "text-content/55"}`}
@@ -524,7 +524,7 @@ function McpConnections({
             ) : (
               <ProviderIcon provider={provider} />
             )}
-            {provider === "all" ? "All" : MCP_PROVIDER_LABELS[provider]}
+            {provider === "all" ? t("ui.settings.all") : MCP_PROVIDER_LABELS[provider]}
             <span className="opacity-60">
               {provider === "all"
                 ? servers.length
@@ -599,7 +599,9 @@ function McpConnections({
                     <label className="text-xs text-content/55">
                       {t("ui.settings.scope")}{" "}
                       <select
-                        aria-label={`Scope to remove ${server.name} from`}
+                        aria-label={t("ui.settings.scopeToRemoveFrom", {
+                          name: server.name,
+                        })}
                         value={removeScopes[server.name] ?? "local"}
                         onChange={(event) =>
                           setRemoveScopes((current) => ({

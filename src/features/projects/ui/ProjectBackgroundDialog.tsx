@@ -176,7 +176,7 @@ export function ProjectBackgroundDialog({
   return (
     <Modal
       title={t("ui.projects.backgroundImage")}
-      description={`Choose a background image for ${name}`}
+      description={t("ui.projects.chooseBackgroundFor", { name })}
       size="sm"
       fitViewport
       onClose={onClose}
@@ -222,14 +222,14 @@ export function ProjectBackgroundDialog({
             {busy ? (
               <Loader className="size-3.5 animate-spin" aria-hidden />
             ) : null}
-            {path ? "Change image" : "Choose image"}
+            {path ? t("ui.projects.changeImage") : t("ui.projects.chooseImage")}
           </button>
           <p className="mt-1.5 text-[11px] leading-relaxed text-content/45">
             {locked
-              ? `Shown behind ${name}'s chat, dimmed with the Haze effect.`
+              ? t("ui.projects.shownBehindChat", { name })
               : path
-                ? "This image overrides the global background for this project."
-                : "This project currently follows the global Appearance setting."}
+                ? t("ui.projects.overridesGlobalBackground")
+                : t("ui.projects.followsGlobalAppearance")}
           </p>
           {error ? (
             <p className="mt-1.5 text-[12px] text-red-400">{error}</p>

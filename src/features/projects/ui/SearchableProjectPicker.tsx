@@ -93,6 +93,7 @@ export function SearchableProjectPicker({
   projectMenuActive = false,
   monos,
 }: Props) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
   const { groupLabels, groupColors, groupCustomColors, groupMascots } =
@@ -103,7 +104,7 @@ export function SearchableProjectPicker({
   const key = projectKey(cwd);
   const label = inProject
     ? resolveTabGroupLabel(key, groupLabels, basename(cwd) || seed)
-    : "Choose project";
+    : t("ui.projects.chooseProject");
   const logoPath = resolveTabGroupLogo(key, groupLogos);
   const color = resolveTabGroupColor(key, groupColors, groupCustomColors, seed);
   const orderedProjects = pickerProjects(recents, cwd, railCwd);
@@ -111,7 +112,7 @@ export function SearchableProjectPicker({
   const closePicker = () => setOpen(false);
   const openPicker = () => setOpen(true);
 
-  const action = mode === "move" ? "Move note to project" : "Switch project";
+  const action = mode === "move" ? t("ui.projects.moveNoteToProject") : t("ui.sourceControl.switchProject");
 
   return (
     <div
@@ -144,10 +145,14 @@ export function SearchableProjectPicker({
         }
         aria-label={
           activeMono
-            ? `${action}, current mono ${activeMono.name}, ${MONO_STATUS_LABEL[activeMono.status ?? "idle"]}`
+            ? t("ui.projects.currentMonoAria", {
+                action,
+                name: activeMono.name,
+                status: MONO_STATUS_LABEL[activeMono.status ?? "idle"],
+              })
             : inProject
-              ? `${action}, current project ${label}`
-              : "Choose project for note"
+              ? t("ui.projects.currentProjectAria", { action, name: label })
+              : t("ui.projects.chooseProjectForNote")
         }
         aria-expanded={open}
         aria-haspopup="dialog"
@@ -407,8 +412,8 @@ export function ProjectPickerPopover({
           }}
           placeholder={
             monos?.items.length
-              ? "Search monos and projects..."
-              : "Search projects..."
+              ? t("ui.projects.searchMonosAndProjects")
+              : t("ui.projects.searchProjectsDots")
           }
           className="min-w-0 flex-1 bg-transparent text-[13px] text-content outline-none placeholder:text-content/35"
         />

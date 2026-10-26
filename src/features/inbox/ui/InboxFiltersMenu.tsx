@@ -159,8 +159,8 @@ export function InboxFiltersMenu({
       <FilterItem
         label={
           source === "gitlab" || source === "azuredevops"
-            ? "Needs attention"
-            : "Assigned to me"
+            ? t("ui.settings.needsAttention")
+            : t("ui.inbox.assignedToMe")
         }
         checked={filters.assignedToMe}
         onClick={toggleAssigned}
@@ -210,7 +210,7 @@ export function InboxFiltersMenu({
               key={option.id}
               label={
                 source === "gitlab" && option.id === "pr"
-                  ? "Merge requests"
+                  ? t("ui.inbox.mergeRequests")
                   : option.label
               }
               checked={!hiddenKinds.has(option.id)}

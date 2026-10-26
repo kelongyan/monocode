@@ -82,7 +82,7 @@ export function NoteMiniCard({ card, onDismiss, embedded = false }: Props) {
         <button
           type="button"
           title={t("ui.notes.remove")}
-          aria-label={`Remove note ${card.title || "Untitled"}`}
+          aria-label={t("ui.notes.removeNoteNamed", { title: card.title || t("ui.notes.untitled") })}
           onClick={onDismiss}
           className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"
         >

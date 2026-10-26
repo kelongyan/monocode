@@ -76,7 +76,7 @@ export function LiveAgentsPreview({
       data-live-agents-preview="full"
     >
       <span className="sr-only" aria-live="polite" aria-atomic="true">
-        {agents.length} working agents
+        {t("ui.sessions.workingAgentsCount", { count: agents.length })}
       </span>
       <div className="overflow-hidden rounded-lg bg-content/5">
         <div className="flex items-center gap-2 px-3.5 py-1.5">
@@ -122,7 +122,7 @@ export function LiveAgentsPreview({
             ) : (
               <ChevronDown className="size-3" strokeWidth={1.75} />
             )}
-            {expanded ? "Show less" : `${extra} more`}
+            {expanded ? t("ui.sessions.showLess") : `${extra} more`}
           </button>
         ) : null}
       </div>

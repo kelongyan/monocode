@@ -71,12 +71,12 @@ export function ToolDiffPreview({
 
   const description =
     status === "pending"
-      ? "Proposed changes"
+      ? t("ui.sessions.proposedChanges")
       : status === "rejected"
-        ? "Attempted changes · tool did not complete"
+        ? t("ui.sessions.attemptedChangesIncomplete")
         : preview.contentOnly
-          ? "Written content · previous contents unavailable"
-          : "Change preview";
+          ? t("ui.sessions.writtenContentUnavailable")
+          : t("ui.sessions.changePreview");
 
   return (
     <>
@@ -86,8 +86,10 @@ export function ToolDiffPreview({
         className={`${className ?? ""} focus-visible:outline-2 focus-visible:outline-sky-400/60`}
         aria-label={
           onOpen
-            ? `Open ${label}`
-            : `Preview ${preview.contentOnly ? "written content" : "changes"}: ${label}`
+            ? t("ui.sessions.openNamed", { name: label })
+            : preview.contentOnly
+              ? t("ui.sessions.previewWrittenContentAria", { name: label })
+              : t("ui.sessions.previewChangesAria", { name: label })
         }
         aria-haspopup="dialog"
         aria-expanded={open}

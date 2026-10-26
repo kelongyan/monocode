@@ -175,7 +175,7 @@ export function CheckRepairForm({
           >
             {checks.length === 1
               ? checks[0].name
-              : `${checks.length} failed checks`}{" "}
+              : t("ui.inbox.failedChecksCount", { count: checks.length })}{" "}
             · PR #{repair.number}
           </p>
         </div>
@@ -300,7 +300,7 @@ export function CheckRepairForm({
               strokeWidth={1.75}
             />
           ) : null}
-          {busy ? "Preparing..." : "Start fix"}
+          {busy ? t("ui.inbox.preparingEllipsis") : t("ui.inbox.startFix")}
           {!busy ? (
             <ChevronRight className="size-3" strokeWidth={1.75} />
           ) : null}

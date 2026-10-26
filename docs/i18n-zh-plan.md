@@ -461,6 +461,23 @@ CI 新增独立 job `i18n`（advisory）。**故意不放进三平台 `check` �
 
 **遗留**（与 5.1 一致，无新增）：NSIS 安装包语言（打包发布环节）、`menu.rs`（macOS）、中文视觉回归。Rust 高频错误码映射（CLI not found 等）按「不硬翻译」原则暂不处理。
 
+### 阶段 8：JSX 表达式盲区清零 — ✅ 已完成（2026-10-26）
+
+语言锁定（唯一中文）上线后，用户报「设置→服务提供方→代理 CLI」说明仍是英文。根因是扫描器的第三类表达式盲区：字面量藏在 JSX 表达式容器里——三元分支（`{locked ? "Hidden globally" : "Show in picker"}`）、`??`/`&&` 兜底、模板静态段、经变量传入可见属性的语句级常量，以及 `window.confirm/alert` 原生弹窗。
+
+**扫描器二次升级**（`scripts/check-i18n.mjs`）：
+- 新增 `findJsxCopy()`：递归表达式容器（三元两臂、`??`/`&&` 右值、括号、模板静态段合并），属性侧从「仅字符串字面量初值」扩展到表达式初值；`t()` 包裹的调用表达式天然不命中。
+- `DIALOG_CALLEES` 加 `confirm`/`alert`（成员调用只认 `window.`，`host.message` 之类协议调用不受影响）。
+- `VISIBLE_ATTRS` 加 `detail`。
+- `looksLikeCopy` 收紧：全小写词组不再一律当类名——须含 `-:[]/.%#` 工具标记才豁免（否则 "is still running" 整句漏网；此前豁免了 "h-full min-h-0"）。
+- `i18nGuard.test.ts` 新增 3 组用例（表达式正反两向、原生弹窗、小写句子判定）。
+
+**清理执行**：升级后全仓报出 588 + 28 条，按目录贪心分 3 组派 general-purpose 子代理并行处理（各约 196 条），主代理用 `work/merge-expr-dicts.mjs`（点路径嵌套插入、已存在键幂等跳过、值冲突报告）集中合并 8 份 fragment JSON 进双词典，再统一过 tsc/vitest。语句级常量（`backgroundLabel`、`interjectionChrome` 等）直接模块级 `t()`——语言已锁 zh-CN、测试 setup 先钉 en，两侧都安全；`availability.ts` 保持字典无关（host 打包约束），导出 `harnessUnavailableParts()` 由渲染层拼句。
+
+**词典规模**：叶子 1,602 → 约 2,150（+548），中英键集合始终一致；新增 `ui.terminal`、`ui.appShell` 未用（shell 文案并入既有 `ui.shell`）、`dialogs` 扩容（原生弹窗族）、`ui.files.video*`、`ui.monos.lines*`、`ui.projects` 搜索结果 2×2 单复数矩阵等。
+
+**验证**：`check:web` 全绿（507 文件 / 5563 用例，含 3 条新 guard），tsc 干净，`check:i18n:strict` 零报告。en 值与原文逐字节纪律在 ~110 文件、600+ 处包装后仍由英文钉定的测试矩阵全量证明。浏览器测试仍受本机 Playwright 修订限制未跑。
+
 ## 5.1 交付状态与遗留项
 
 阶段 0–6 与存量清理全部完成；阶段 7 清理了扫描器四类盲区（对话框实参、`.ts` 常量、白名单外 props、原生层文案入口），`check:i18n` 与词典同值清单已复核为「仅品牌/协议保留」。
@@ -475,6 +492,7 @@ CI 新增独立 job `i18n`（advisory）。**故意不放进三平台 `check` �
 阶段 6  AST 防回退检测
 批次 1–9  清理全部 960 处存量文案
 阶段 7  扫描器盲区清理：对话框族、模型设置、自动化模板/触发器、通知分类、账号用量、props 与终端/更新确认（+227 词条）
+阶段 8  JSX 表达式盲区清零：三元/兜底/模板/原生弹窗/语句级常量，扫描器升级 + 616 处包装（+548 词条）
 ```
 
 **最终状态**：`npm run check:i18n` **零报告**。整个渲染层的用户可见文案都经过 `t()`，中英双词典键集合一致（`tsc` 强制）。CI 已切换到 `check:i18n:strict` 硬门禁，并纳入 `check:web`；扫描范围自阶段 7 起覆盖 `.ts`+`.tsx` 的对话框实参与扩展后的可见属性白名单。

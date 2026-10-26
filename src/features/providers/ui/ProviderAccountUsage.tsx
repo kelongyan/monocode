@@ -195,7 +195,7 @@ export function UsageMeter({
           {showRemaining
             ? `${formatUsagePercent(remaining)} left`
             : full
-              ? "Full"
+              ? t("ui.providers.full")
               : formatUsagePercent(pct)}
         </span>
       </div>

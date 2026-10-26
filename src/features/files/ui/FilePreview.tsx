@@ -141,7 +141,7 @@ export function FilePreview({
                 : undefined
             }
             tabIndex={variant === "popover" ? 0 : undefined}
-            aria-label={variant === "popover" ? "Preview lines" : undefined}
+            aria-label={variant === "popover" ? t("ui.files.previewLines") : undefined}
           >
             {preview.contentOnly && !lines.length ? (
               <p className="px-3 py-2 font-mono text-xs text-content/50">

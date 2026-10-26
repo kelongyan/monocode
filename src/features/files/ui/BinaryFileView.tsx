@@ -131,7 +131,7 @@ export function BinaryFileView({ path, cwd, visible = true }: Props) {
       <FileCard
         path={path}
         cwd={cwd}
-        title={`Couldn’t open ${basename(path)}`}
+        title={t("ui.files.couldntOpenNamed", { name: basename(path) })}
         detail={state.message}
         icon={<AlertCircle className="mx-auto mb-3 size-5 text-red-400" />}
         onRetry={reload}
@@ -146,7 +146,9 @@ export function BinaryFileView({ path, cwd, visible = true }: Props) {
         path={path}
         cwd={cwd}
         title={basename(path)}
-        detail={`${formatFileSize(state.size)} · not a readable image`}
+        detail={t("ui.files.sizeNotReadableImage", {
+          size: formatFileSize(state.size),
+        })}
         icon={
           <div className="mx-auto mb-3 flex justify-center">
             <FileTypeIcon name={basename(path)} isDir={false} size={28} />
@@ -195,6 +197,7 @@ function VideoView({
   visible: boolean;
   onRetry: () => void;
 }) {
+  const t = useT();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [metadata, setMetadata] = useState<{
     width: number;
@@ -241,8 +244,8 @@ function VideoView({
       <FileCard
         path={path}
         cwd={cwd}
-        title={`Couldn’t play ${basename(path)}`}
-        detail="This video’s format or codec is unsupported, or the file is damaged."
+        title={t("ui.files.couldntPlayNamed", { name: basename(path) })}
+        detail={t("ui.files.videoUnsupportedFormat")}
         icon={<AlertCircle className="mx-auto mb-3 size-5 text-red-400" />}
         onRetry={onRetry}
         offerOpen
@@ -259,7 +262,7 @@ function VideoView({
           controls
           playsInline
           preload="metadata"
-          aria-label={`Video preview: ${basename(path)}`}
+          aria-label={t("ui.files.videoPreviewAria", { name: basename(path) })}
           className="h-full w-full object-contain"
           onLoadedMetadata={(event) => {
             const video = event.currentTarget;
@@ -518,7 +521,7 @@ function ImageView({
         <span className="flex-1" />
         {IS_MAC ? (
           <ZoomButton
-            label={copied ? "Copied" : "Copy original file"}
+            label={copied ? t("ui.files.copied") : t("ui.files.copyOriginalFile")}
             onClick={copyOriginal}
           >
             {copied ? (
@@ -540,7 +543,7 @@ function ImageView({
           onClick={() => setZoom("fit")}
           className="w-11 rounded text-center tabular-nums hover:text-content"
         >
-          {zoom === "fit" ? "Fit" : `${Math.round(zoom * 100)}%`}
+          {zoom === "fit" ? t("ui.files.fit") : `${Math.round(zoom * 100)}%`}
         </button>
         <ZoomButton
           label={t("ui.files.zoomIn")}

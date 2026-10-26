@@ -426,6 +426,7 @@ export function FileField({
 
 /** How much of MEMORY.md loads, against the budget each turn has for it. */
 export function MemoryGauge({ memory }: { memory: string }) {
+  const t = useT();
   const budget = memoryWithinBudget(memory);
   const share = Math.max(
     budget.lines / MEMORY_MAX_LINES,
@@ -446,8 +447,11 @@ export function MemoryGauge({ memory }: { memory: string }) {
       </span>
       <span className="shrink-0 tabular-nums">
         {budget.droppedLines
-          ? `${budget.droppedLines} lines not loading`
-          : `${budget.lines} / ${MEMORY_MAX_LINES} lines`}
+          ? t("ui.monos.linesNotLoading", { count: budget.droppedLines })
+          : t("ui.monos.linesBudget", {
+              used: budget.lines,
+              max: MEMORY_MAX_LINES,
+            })}
       </span>
     </div>
   );

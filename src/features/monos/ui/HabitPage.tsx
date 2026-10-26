@@ -88,10 +88,10 @@ export function HabitPage({
         <IconButton
           label={
             runningSince != null
-              ? "Already running"
+              ? t("ui.monos.alreadyRunning")
               : starting
-                ? "Starting"
-                : "Run now"
+                ? t("ui.monos.startingNow")
+                : t("ui.automations.runNow")
           }
           disabled={runningSince != null || starting}
           onClick={onRunNow}
@@ -99,7 +99,7 @@ export function HabitPage({
           <Zap className="size-3.5" strokeWidth={1.75} />
         </IconButton>
         <IconButton
-          label={habit.enabled ? "Pause" : "Resume"}
+          label={habit.enabled ? t("ui.monos.pause") : t("ui.monos.resume")}
           onClick={onToggle}
         >
           {habit.enabled ? (
@@ -116,7 +116,7 @@ export function HabitPage({
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none">
         <dl className="flex flex-col gap-0.5 px-4 py-3 text-[12px]">
           <Row label={t("monos.habitRuns")}>
-            {habit.enabled ? habitScheduleLabel(habit.schedule) : "Paused"}
+            {habit.enabled ? habitScheduleLabel(habit.schedule) : t("ui.monos.paused")}
           </Row>
           {starting ? (
             <Row label={t("monos.habitNext")}>{t("monos.starting")}</Row>

@@ -82,7 +82,7 @@ export function ConfirmReset({
                 onClick={() => void reset()}
                 className="rounded-md bg-red-500/20 px-3 py-1.5 text-[12px] font-medium text-red-300 enabled:hover:bg-red-500/30 disabled:opacity-50"
               >
-                {busy ? "Resetting…" : label}
+                {busy ? t("ui.monos.resetting") : label}
               </button>
             </div>
           </div>

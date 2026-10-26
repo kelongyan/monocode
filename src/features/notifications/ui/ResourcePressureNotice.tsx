@@ -212,7 +212,9 @@ export function ResourcePressureNotice({
               aria-haspopup="dialog"
               aria-expanded={open}
               onClick={() => setOpen(true)}
-              title={`${reasons.join(" · ")} · Review running work`}
+              title={t("ui.notifications.reviewRunningWorkTitle", {
+                reasons: reasons.join(" · "),
+              })}
               className={`inline-flex h-5 shrink-0 items-center gap-1.5 whitespace-nowrap ${insetChip ? "rounded-full px-2" : "rounded-md px-1.5"} text-content/55 transition-colors hover:bg-content/8 hover:text-content focus-visible:outline-2 focus-visible:outline-accent ${open ? "bg-content/8 text-content" : ""}`}
             >
               <CircleAlert
@@ -243,12 +245,12 @@ export function ResourcePressureNotice({
                 <p className="text-[12px] font-medium">
                   {pressure.active
                     ? reasons.join(" · ")
-                    : "Usage is back to normal"}
+                    : t("ui.notifications.usageBackToNormal")}
                 </p>
                 <p className="mt-0.5 text-[12px] leading-relaxed text-content/55">
                   {pressure.active
-                    ? "Things may feel slower. Stop work you no longer need."
-                    : "The slowdown has cleared. You can close this window."}
+                    ? t("ui.notifications.thingsMayFeelSlower")
+                    : t("ui.notifications.slowdownCleared")}
                 </p>
               </div>
             </div>
@@ -277,9 +279,10 @@ export function ResourcePressureNotice({
                 {t("ui.notifications.checkingRunningWork")}</p>
             ) : !processes.length && !error ? (
               <p className="py-6 text-center text-[12px] leading-relaxed text-content/50">
-                {t("ui.notifications.noRunningWorkFoundInMonocode")}{pressure.active
-                  ? " Other apps may be using these resources."
-                  : ""}
+                {t("ui.notifications.noRunningWorkFoundInMonocode")}
+                {pressure.active ? (
+                  <>{" "}{t("ui.notifications.otherAppsUsingResources")}</>
+                ) : null}
               </p>
             ) : null}
             {processes.length ? (
@@ -325,7 +328,7 @@ export function ResourcePressureNotice({
                           {session ? (
                             <button
                               type="button"
-                              aria-label={`Stop session ${title}`}
+                              aria-label={t("ui.notifications.stopSessionNamed", { name: title })}
                               title={t("ui.notifications.stopThisSessionAndPauseQueued")}
                               disabled={!!stopping}
                               className="flex h-7 shrink-0 items-center gap-1.5 rounded-md bg-content/6 px-2.5 text-[12px] text-content/70 hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40 dark:hover:text-red-400"
@@ -340,7 +343,7 @@ export function ResourcePressureNotice({
                                   <Loader className="size-3 animate-spin" />
                                   {t("ui.notifications.stopping")}</>
                               ) : (
-                                "Stop"
+                                t("composer.stop")
                               )}
                             </button>
                           ) : null}
@@ -348,9 +351,15 @@ export function ResourcePressureNotice({
                         <details className="group/processes ml-[34px] mt-0.5">
                           <summary className="flex cursor-pointer list-none items-center gap-1 text-[11px] text-content/45 hover:text-content/75 [&::-webkit-details-marker]:hidden">
                             <ChevronDown className="size-3 shrink-0 -rotate-90 transition-transform group-open/processes:rotate-0" />
-                            {rows.length}{" "}
-                            {rows.length === 1 ? "process" : "processes"} ·{" "}
-                            {formatMemory(memory)} memory
+                            {t(
+                              rows.length === 1
+                                ? "ui.notifications.processMemoryOne"
+                                : "ui.notifications.processMemoryOther",
+                              {
+                                count: rows.length,
+                                memory: formatMemory(memory),
+                              },
+                            )}
                           </summary>
                           <div className="mt-2 space-y-2 border-l border-stroke pl-2.5">
                             {rows.map((process) => (
@@ -376,11 +385,16 @@ export function ResourcePressureNotice({
                                 </div>
                                 <button
                                   type="button"
-                                  aria-label={`${process.agent ? "Stop agent" : "Stop build/tool"} for ${title} (PID ${process.pid})`}
+                                  aria-label={t(
+                                    process.agent
+                                      ? "ui.notifications.stopAgentAria"
+                                      : "ui.notifications.stopBuildToolAria",
+                                    { name: title, pid: process.pid },
+                                  )}
                                   title={
                                     process.agent
-                                      ? "Interrupt the agent"
-                                      : "Stop this tool; keep the agent running"
+                                      ? t("ui.notifications.interruptTheAgent")
+                                      : t("ui.notifications.stopToolKeepAgent")
                                   }
                                   disabled={
                                     !!stopping || (process.agent && !session)
@@ -398,8 +412,8 @@ export function ResourcePressureNotice({
                                   }
                                 >
                                   {stopping === process.identity
-                                    ? "Stopping…"
-                                    : "Stop"}
+                                    ? t("ui.notifications.stopping")
+                                    : t("composer.stop")}
                                 </button>
                               </div>
                             ))}

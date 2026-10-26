@@ -67,7 +67,7 @@ import { TerminalSpinner } from "./TerminalSpinner";
 import { Popover } from "../../../shared/ui/Popover";
 import { ProjectMascot } from "../../projects/ui/ProjectMascot";
 import { PixelMascot } from "../../projects/ui/PixelMascot";
-import { useT } from "../../../shared/i18n";
+import { t, useT } from "../../../shared/i18n";
 import type { MonoLook } from "../../monos/model/mono";
 import {
   monoSpawnedSessions,
@@ -1156,8 +1156,8 @@ function AgentTranscriptComponent({
           >
             <span className="inline-block rounded-md bg-background-base px-2.5 py-1.5">
               {loadingEarlier
-                ? "Loading earlier messages…"
-                : "Couldn't load earlier messages. Scroll up to retry."}
+                ? t("ui.sessions.loadingEarlierMessages")
+                : t("ui.sessions.couldNotLoadEarlierScrollUp")}
             </span>
           </div>
         ) : null}
@@ -1170,10 +1170,10 @@ function AgentTranscriptComponent({
               disabled={loadingEarlier}
             >
               {loadingEarlier
-                ? "Loading earlier messages…"
+                ? t("ui.sessions.loadingEarlierMessages")
                 : loadEarlierError
-                  ? "Couldn't load messages. Try again"
-                  : "Load earlier messages"}
+                  ? t("ui.sessions.couldNotLoadMessagesTryAgain")
+                  : t("ui.sessions.loadEarlierMessages")}
             </button>
           </div>
         ) : null}
@@ -1887,7 +1887,11 @@ function InitialThinking({
     <div
       className={`min-w-0 pt-3 pb-1 font-sans text-sm text-content/50 ${embedded ? "" : "px-4"}`}
     >
-      {live ? <Shimmer duration={1.6}>{t("ui.sessions.thinking")}</Shimmer> : "Thinking…"}
+      {live ? (
+        <Shimmer duration={1.6}>{t("ui.sessions.thinking")}</Shimmer>
+      ) : (
+        t("ui.sessions.thinking")
+      )}
     </div>
   );
 }
@@ -1935,8 +1939,8 @@ function LiveFoldTitle({
 
 function backgroundLabel(tasks: string[]): string {
   return tasks.length === 1
-    ? "running in background"
-    : `${tasks.length} tasks running in background`;
+    ? t("ui.sessions.runningInBackground")
+    : t("ui.sessions.tasksRunningInBackground", { count: tasks.length });
 }
 
 /**
@@ -1982,6 +1986,7 @@ function TurnDuration({
   /** Sit in the gap under the turn and show on hover, as a sent message's do. */
   revealOnHover?: boolean;
 }) {
+  const t = useT();
   const label =
     completionLabel ?? formatWorkingDuration(elapsedMs, modelName, true);
   const dot = (
@@ -2010,8 +2015,16 @@ function TurnDuration({
         {onShowWork ? (
           <button
             type="button"
-            title={workExpanded ? "Hide activity" : "Show activity"}
-            aria-label={workExpanded ? "Hide activity" : "Show activity"}
+            title={
+              workExpanded
+                ? t("ui.sessions.hideActivity")
+                : t("ui.sessions.showActivity")
+            }
+            aria-label={
+              workExpanded
+                ? t("ui.sessions.hideActivity")
+                : t("ui.sessions.showActivity")
+            }
             aria-expanded={!!workExpanded}
             onClick={onShowWork}
             className={`rounded-md p-1 outline-none hover:bg-content/8 hover:text-content/70 focus-visible:ring-1 focus-visible:ring-accent ${workExpanded ? "bg-content/8 text-content/70" : "text-content/40"}`}
@@ -2112,7 +2125,7 @@ function TurnMetricsBadge({
       <span
         role="img"
         tabIndex={0}
-        aria-label={`Turn metrics: ${label}`}
+        aria-label={t("ui.sessions.turnMetricsAria", { label })}
         title={t("transcript.turnMetrics")}
         className="grid rounded-md p-1 text-content/40 outline-none hover:bg-content/8 hover:text-content/70 focus-visible:ring-1 focus-visible:ring-accent"
       >
@@ -2190,8 +2203,8 @@ function CopyTurnButton({
       <button
         type="button"
         disabled={pending}
-        title={copied ? "Copied" : label}
-        aria-label={copied ? "Copied" : label}
+        title={copied ? t("ui.sessions.copied") : label}
+        aria-label={copied ? t("ui.sessions.copied") : label}
         className="-ml-1 rounded-md p-1 text-content/40 hover:bg-content/8 hover:text-content/70"
         onClick={(event) => {
           event.stopPropagation();
@@ -2254,8 +2267,12 @@ function SaveNoteButton({
       <button
         type="button"
         disabled={pending}
-        title={saved ? "Saved to Notes" : "Save as note"}
-        aria-label={saved ? "Saved to Notes" : "Save as note"}
+        title={
+          saved ? t("ui.sessions.savedToNotes") : t("ui.sessions.saveAsNote")
+        }
+        aria-label={
+          saved ? t("ui.sessions.savedToNotes") : t("ui.sessions.saveAsNote")
+        }
         className="rounded-md p-1 text-content/40 hover:bg-content/8 hover:text-content/70"
         onClick={async () => {
           setError(null);
@@ -2522,10 +2539,11 @@ const TranscriptBlock = memo(function TranscriptBlock({
  * left keeps it clear of the hover actions below.
  */
 function MonoReactionBadge({ emoji, live }: { emoji: string; live: boolean }) {
+  const t = useT();
   return (
     <span
       role="img"
-      aria-label={`Reacted ${emoji}`}
+      aria-label={t("ui.sessions.reactedWithEmoji", { emoji })}
       data-mono-reaction={emoji}
       className={`${live ? "mono-reaction-in " : ""}mono-reaction-badge absolute -top-2.5 -left-2.5 z-[1] grid h-[22px] place-items-center rounded-[8px] px-[7px] font-sans text-[11px] leading-none`}
     >
@@ -2689,7 +2707,9 @@ function UserMessageBlock({
     delivery && delivery.status !== "pending" ? (
       <div className="flex max-w-full items-center gap-2 px-3 pt-1 font-sans text-xs text-content/50">
         <span role={delivery.error ? "alert" : "status"}>
-          {delivery.error ? `Not sent · ${delivery.error}` : "Not sent"}
+          {delivery.error
+            ? t("ui.sessions.notSentWithReason", { error: delivery.error })
+            : t("ui.sessions.notSent")}
         </span>
         {onRetryMessage ? (
           <button
@@ -2697,7 +2717,9 @@ function UserMessageBlock({
             onClick={() => onRetryMessage(block.id)}
             className="shrink-0 rounded px-1 py-0.5 text-content/70 hover:bg-content/8"
           >
-            {delivery.status === "failed" ? "Retry" : "Resume"}
+            {delivery.status === "failed"
+              ? t("ui.sessions.retry")
+              : t("ui.sessions.resume")}
           </button>
         ) : null}
       </div>
@@ -2835,7 +2857,9 @@ function UserMessageBlock({
                   className="mt-1 rounded px-1 py-0.5 text-xs text-content/60 hover:bg-content/8 hover:text-content"
                   onClick={toggle}
                 >
-                  {expanded ? "Show less" : "Show more"}
+                  {expanded
+                    ? t("ui.sessions.showLess")
+                    : t("ui.sessions.showMore")}
                 </button>
               ) : null}
               {block.ciContext ? (
@@ -3079,6 +3103,7 @@ function WorkFoldLine({
   open: boolean;
   onToggle: () => void;
 }) {
+  const t = useT();
   const icon = (
     <span className="relative flex size-3.5 shrink-0 items-center justify-center">
       {open ? (
@@ -3159,7 +3184,9 @@ function WorkFoldLine({
     <button
       type="button"
       aria-expanded={open}
-      aria-label={open ? "Hide the work" : "Show the work"}
+      aria-label={
+        open ? t("ui.sessions.hideWork") : t("ui.sessions.showWork")
+      }
       aria-live={live ? "polite" : undefined}
       onClick={onToggle}
       className={`group ${row}`}
@@ -3417,6 +3444,7 @@ function MonoTurnHeader({
   workExpanded?: boolean;
   searchCurrent: boolean;
 }) {
+  const t = useT();
   const activity = useMemo(
     () => blocks.filter((block) => !block.internal && !block.draft),
     [blocks],
@@ -3495,8 +3523,16 @@ function MonoTurnHeader({
           {onShowWork ? (
             <button
               type="button"
-              title={workExpanded ? "Hide activity" : "Show activity"}
-              aria-label={workExpanded ? "Hide activity" : "Show activity"}
+              title={
+                workExpanded
+                  ? t("ui.sessions.hideActivity")
+                  : t("ui.sessions.showActivity")
+              }
+              aria-label={
+                workExpanded
+                  ? t("ui.sessions.hideActivity")
+                  : t("ui.sessions.showActivity")
+              }
               aria-expanded={!!workExpanded}
               onClick={onShowWork}
               className="min-w-0 flex-1 cursor-pointer text-left outline-none transition-opacity duration-150 hover:opacity-70 focus-visible:opacity-70"
@@ -3680,6 +3716,7 @@ function ActivityPhaseGroup({
   onOpenFile?: (path: string) => void;
   onOpenDiff?: (path: string) => void;
 }) {
+  const t = useT();
   const [override, setOverride] = useState<boolean | null>(null);
   const waiting = phase.steps.some(needsApproval);
   const open = waiting || (override ?? active);
@@ -3771,7 +3808,9 @@ function ActivityPhaseGroup({
         type="button"
         aria-expanded={open}
         aria-label={
-          open ? `Hide the steps for ${title}` : `Show the steps for ${title}`
+          open
+            ? t("ui.sessions.hideStepsFor", { title })
+            : t("ui.sessions.showStepsFor", { title })
         }
         onClick={() => setOverride(!open)}
         className="group flex w-full min-w-0 items-center gap-1.5 py-1 text-left"
@@ -4038,6 +4077,7 @@ function SubagentPanel({
   onOpenFile?: (path: string) => void;
   onOpenDiff?: (path: string) => void;
 }) {
+  const t = useT();
   const name = subagentName(block);
   const brief = subagentBrief(block);
   const model = subagentModelName(block);
@@ -4112,7 +4152,11 @@ function SubagentPanel({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={open ? `Hide ${name}'s work` : `Show ${name}'s work`}
+        aria-label={
+          open
+            ? t("ui.sessions.hideNamedWork", { name })
+            : t("ui.sessions.showNamedWork", { name })
+        }
         title={brief}
         onClick={onToggle}
         // An open row keeps the wash it lit up under the cursor, so the panel
@@ -4373,6 +4417,7 @@ function ActivityStatusRow({ block }: { block: Block }) {
  * you a note you wanted to read.
  */
 function ActivityInterjectionRow({ block }: { block: Block }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const meta = block.interjection;
   if (!meta) return null;
@@ -4413,7 +4458,9 @@ function ActivityInterjectionRow({ block }: { block: Block }) {
         type="button"
         aria-expanded={open}
         aria-label={
-          open ? `Hide the ${chrome.label} note` : `${chrome.label}: ${summary}`
+          open
+            ? t("ui.sessions.hideInterjectionNote", { label: chrome.label })
+            : `${chrome.label}: ${summary}`
         }
         onClick={() => setOpen((value) => !value)}
         className="group flex min-w-0 items-center gap-1.5 py-1 text-left"
@@ -4447,8 +4494,9 @@ function ActivityThinkingRow({
   bare?: boolean;
   onOpenFile?: (path: string) => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
-  const text = proseSummary(block.text) || "Thinking";
+  const text = proseSummary(block.text) || t("ui.sessions.thinkingPlain");
   // In a group the rail is the bullet, so there is nothing to breathe while
   // reasoning streams in — the line itself does.
   const pulse = block.streaming ? "zen-thinking-pulse" : "";
@@ -4485,7 +4533,11 @@ function ActivityThinkingRow({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={open ? "Hide thinking" : `Show thinking: ${text}`}
+        aria-label={
+          open
+            ? t("ui.sessions.hideThinking")
+            : t("ui.sessions.showThinking", { text })
+        }
         onClick={() => setOpen((value) => !value)}
         className="group flex min-w-0 items-center gap-1.5 py-1 text-left"
       >
@@ -4496,7 +4548,7 @@ function ActivityThinkingRow({
           }`}
         >
           {/* Open, the body starts with the paragraph the summary came from. */}
-          {open ? "Thinking" : text}
+          {open ? t("ui.sessions.thinkingLabel") : text}
         </span>
       </button>
       {open ? (
@@ -4530,6 +4582,7 @@ function ActivityNoteRow({
   expandable?: boolean;
   onOpenFile?: (path: string) => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const text = proseSummary(block.text);
   const icon = bare ? null : (
@@ -4539,7 +4592,7 @@ function ActivityNoteRow({
   if (!expandable) {
     return (
       <div
-        aria-label={`Agent said: ${text}`}
+        aria-label={t("ui.sessions.agentSaid", { text })}
         className="flex min-w-0 items-center gap-1.5 py-1"
       >
         {icon}
@@ -4555,7 +4608,11 @@ function ActivityNoteRow({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={open ? "Hide the full note" : `Agent said: ${text}`}
+        aria-label={
+          open
+            ? t("ui.sessions.hideFullNote")
+            : t("ui.sessions.agentSaid", { text })
+        }
         onClick={() => setOpen((value) => !value)}
         className="group flex min-w-0 items-center gap-1.5 py-1 text-left"
       >
@@ -4590,6 +4647,7 @@ function ActivityToolRow({
   onOpenFile?: (path: string) => void;
   onOpenDiff?: (path: string) => void;
 }) {
+  const t = useT();
   const [errorOpen, setErrorOpen] = useState(false);
   const output = useToolDetail(block, errorOpen);
   const appCall = monoCodeToolCall(block);
@@ -4624,7 +4682,7 @@ function ActivityToolRow({
     <div className="flex min-w-0 flex-col">
       {errorDetail ? (
         <div
-          aria-label={`Failed tool call: ${label}`}
+          aria-label={t("ui.sessions.failedToolCall", { label })}
           className="group flex min-w-0 items-center gap-1.5 py-1"
         >
           {bare ? null : <ActivityToolIcon state={state} live={live} />}
@@ -4638,7 +4696,11 @@ function ActivityToolRow({
           <button
             type="button"
             aria-expanded={errorOpen}
-            aria-label={`${errorOpen ? "Hide" : "Show"} error details for ${label}`}
+            aria-label={
+              errorOpen
+                ? t("ui.sessions.hideErrorDetails", { label })
+                : t("ui.sessions.showErrorDetails", { label })
+            }
             onClick={() => setErrorOpen((value) => !value)}
             className="-m-1 shrink-0 rounded p-1"
           >
@@ -4650,7 +4712,7 @@ function ActivityToolRow({
         </div>
       ) : (
         <div
-          aria-label={`Tool call: ${label}`}
+          aria-label={t("ui.sessions.toolCallAria", { label })}
           className="flex min-w-0 items-center gap-1.5 py-1"
         >
           {bare ? null : <ActivityToolIcon state={state} live={live} />}
@@ -4686,6 +4748,7 @@ function MonoCodeCallRow({
   call: MonoCodeToolCall;
   onApproval?: (requestId: number, decision: ApprovalDecision) => void;
 }) {
+  const t = useT();
   const state = toolCallState(block);
   const [errorOpen, setErrorOpen] = useState(false);
   const stored = useToolDetail(block, errorOpen);
@@ -4730,7 +4793,15 @@ function MonoCodeCallRow({
         <button
           type="button"
           aria-expanded={errorOpen}
-          aria-label={`${errorOpen ? "Hide" : "Show"} error details for MonoCode: ${call.label}`}
+          aria-label={
+            errorOpen
+              ? t("ui.sessions.hideMonoCodeErrorDetails", {
+                  label: call.label,
+                })
+              : t("ui.sessions.showMonoCodeErrorDetails", {
+                  label: call.label,
+                })
+          }
           onClick={() => setErrorOpen((value) => !value)}
           className="flex w-full min-w-0 items-center gap-1.5 py-1 text-left"
         >
@@ -5144,11 +5215,14 @@ function ApprovalControls({
 }
 
 function HandoffDivider({ block }: { block: Block }) {
+  const t = useT();
   const meta = block.handoff;
   if (!meta) return null;
 
   const preparing = meta.status === "preparing";
-  const label = preparing ? "Preparing a handoff" : HARNESS_TITLE[meta.to];
+  const label = preparing
+    ? t("ui.sessions.preparingHandoff")
+    : HARNESS_TITLE[meta.to];
 
   return (
     <div className="px-4 py-5">
@@ -5158,8 +5232,10 @@ function HandoffDivider({ block }: { block: Block }) {
           role="separator"
           aria-label={
             preparing
-              ? `Preparing a handoff to ${HARNESS_TITLE[meta.to]}`
-              : `Continued with ${label}`
+              ? t("ui.sessions.preparingHandoffTo", {
+                  target: HARNESS_TITLE[meta.to],
+                })
+              : t("ui.sessions.continuedWith", { target: label })
           }
           className="flex max-w-[min(100%,20rem)] items-center gap-1.5 px-1.5 font-sans text-[12px] text-content/55"
         >
@@ -5188,17 +5264,17 @@ function interjectionChrome(meta: InterjectionMeta): {
 } {
   const label =
     meta.customType === "advisor"
-      ? "Advisor"
+      ? t("ui.sessions.interjectionAdvisor")
       : meta.customType === "custom"
-        ? "Notice"
+        ? t("ui.sessions.interjectionNotice")
         : meta.customType;
   const severityText =
     meta.severity === "blocker"
-      ? "Blocker"
+      ? t("ui.sessions.severityBlocker")
       : meta.severity === "concern"
-        ? "Concern"
+        ? t("ui.sessions.severityConcern")
         : meta.severity === "nit"
-          ? "Nit"
+          ? t("ui.sessions.severityNit")
           : undefined;
   const severityClass =
     meta.severity === "blocker"
@@ -5216,6 +5292,7 @@ const INTERJECTION_BODY =
 /** A mid-turn interjection, e.g. OMP advisor notes: a labeled boundary with
  * a collapsible advisory body below it. */
 function InterjectionDivider({ block }: { block: Block }) {
+  const t = useT();
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const textRef = useRef<HTMLPreElement>(null);
@@ -5273,7 +5350,9 @@ function InterjectionDivider({ block }: { block: Block }) {
               onClick={() => setExpanded((value) => !value)}
               className="mt-1 py-1 font-sans text-xs text-content/55 hover:text-content"
             >
-              {expanded ? "Show less" : "Show more"}
+              {expanded
+                ? t("ui.sessions.showLess")
+                : t("ui.sessions.showMore")}
             </button>
           ) : null}
         </div>

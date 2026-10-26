@@ -283,13 +283,13 @@ export function BranchPicker({
   const missingGit = !current && !awaitingBranch;
   const label = current
     ? detached
-      ? `detached ${current}`
+      ? t("ui.sourceControl.detachedLower", { hash: current })
       : current
-    : "No repo";
+    : t("ui.sourceControl.noRepo");
   const title = awaitingBranch
-    ? "Loading branch…"
+    ? t("ui.sourceControl.loadingBranchProgress")
     : missingGit
-      ? "No git repository"
+      ? t("ui.sourceControl.noGitRepository")
       : label;
   const interactive = enabled && !awaitingBranch && !missingGit;
 
@@ -299,10 +299,10 @@ export function BranchPicker({
         title={title}
         aria-label={
           awaitingBranch
-            ? "Loading branch"
+            ? t("ui.sourceControl.loadingBranch")
             : missingGit
-              ? "No git repository"
-              : `Branch ${label}`
+              ? t("ui.sourceControl.noGitRepository")
+              : t("ui.sourceControl.branchNamed", { label })
         }
         aria-expanded={missingGit ? undefined : open}
         aria-haspopup={missingGit ? undefined : "dialog"}
@@ -400,7 +400,11 @@ export function BranchPicker({
             rows={rows}
             active={active}
             busy={busy}
-            emptyLabel={query.trim() ? "No matching branches" : "No branches"}
+            emptyLabel={
+              query.trim()
+                ? t("ui.workspace.noMatchingBranches")
+                : t("ui.sourceControl.noBranches")
+            }
             onActive={setActive}
             onPick={pick}
           />
@@ -421,8 +425,10 @@ export function BranchPicker({
                 <Plus className="size-4 shrink-0" strokeWidth={1.75} />
                 <span className="min-w-0 truncate">
                   {createRow.name
-                    ? `Create and checkout ${createRow.name}`
-                    : "New branch"}
+                    ? t("ui.sourceControl.createAndCheckout", {
+                        name: createRow.name,
+                      })
+                    : t("ui.sourceControl.newBranch")}
                 </span>
               </button>
             </div>

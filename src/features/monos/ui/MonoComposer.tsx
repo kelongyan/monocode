@@ -328,8 +328,8 @@ export function MonoComposer({
     <textarea
       ref={field}
       rows={1}
-      aria-label={`Message ${name}`}
-      placeholder={`Message ${name}`}
+      aria-label={t("ui.monos.messageMono", { name })}
+      placeholder={t("ui.monos.messageMono", { name })}
       spellCheck={autocorrect}
       autoCorrect={autocorrect ? "on" : "off"}
       disabled={!enabled || submitting}
@@ -360,7 +360,7 @@ export function MonoComposer({
     <button
       type="submit"
       aria-label={t("monos.send")}
-      title={pendingReads ? "Reading attachments…" : "Send"}
+      title={pendingReads ? t("ui.monos.readingAttachments") : t("monos.send")}
       disabled={!ready}
       className={`primary-action grid size-6.5 place-items-center rounded-md transition-[background-color,color,transform] duration-150 active:scale-90 disabled:cursor-default ${className}`}
     >

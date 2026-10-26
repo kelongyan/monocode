@@ -83,8 +83,8 @@ export function MonoProjects({
           </span>
           <button
             type="button"
-            aria-label={`Remove ${project.name}`}
-            title={`Remove ${project.name}`}
+            aria-label={t("common.removeNamed", { name: project.name })}
+            title={t("common.removeNamed", { name: project.name })}
             onClick={() => removeMonoProject(monoId, project.path)}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 opacity-0 hover:bg-content/8 hover:text-content focus-visible:opacity-100 group-hover:opacity-100"
           >

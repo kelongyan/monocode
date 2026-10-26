@@ -296,7 +296,7 @@ function PrCheckRow({
         ) : null}
         <span className="sr-only">
           {meta}
-          {failureMessage && failedStep ? `; Failed at ${failedStep}` : ""}
+          {failureMessage && failedStep ? t("ui.inbox.failedAtStep", { step: failedStep }) : ""}
         </span>
       </span>
     </>
@@ -360,7 +360,7 @@ function PrCheckRow({
             disabled={fixDisabled}
             aria-haspopup="dialog"
             aria-expanded={fixOpen}
-            aria-label={`Fix ${check.name} with AI`}
+            aria-label={t("ui.inbox.fixWithAiNamed", { name: check.name })}
             title={t("ui.inbox.fixWithAi")}
             className="grid size-7 shrink-0 place-items-center rounded-lg bg-content/[0.03] text-content/65 hover:bg-selection hover:text-content focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/50"
           >
@@ -390,7 +390,7 @@ function PrCheckRow({
           <button
             type="button"
             title={t("ui.inbox.viewFullLogOnGithub")}
-            aria-label={`View ${check.name} on GitHub`}
+            aria-label={t("ui.inbox.viewNamedOnGithub", { name: check.name })}
             onClick={() => void openUrl(url)}
             className={`${REFRESH_BUTTON} opacity-60 group-hover/check:opacity-100 focus-visible:opacity-100`}
           >
@@ -729,7 +729,7 @@ export function InboxPrChecks({
             ))}
           </div>
           <span className="text-[10px] text-content/40 @max-[420px]/checks:hidden">
-            {counts.fail ? "Failures first" : ""}
+            {counts.fail ? t("ui.inbox.failuresFirst") : ""}
           </span>
         </div>
       ) : null}

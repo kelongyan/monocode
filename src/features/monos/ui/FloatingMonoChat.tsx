@@ -250,7 +250,7 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
               />
             )}
             <p className="text-[13px] text-content/50">
-              {failure ?? "Loading conversation…"}
+              {failure ?? t("ui.monos.loadingConversation")}
             </p>
           </div>
         ) : (
@@ -587,8 +587,8 @@ function ArtifactSheet({
           {artifact ? (
             <button
               type="button"
-              aria-label={copied ? "Copied" : `Copy ${label.toLowerCase()}`}
-              title={copied ? "Copied" : `Copy ${label.toLowerCase()}`}
+              aria-label={copied ? t("ui.shared.copied") : t("ui.monos.copyNamed", { name: label.toLowerCase() })}
+              title={copied ? t("ui.shared.copied") : t("ui.monos.copyNamed", { name: label.toLowerCase() })}
               className={BUTTON}
               onClick={() =>
                 void copyMessage(artifact.body).then(
@@ -626,7 +626,7 @@ function ArtifactSheet({
             </p>
           ) : !artifact ? (
             <p role="alert" className="text-[13px] text-content/60">
-              {error ?? "This document is no longer available."}
+              {error ?? t("ui.artifacts.thisDocumentIsNoLongerAvailable")}
             </p>
           ) : (
             <article data-artifact-reader={artifact.id}>

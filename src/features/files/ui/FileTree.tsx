@@ -1044,7 +1044,7 @@ export const FileTree = memo(function FileTree({
           </HeaderIcon>
           {onSearch ? (
             <HeaderIcon
-              label={`Search in files (${MOD}Shift+F)`}
+              label={t("ui.files.searchInFilesShortcut", { mod: MOD })}
               onClick={onSearch}
             >
               <Search className="size-3.5" strokeWidth={1.75} />

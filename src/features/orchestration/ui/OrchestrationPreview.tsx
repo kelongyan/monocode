@@ -194,7 +194,7 @@ function AssignmentModel({
       <button
         type="button"
         ref={anchor}
-        aria-label={`Model for ${task.title}`}
+        aria-label={t("ui.orchestration.modelForTask", { title: task.title })}
         aria-expanded={open}
         onClick={() => {
           setQuery("");
@@ -516,7 +516,7 @@ export function OrchestrationPreview({
         </span>
         <div className="min-w-0 flex-1">
           <div className="truncate text-[13px] font-medium leading-tight text-content/90">
-            {planning ? "Planning assignments…" : proposal.title}
+            {planning ? t("ui.orchestration.planningAssignments") : proposal.title}
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-[11px] leading-tight text-content/45">
             <HarnessIcon
@@ -555,7 +555,7 @@ export function OrchestrationPreview({
               }
             >
               <Play className="size-3" strokeWidth={1.75} />
-              {starting ? "Starting…" : "Confirm & start"}
+              {starting ? t("monos.starting") : t("ui.orchestration.confirmAndStart")}
             </button>
           )}
           {run && (
@@ -579,8 +579,8 @@ export function OrchestrationPreview({
       {planning && (
         <p className="px-3 pb-2.5 text-[12px] leading-5 text-content/50">
           {proposal.settings.choices.length
-            ? "Your lead is choosing tasks and worker models. Review the assignments here before starting."
-            : "Checking available harnesses and models…"}
+            ? t("ui.orchestration.leadChoosingTasks")
+            : t("ui.orchestration.checkingHarnessesAndModels")}
         </p>
       )}
       {!!proposal.tasks.length && (
@@ -602,7 +602,7 @@ export function OrchestrationPreview({
                 <div className="flex min-h-9 min-w-0 flex-wrap items-center gap-x-2 gap-y-1 px-3 py-1 hover:bg-content/5">
                   <button
                     type="button"
-                    aria-label={`Details for ${task.title}`}
+                    aria-label={t("ui.orchestration.detailsForTask", { title: task.title })}
                     aria-expanded={open}
                     onClick={() =>
                       setExpanded((prev) =>
@@ -659,7 +659,7 @@ export function OrchestrationPreview({
                         <label className="block">
                           <span className={fieldLabel}>{t("ui.orchestration.task")}</span>
                           <input
-                            aria-label={`Title for task ${index + 1}`}
+                            aria-label={t("ui.orchestration.titleForTask", { n: index + 1 })}
                             className={field}
                             value={task.title}
                             onChange={(event) =>
@@ -670,7 +670,7 @@ export function OrchestrationPreview({
                         <label className="block">
                           <span className={fieldLabel}>{t("ui.orchestration.instructions")}</span>
                           <InstructionsField
-                            label={`Instructions for task ${index + 1}`}
+                            label={t("ui.orchestration.instructionsForTask", { n: index + 1 })}
                             value={task.prompt}
                             className={field}
                             onChange={(prompt) => change(task.id, { prompt })}
@@ -714,8 +714,10 @@ export function OrchestrationPreview({
             <ChevronRight className="size-3.5" />
           )}
           {showAll
-            ? "Show fewer tasks"
-            : `Show ${proposal.tasks.length - 3} more ${proposal.tasks.length === 4 ? "task" : "tasks"}`}
+            ? t("ui.orchestration.showFewerTasks")
+            : proposal.tasks.length === 4
+              ? t("ui.orchestration.showMoreTask", { count: proposal.tasks.length - 3 })
+              : t("ui.orchestration.showMoreTasks", { count: proposal.tasks.length - 3 })}
         </button>
       )}
       {(error || proposal.error) && (
@@ -768,9 +770,9 @@ export function OrchestrationPreview({
           <span>
             {run?.status ??
               (proposal.status === "approved"
-                ? "Approved"
+                ? t("ui.orchestration.approved")
                 : proposal.status === "ready"
-                  ? "Awaiting confirmation"
+                  ? t("ui.orchestration.awaitingConfirmation")
                   : "")}{" "}
             {t("ui.orchestration.sharedProjectFolder")}</span>
         </div>

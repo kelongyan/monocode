@@ -61,6 +61,7 @@ export function UserLinkPreview({
 }
 
 function GenericLinkPreview({ link }: { link: UserLink }) {
+  const t = useT();
   const [metadata, setMetadata] = useState<LinkPreviewMetadata | null>(null);
   const [faviconFailed, setFaviconFailed] = useState(false);
 
@@ -86,7 +87,7 @@ function GenericLinkPreview({ link }: { link: UserLink }) {
       href={link.url}
       data-user-link-preview
       title={link.url}
-      aria-label={`Open ${title}`}
+      aria-label={t("ui.sessions.openNamed", { name: title })}
       className="user-link-preview group mx-0.5 text-sky-400/90 hover:text-sky-300 hover:underline"
       onClick={(event) => openExternalLink(event, link.url)}
     >
@@ -369,7 +370,10 @@ function GithubWorkItemCard({
       ) : (
         <div className="mt-2">
           <h3 className="text-[13px] font-semibold text-content">
-            {parsed.kind === "pr" ? "Pull request" : "Issue"} #{parsed.number}
+            {parsed.kind === "pr"
+              ? t("ui.sessions.pullRequest")
+              : t("ui.sessions.issue")}{" "}
+            #{parsed.number}
           </h3>
           {summary ? (
             <p className="mt-1.5 line-clamp-3 text-[11px] leading-[1.45] text-content/55">
@@ -429,7 +433,9 @@ function GithubWorkItemCard({
           {assignees.length > 0 ? (
             <div
               className="flex shrink-0 -space-x-1"
-              aria-label={`Assigned to ${assignees.map((person) => person.login).join(", ")}`}
+              aria-label={t("ui.sessions.assignedTo", {
+                names: assignees.map((person) => person.login).join(", "),
+              })}
             >
               {assignees.slice(0, 3).map((person) => (
                 <GithubAvatar

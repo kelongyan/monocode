@@ -135,10 +135,10 @@ export function SessionReview({
               type="button"
               title={
                 canUndoAll
-                  ? "Undo the recorded changes"
+                  ? t("ui.sessions.undoRecordedChanges")
                   : undoLocked
-                    ? "Undo is unavailable while another session is running in this project"
-                    : "Undo is unavailable because the workspace was shared, the branch moved, or a recorded file changed afterward"
+                    ? t("ui.sessions.undoLockedByOtherSession")
+                    : t("ui.sessions.undoUnavailableAfterChanges")
               }
               disabled={disabled || !canUndoAll}
               onClick={() => run("undo")}
@@ -201,8 +201,10 @@ export function SessionReview({
             )}
             <span>
               {expanded
-                ? "Show fewer files"
-                : `Show ${hiddenFileCount} more ${hiddenFileCount === 1 ? "file" : "files"}`}
+                ? t("ui.sessions.showFewerFiles")
+                : hiddenFileCount === 1
+                  ? t("ui.sessions.showMoreFile", { count: hiddenFileCount })
+                  : t("ui.sessions.showMoreFiles", { count: hiddenFileCount })}
             </span>
           </button>
         ) : null}

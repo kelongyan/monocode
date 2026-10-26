@@ -828,8 +828,12 @@ const CodeLine = memo(function CodeLine({
           <div className="diff-review-line-actions">
             <button
               type="button"
-              title={`Comment on line ${number ?? ""}`}
-              aria-label={`Comment on line ${number ?? ""}`}
+              title={t("ui.sourceControl.commentOnLine", {
+                number: number ?? "",
+              })}
+              aria-label={t("ui.sourceControl.commentOnLine", {
+                number: number ?? "",
+              })}
               onClick={(event) =>
                 actions.comment(
                   file.path,

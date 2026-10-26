@@ -535,7 +535,7 @@ export function ProjectRail({
               muteStatuses={muteStatuses}
               emptyLabel={
                 sections.projects.length === 0 && projectGroups.length === 0
-                  ? "No projects yet"
+                  ? t("ui.shell.noProjectsYet")
                   : undefined
               }
               onAdd={onOpenProject}
@@ -855,7 +855,9 @@ function ProjectGroupSection({
           type="button"
           data-no-drag
           title={t("ui.shell.groupOptions")}
-          aria-label={`${group.name} group options`}
+          aria-label={t("ui.shell.groupOptionsNamedAria", {
+            name: group.name,
+          })}
           aria-haspopup="menu"
           onPointerDown={(event) => event.stopPropagation()}
           onClick={(event) => {
@@ -1113,8 +1115,10 @@ function ProjectCard({
       <button
         type="button"
         data-no-drag
-        title={pinned ? "Unpin project" : "Pin project"}
-        aria-label={pinned ? "Unpin project" : "Pin project"}
+        title={pinned ? t("ui.shell.unpinProject") : t("ui.shell.pinProject")}
+        aria-label={
+          pinned ? t("ui.shell.unpinProject") : t("ui.shell.pinProject")
+        }
         onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => {
           event.stopPropagation();

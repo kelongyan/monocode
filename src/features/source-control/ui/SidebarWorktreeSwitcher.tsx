@@ -234,7 +234,7 @@ export function SidebarWorktreeSwitcher({
   const busyIcon =
     pending || creating ? (
       <Loader
-        aria-label={creating ? "Creating worktree" : "Switching working copy"}
+        aria-label={creating ? t("ui.sourceControl.creatingWorktree") : t("ui.sourceControl.switchingWorkingCopy")}
         className="size-3.5 shrink-0 animate-spin text-content/45"
       />
     ) : null;
@@ -634,7 +634,7 @@ export function SidebarWorktreeSwitcher({
                 type="button"
                 disabled={creating}
                 onClick={() => void create()}
-                title={`Create worktree ${createName}`}
+                title={t("ui.sourceControl.createWorktreeNamed", { name: createName })}
                 className="flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-[13px] text-content/75 hover:bg-content/8 hover:text-content disabled:opacity-60"
               >
                 {creating ? (

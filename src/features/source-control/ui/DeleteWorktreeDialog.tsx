@@ -109,11 +109,21 @@ export function DeleteWorktreeDialog({
                 icon={MessageSquare}
                 tone={deleteSessions ? "danger" : "muted"}
               >
-                {sessionCount} session{sessionCount === 1 ? "" : "s"} using this
-                worktree {sessionCount === 1 ? "is" : "are"}{" "}
-                {deleteSessions
-                  ? "permanently deleted."
-                  : "kept. Select a branch or worktree to continue them."}
+                {sessionCount === 1
+                  ? deleteSessions
+                    ? t("ui.sourceControl.worktreeSessionDeleted", {
+                        count: sessionCount,
+                      })
+                    : t("ui.sourceControl.worktreeSessionKept", {
+                        count: sessionCount,
+                      })
+                  : deleteSessions
+                    ? t("ui.sourceControl.worktreeSessionsDeleted", {
+                        count: sessionCount,
+                      })
+                    : t("ui.sourceControl.worktreeSessionsKept", {
+                        count: sessionCount,
+                      })}
               </Consequence>
             )}
             {tree.dirty && (
@@ -187,8 +197,10 @@ export function DeleteWorktreeDialog({
           >
             {busy && <Loader className="size-3.5 animate-spin" />}
             {sessionCount && deleteSessions
-              ? `Delete worktree and session${sessionCount === 1 ? "" : "s"}`
-              : "Delete worktree"}
+              ? sessionCount === 1
+                ? t("ui.sourceControl.deleteWorktreeAndSession")
+                : t("ui.sourceControl.deleteWorktreeAndSessions")
+              : t("ui.sourceControl.deleteWorktree")}
           </button>
         </div>
       </form>

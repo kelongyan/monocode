@@ -101,7 +101,7 @@ export function UsageLimitAccountPicker({
         }
       >
         <span>
-          {variant === "mono" ? "Choose another account" : "Switch account"}
+          {variant === "mono" ? t("ui.sessions.chooseAnotherAccount") : t("ui.sessions.switchAccount")}
         </span>
         <ChevronDown
           className={`size-3 shrink-0 text-content/50 ${open ? "rotate-180" : ""}`}

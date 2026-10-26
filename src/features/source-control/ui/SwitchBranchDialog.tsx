@@ -119,7 +119,11 @@ export function SwitchBranchDialog({
         role="dialog"
         aria-modal="true"
         aria-busy={Boolean(busy) || generating}
-        aria-label={creating ? `Create ${branch}` : `Switch to ${branch}`}
+        aria-label={
+          creating
+            ? t("ui.sourceControl.createBranchAria", { branch })
+            : t("ui.sourceControl.switchToBranchAria", { branch })
+        }
         onMouseDown={(event) => event.stopPropagation()}
         className={`modal-surface ${host ? "relative w-full" : "absolute left-1/2 top-[22%] w-[min(420px,calc(100vw-24px))] -translate-x-1/2"} z-[1] flex flex-col gap-3 rounded-lg border border-content/10 bg-background-base dark:bg-content/5 p-4 shadow-xl backdrop-blur-xl`}
       >
@@ -128,8 +132,8 @@ export function SwitchBranchDialog({
             {t("ui.sourceControl.uncommittedChanges")}</h2>
           <p className="text-[12px] leading-snug text-content/55">
             {creating
-              ? `Creating “${branch}” would overwrite your local changes. Stash them for later, or commit them on this branch first.`
-              : `Switching to “${branch}” would overwrite your local changes. Stash them for later, or commit them on this branch first.`}
+              ? t("ui.sourceControl.creatingWouldOverwrite", { branch })
+              : t("ui.sourceControl.switchingWouldOverwrite", { branch })}
           </p>
         </div>
 
@@ -138,7 +142,7 @@ export function SwitchBranchDialog({
             ref={messageRef}
             rows={1}
             value={message}
-            placeholder={`Message (${MOD}↩ to commit)`}
+            placeholder={t("ui.sourceControl.messagePlaceholder", { mod: MOD })}
             disabled={Boolean(busy) || generating}
             aria-label={t("ui.sourceControl.commitMessage")}
             className="max-h-40 w-full resize-none overflow-y-auto rounded-md bg-content/10 py-1 pr-8 pl-2 text-[13px] leading-5 text-content outline-none placeholder:text-content/35 disabled:opacity-40"
@@ -158,13 +162,13 @@ export function SwitchBranchDialog({
             type="button"
             title={
               generating
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("ui.sourceControl.cancelGenerateCommitMessage")
+                : t("ui.sourceControl.generateCommitMessage")
             }
             aria-label={
               generating
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("ui.sourceControl.cancelGenerateCommitMessage")
+                : t("ui.sourceControl.generateCommitMessage")
             }
             disabled={Boolean(busy)}
             onClick={() => (generating ? cancelGenerate() : void generate())}

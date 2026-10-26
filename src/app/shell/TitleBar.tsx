@@ -475,7 +475,7 @@ function TitleTabItem({
         <button
           type="button"
           title={t("shell.closeTab")}
-          aria-label={`Close ${headline}`}
+          aria-label={t("ui.shell.closeTabAria", { name: headline })}
           data-no-drag
           data-tauri-drag-region="false"
           onPointerDown={(event) => event.stopPropagation()}
@@ -694,7 +694,7 @@ export function MonoViewActions({
         <button
           type="button"
           aria-pressed={overviewOpen}
-          title={overviewOpen ? "Hide overview" : "Show overview"}
+          title={overviewOpen ? t("ui.shell.hideOverview") : t("ui.shell.showOverview")}
           data-tauri-drag-region="false"
           onClick={onToggleOverview}
           className={`flex h-6 items-center gap-1.5 rounded-md px-2 text-[12px] ${
@@ -723,6 +723,7 @@ export function OverlayNav({
   onBack?: () => void;
   onToggleSidebar?: () => void;
 }) {
+  const t = useT();
   if (!onBack && !onToggleSidebar) return null;
   return (
     <div className="flex shrink-0 items-center px-1.5">
@@ -733,7 +734,7 @@ export function OverlayNav({
       ) : null}
       {onToggleSidebar ? (
         <IconButton
-          label={`Toggle Sidebar (${MOD}B)`}
+          label={t("ui.shell.toggleSidebarB", { mod: MOD })}
           onClick={onToggleSidebar}
         >
           <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -1070,8 +1071,11 @@ function TitleBarComponent({
             <IconButton
               label={
                 changesDot
-                  ? `Toggle right sidebar (${MOD}${SHIFT}B, uncommitted changes)`
-                  : `Toggle right sidebar (${MOD}${SHIFT}B)`
+                  ? t("ui.shell.toggleRightSidebarWithChanges", {
+                      mod: MOD,
+                      shift: SHIFT,
+                    })
+                  : t("ui.shell.toggleRightSidebar", { mod: MOD, shift: SHIFT })
               }
               active={rightPanelOpen && !rightPanelOff}
               disabled={rightPanelOff}
@@ -1151,7 +1155,7 @@ function TitleBarComponent({
             // Hovering the toggle peeks a collapsed sidebar out.
             <span data-sidebar-peek-trigger className="flex">
               <IconButton
-                label={`Toggle Sidebar (${MOD}B)`}
+                label={t("ui.shell.toggleSidebarB", { mod: MOD })}
                 onClick={onToggleSessionSidebar}
               >
                 <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -1192,7 +1196,7 @@ function TitleBarComponent({
           {trafficLightsVisible ? <div className="w-[78px] shrink-0" /> : null}
           <div className="flex shrink-0 items-center px-1.5">
             <IconButton
-              label={`Toggle Sidebar (${MOD}B)`}
+              label={t("ui.shell.toggleSidebarB", { mod: MOD })}
               onClick={onToggleSidebar}
             >
               <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -1209,7 +1213,7 @@ function TitleBarComponent({
             <div className="w-[70px] shrink-0" />
           ) : null}
           <IconButton
-            label={`Toggle Session Sidebar (${MOD}${SHIFT}B)`}
+            label={t("ui.shell.toggleSessionSidebarB", { mod: MOD, shift: SHIFT })}
             onClick={onToggleSessionSidebar}
           >
             <DashboardSquare className="size-3.5" strokeWidth={1.75} />
@@ -1334,8 +1338,8 @@ function TitleBarComponent({
                 // Sized and plated like an inactive tab beside it.
                 <button
                   type="button"
-                  title={`New session (${MOD}T)`}
-                  aria-label={`New session (${MOD}T)`}
+                  title={t("ui.shell.newSessionShortcut", { mod: MOD })}
+                  aria-label={t("ui.shell.newSessionShortcut", { mod: MOD })}
                   data-tauri-drag-region="false"
                   onClick={onNewSession}
                   className="ml-0.5 grid size-7.5 shrink-0 cursor-default place-items-center rounded-md bg-content/4 text-content/50 opacity-65 hover:bg-content/7 hover:text-content hover:opacity-100 focus-visible:opacity-100"
@@ -1362,7 +1366,9 @@ function TitleBarComponent({
           y={tabMenu.y}
           width={244}
           items={contextMenuItems}
-          ariaLabel={`Tab actions for ${tabCopy(contextTab).headline}`}
+          ariaLabel={t("ui.shell.tabActionsFor", {
+            name: tabCopy(contextTab).headline,
+          })}
           onPick={onPickTabMenu}
           onClose={() => setTabMenu(null)}
         />

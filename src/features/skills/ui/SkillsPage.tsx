@@ -256,7 +256,11 @@ export function SkillsPage({
               <div className="flex shrink-0 items-center gap-2">
                 <button
                   type="button"
-                  aria-label={adding ? "Close skill form" : "Add skill"}
+                  aria-label={
+                    adding
+                      ? t("ui.skills.closeSkillForm")
+                      : t("ui.skills.addSkill")
+                  }
                   ref={addSkillButton}
                   disabled={busy}
                   className="rounded-md border border-content/10 px-2.5 py-1 text-[12px] text-content/70 hover:bg-content/10 disabled:opacity-40"
@@ -266,7 +270,7 @@ export function SkillsPage({
                   }}
                   title={t("ui.skills.createAStarterSkillMdYou")}
                 >
-                  {adding ? "Close" : "Add skill"}
+                  {adding ? t("common.close") : t("ui.skills.addSkill")}
                 </button>
               </div>
             </div>
@@ -307,8 +311,8 @@ export function SkillsPage({
                 {filtered.length === 0 ? (
                   <p className="px-3 py-3 text-[12px] text-content/45">
                     {skills.length === 0
-                      ? "No skills yet. Add skill creates a starter SKILL.md."
-                      : "No matching skills"}
+                      ? t("ui.skills.noSkillsYet")
+                      : t("ui.skills.noMatchingSkills")}
                   </p>
                 ) : (
                   filtered.map((skill) => {
@@ -324,7 +328,7 @@ export function SkillsPage({
                           <button
                             type="button"
                             className="mr-auto min-w-0 truncate rounded text-left font-sans text-[12px] text-content hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                            title={`Preview ${skill.name}`}
+                            title={t("ui.skills.previewNamed", { name: skill.name })}
                             ref={registerPreviewButton(`name:${skill.path}`)}
                             aria-controls={previewOpen ? previewId : undefined}
                             aria-expanded={previewSkill?.path === skill.path}
@@ -334,10 +338,10 @@ export function SkillsPage({
                           </button>
                           <span className="shrink-0 rounded-full bg-content/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-content/60">
                             {skill.scope === "user"
-                              ? "Personal"
+                              ? t("ui.skills.personal")
                               : skill.scope === "builtin"
                                 ? "MonoCode"
-                                : "Project"}
+                                : t("ui.skills.project")}
                           </span>
                           <span className="w-20 shrink-0 truncate text-right font-sans text-[11px] text-content/40">
                             {skill.source}
@@ -345,7 +349,7 @@ export function SkillsPage({
                           <button
                             type="button"
                             role="switch"
-                            aria-label={`Include ${skill.name} in MonoCode catalog`}
+                            aria-label={t("ui.skills.includeInCatalog", { name: skill.name })}
                             aria-checked={!disabled}
                             onClick={() => onToggle(skill.path, disabled)}
                             className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${disabled ? "bg-content/20" : "bg-accent"}`}
@@ -372,7 +376,7 @@ export function SkillsPage({
                           </p>
                           <button
                             type="button"
-                            aria-label={`Preview skill ${skill.name}`}
+                            aria-label={t("ui.skills.previewSkillNamed", { name: skill.name })}
                             title={t("ui.skills.previewSkill")}
                             ref={registerPreviewButton(`icon:${skill.path}`)}
                             aria-controls={previewOpen ? previewId : undefined}
@@ -388,7 +392,7 @@ export function SkillsPage({
                           </button>
                           <button
                             type="button"
-                            aria-label={`Copy path of ${skill.name}`}
+                            aria-label={t("ui.skills.copyPathOf", { name: skill.name })}
                             title={t("ui.skills.copyPath")}
                             onClick={() => onCopyPath(skill.path)}
                             className="grid size-5 shrink-0 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"
@@ -397,7 +401,7 @@ export function SkillsPage({
                           </button>
                           <button
                             type="button"
-                            aria-label={`Reveal ${skill.name} in file explorer`}
+                            aria-label={t("ui.skills.revealInExplorer", { name: skill.name })}
                             title={t("ui.skills.revealInFileManager")}
                             onClick={() => onReveal(skill.path)}
                             className="grid size-5 shrink-0 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content"
@@ -414,8 +418,9 @@ export function SkillsPage({
 
             <p className="pt-3 text-[12px] text-content/40">
               {t("ui.skills.hiddenSkillsStayOnDiskAnd")}{" "}
-              <span className="font-sans">.agents/skills</span> for this project
-              and <span className="font-sans">~/.agents/skills</span> {t("ui.skills.forYouPersonallyHarnessFoldersAre")}</p>
+              <span className="font-sans">.agents/skills</span>
+              {t("ui.skills.forThisProjectAnd")}
+              <span className="font-sans">~/.agents/skills</span> {t("ui.skills.forYouPersonallyHarnessFoldersAre")}</p>
           </div>
         </div>
         {previewSkill ? (

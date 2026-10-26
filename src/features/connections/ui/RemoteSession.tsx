@@ -144,10 +144,10 @@ export function RemoteSession({
       <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
         <p className="text-[13px] text-content/60">
           {!project
-            ? "This project’s machine details are missing. Add the project again from the project rail."
+            ? t("ui.connections.machineDetailsMissing")
             : loaded
-              ? "The machine for this project isn’t connected on this computer."
-              : "Connecting to the machine…"}
+              ? t("ui.connections.machineNotConnectedHere")
+              : t("ui.connections.connectingToMachine")}
         </p>
         {project && loaded ? (
           <button

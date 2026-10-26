@@ -29,10 +29,18 @@ const VISIBLE_ATTRS = new Set([
   "emptyLabel",
   "message",
   "body",
+  "detail",
 ]);
 
 /** Native dialog APIs whose string arguments the user reads. */
-const DIALOG_CALLEES = new Set(["ask", "message", "toast", "notify"]);
+const DIALOG_CALLEES = new Set([
+  "ask",
+  "message",
+  "toast",
+  "notify",
+  "confirm",
+  "alert",
+]);
 const DIALOG_OPTION_ATTRS = new Set(["title", "okLabel", "cancelLabel"]);
 
 /**
@@ -63,8 +71,12 @@ export function looksLikeCopy(value) {
   if (!/[A-Za-z]/.test(text)) return false;
 
   const words = text.split(/\s+/);
-  // Utility-class soup: every token is a short lowercase kebab/utility token.
-  const utilityLike = words.every((word) => /^[a-z0-9:[\]./%-]+$/.test(word));
+  // Utility-class soup: only ignored when a token carries a real utility
+  // marker (`-`, `:`, `/`, `[`, `.`, `%`, `#`). A bare lowercase sentence
+  // like "is still running" is prose, not a class list.
+  const utilityLike =
+    words.every((word) => /^[a-z0-9:[\]./%#-]+$/.test(word)) &&
+    words.some((word) => /[-:[\]/.%#]/.test(word));
   if (words.length > 1 && utilityLike) return false;
 
   // Multi-word prose.
@@ -127,12 +139,24 @@ export function findDialogCopy(source) {
   const findings = [];
 
   const visit = (node) => {
-    if (
-      ts.isCallExpression(node) &&
-      ts.isIdentifier(node.expression) &&
-      DIALOG_CALLEES.has(node.expression.text) &&
-      node.arguments.length > 0
-    ) {
+    const callee =
+      ts.isCallExpression(node) && node.arguments.length > 0
+        ? node.expression
+        : undefined;
+    // Bare calls route through the whole set; member calls only match the
+    // native `window.confirm`/`window.alert` pair, never things like
+    // `host.message(...)`, which is a protocol send, not a dialog.
+    const calleeName =
+      callee && ts.isIdentifier(callee)
+        ? callee.text
+        : callee &&
+            ts.isPropertyAccessExpression(callee) &&
+            ts.isIdentifier(callee.expression) &&
+            callee.expression.text === "window" &&
+            (callee.name.text === "confirm" || callee.name.text === "alert")
+          ? callee.name.text
+          : undefined;
+    if (calleeName && DIALOG_CALLEES.has(calleeName)) {
       const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf));
       const text = literalText(node.arguments[0]);
       if (text !== undefined && looksLikeCopy(text)) {
@@ -165,42 +189,78 @@ export function findDialogCopy(source) {
   return findings;
 }
 
-function scanFile(path, isTsx) {
-  const source = readFileSync(path, "utf8");
+/**
+ * Copy candidates inside one expression: string and template literals, the
+ * arms of a ternary, and the right side of `??`/`&&` fallbacks. Collapses
+ * template holes out, exactly like `literalText`. Stops at call expressions,
+ * so a value already routed through `t(...)` never reports.
+ */
+function copyCandidates(node, out = []) {
+  const text = literalText(node);
+  if (text !== undefined) {
+    out.push(text);
+    return out;
+  }
+  if (ts.isParenthesizedExpression(node)) {
+    return copyCandidates(node.expression, out);
+  }
+  if (ts.isConditionalExpression(node)) {
+    copyCandidates(node.whenTrue, out);
+    copyCandidates(node.whenFalse, out);
+    return out;
+  }
+  if (
+    ts.isBinaryExpression(node) &&
+    (node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken ||
+      node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken)
+  ) {
+    return copyCandidates(node.right, out);
+  }
+  return out;
+}
+
+/**
+ * JSX copy in `.tsx` sources: literal text nodes, visible attributes with a
+ * string literal, and — the part a naive JSX scan misses — string literals
+ * nested in expression containers, such as ternary arms rendered as children
+ * (`{locked ? "Hidden globally" : "Show in picker"}`) or expression-valued
+ * visible attributes (`title={ready ? null : "Needs attention"}`).
+ */
+export function findJsxCopy(source) {
   const sf = ts.createSourceFile(
-    path,
+    "inline.tsx",
     source,
     ts.ScriptTarget.Latest,
     true,
     ts.ScriptKind.TSX,
   );
-  const findings = findDialogCopy(source);
-
-  if (!isTsx) return findings;
+  const findings = [];
+  const report = (node, kind, value) => {
+    if (!looksLikeCopy(value)) return;
+    const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf));
+    findings.push({ line: line + 1, kind, value });
+  };
 
   const visit = (node) => {
-    // Literal JSX text: <span>Save</span>
     if (ts.isJsxText(node)) {
       const value = node.text.replace(/\s+/g, " ").trim();
-      if (value && looksLikeCopy(value)) {
-        const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf));
-        findings.push({ line: line + 1, kind: "jsx-text", value });
-      }
+      if (value) report(node, "jsx-text", value);
     }
 
-    // Visible attribute with a string literal: title="Save"
     if (ts.isJsxAttribute(node)) {
       const name = attributeName(node);
       const init = node.initializer;
-      if (
-        name &&
-        VISIBLE_ATTRS.has(name) &&
-        init &&
-        ts.isStringLiteral(init) &&
-        looksLikeCopy(init.text)
-      ) {
-        const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf));
-        findings.push({ line: line + 1, kind: `attr:${name}`, value: init.text });
+      if (name && VISIBLE_ATTRS.has(name) && init) {
+        for (const value of copyCandidates(ts.isJsxExpression(init) ? (init.expression ?? init) : init)) {
+          report(node, `attr:${name}`, value);
+        }
+      }
+    }
+
+    // Expression child: {cond ? "Retry now" : label}
+    if (ts.isJsxExpression(node) && node.expression && !ts.isJsxAttribute(node.parent)) {
+      for (const value of copyCandidates(node.expression)) {
+        report(node, "jsx-expr", value);
       }
     }
 
@@ -208,6 +268,13 @@ function scanFile(path, isTsx) {
   };
 
   visit(sf);
+  return findings;
+}
+
+function scanFile(path, isTsx) {
+  const source = readFileSync(path, "utf8");
+  const findings = findDialogCopy(source);
+  if (isTsx) findings.push(...findJsxCopy(source));
   return findings;
 }
 

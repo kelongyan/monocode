@@ -253,17 +253,17 @@ export function UsageProviderChip({
         ref={trigger}
         type="button"
         className={USAGE_CHIP_CLASSES[variant]}
-        aria-label={`${providerLabel} usage details`}
+        aria-label={t("ui.providers.usage.detailsAria", { name: providerLabel })}
         aria-expanded={open}
         aria-haspopup="dialog"
         title={
           tooltip ||
           limits.error ||
           (disconnected
-            ? "Not connected"
+            ? t("ui.inbox.notConnected")
             : loading
-              ? "Loading usage…"
-              : "Usage details")
+              ? t("ui.shell.loadingUsage")
+              : t("ui.providers.usage.detailsTitle"))
         }
         onClick={() => setOpen((value) => !value)}
       >
@@ -271,7 +271,9 @@ export function UsageProviderChip({
         {loading ? (
           <span className="animate-pulse text-content/35">···</span>
         ) : disconnected ? (
-          <span className="text-content/35">not connected</span>
+          <span className="text-content/35">
+            {t("ui.providers.usage.notConnectedInline")}
+          </span>
         ) : windows.length === 0 ? (
           <span className="text-content/35">{emptyUsageLabel(limits)}</span>
         ) : (
@@ -316,7 +318,7 @@ export function UsageProviderChip({
           autoFocus
           onDismiss={dismiss}
           role="dialog"
-          aria-label={`${providerLabel} usage details`}
+          aria-label={t("ui.providers.usage.detailsAria", { name: providerLabel })}
           tabIndex={-1}
           className={`overflow-y-auto text-content ${accountView === "usage" && loginView ? "" : "p-2.5"}`}
         >
@@ -391,7 +393,7 @@ export function UsageProviderChip({
                       <button
                         type="button"
                         className="pointer-events-auto absolute inset-0 rounded hover:bg-content/10 focus-visible:outline-2 focus-visible:outline-accent"
-                        aria-label={`Switch ${providerLabel} account`}
+                        aria-label={t("ui.shell.switchProviderAccount", { provider: providerLabel })}
                         onClick={() => setAccountView("accounts")}
                       />
                       <span className="max-w-[60%] shrink-0 truncate">
@@ -507,7 +509,7 @@ function AccountSwitchRow({
       <button
         type="button"
         className="flex h-8 w-full items-center gap-2 rounded-lg bg-content/[0.045] px-2.5 text-left text-[11px] ring-1 ring-inset ring-content/[0.06] hover:bg-content/[0.08]"
-        aria-label={`Switch account from ${accountLabel}`}
+        aria-label={t("ui.shell.switchAccountFrom", { account: accountLabel })}
         onClick={onClick}
       >
         <span className="min-w-0 flex-1 truncate">{accountLabel}</span>
@@ -681,7 +683,8 @@ function SwitchSuggestion({
     <section className="mt-2 flex items-center gap-2.5 rounded-lg bg-content/[0.045] px-3 py-2.5 ring-1 ring-inset ring-content/[0.06]">
       <div className="min-w-0 flex-1">
         <p className="text-[10px] leading-4 text-content/45">
-          {exhausted ? "Out of usage" : "Running low"} {t("ui.shell.switchTo")}</p>
+          {exhausted ? t("ui.shell.outOfUsage") : t("ui.providers.usage.low")}{" "}
+          {t("ui.shell.switchTo")}</p>
         <p className="mt-0.5 flex min-w-0 items-center gap-2 text-[11px]">
           <span className="min-w-0 truncate font-medium">{account.label}</span>
           <AccountStatusLabel
@@ -770,7 +773,7 @@ function AddProviderAccount({
         {running ? (
           <RefreshCw className="size-3.5 animate-spin" aria-hidden />
         ) : null}
-        {running ? "Waiting for browser…" : "Sign in and add account"}
+        {running ? t("ui.shell.waitingForBrowser") : t("ui.shell.signInAndAddAccount")}
       </button>
       {error ? (
         <p className="mt-2 text-[10px] leading-4 text-red-500" role="status">
@@ -1127,14 +1130,15 @@ function EmptyUsageState({
   limits: ProviderRateLimits;
   loading: boolean;
 }) {
+  const t = useT();
   return (
     <div className="rounded-lg bg-content/[0.04] px-3 py-4 text-center ring-1 ring-inset ring-content/[0.06]">
       <p className="text-[11px] font-medium text-content/65">
         {loading
-          ? "Loading usage…"
+          ? t("ui.shell.loadingUsage")
           : limits.status === "unavailable"
-            ? "Not connected"
-            : "Usage unavailable"}
+            ? t("ui.inbox.notConnected")
+            : t("ui.providers.usage.unavailable")}
       </p>
       {limits.error ? (
         <p className="mx-auto mt-1 max-w-[15rem] text-[10px] leading-4 text-content/40">

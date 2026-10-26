@@ -54,16 +54,20 @@ export function UsageLimitNotice({
         <Gauge className="size-3.5 shrink-0 text-amber-400" />
         <span className="shrink-0 text-content/85">
           {providerName
-            ? `${providerName} usage limit reached`
-            : "Usage limit reached"}
+            ? t("ui.sessions.usageLimitReachedProvider", {
+                provider: providerName,
+              })
+            : t("ui.sessions.usageLimitReached")}
         </span>
         {variant === "mono" ? null : (
           <span className="min-w-0 flex-1 truncate">
             {limit.resetsAt == null
               ? ""
               : waiting
-                ? `Resets ${formatUsageLimitReset(limit.resetsAt, now)}`
-                : "Limit has reset"}
+                ? t("ui.providers.usage.resetsAt", {
+                    time: formatUsageLimitReset(limit.resetsAt, now),
+                  })
+                : t("ui.sessions.limitHasReset")}
           </span>
         )}
         {variant === "mono" ? null : modelPicker}
@@ -94,8 +98,10 @@ export function UsageLimitNotice({
           {limit.resetsAt != null ? (
             <p className="mt-1 text-content/45">
               {waiting
-                ? `Resets ${formatUsageLimitReset(limit.resetsAt, now)}`
-                : "Limit has reset"}
+                ? t("ui.providers.usage.resetsAt", {
+                    time: formatUsageLimitReset(limit.resetsAt, now),
+                  })
+                : t("ui.sessions.limitHasReset")}
             </p>
           ) : null}
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">

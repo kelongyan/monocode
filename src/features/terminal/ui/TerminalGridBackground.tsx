@@ -15,6 +15,7 @@ import {
   type GridGame,
 } from "../arcade/gridGames";
 import { drawSpeechBubble } from "../../sessions/model/speechBubble";
+import { useT } from "../../../shared/i18n";
 
 const CELL = 6;
 const GAP = 1;
@@ -152,6 +153,7 @@ function drawGhost(
 }
 
 export function TerminalGridBackground() {
+  const t = useT();
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const boardsRef = useRef<Board[] | null>(null);
@@ -574,10 +576,12 @@ export function TerminalGridBackground() {
       {playing ? (
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 grid grid-cols-3 items-center px-3 py-2 font-mono text-[11px] tracking-[0.14em] text-content/50">
           <span>
-            score {score}
+            {t("ui.terminal.scoreLabel", { score })}
             {game.lives ? (
               <span className="ml-3 text-content/35">
-                {lives > 0 ? "•".repeat(lives) : "game over"}
+                {lives > 0
+                  ? "•".repeat(lives)
+                  : t("ui.terminal.gameOver")}
               </span>
             ) : null}
           </span>
@@ -610,7 +614,7 @@ export function TerminalGridBackground() {
               onClick={releaseControl}
               className="pointer-events-auto cursor-pointer border border-content/20 bg-background-base/70 px-2 py-1 text-content/70 hover:border-content/40 hover:text-content"
             >
-              <span className="text-content/35">[</span> release{" "}
+              <span className="text-content/35">[</span> {t("ui.terminal.release")}{" "}
               <span className="text-content/35">]</span>
             </button>
           </div>
@@ -626,7 +630,7 @@ export function TerminalGridBackground() {
               className="pointer-events-none flex cursor-pointer items-center gap-2 border border-content/25 bg-background-base/80 px-3 py-1.5 font-mono text-[11px] tracking-[0.16em] text-content/85 shadow-lg backdrop-blur-sm group-hover:pointer-events-auto hover:border-content/45 hover:bg-content/10 hover:text-content"
             >
               <span className="text-content/40">[</span>
-              take control
+              {t("ui.terminal.takeControl")}
               <span className="text-content/25">·</span>
               {game.label}
               <span

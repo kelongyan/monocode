@@ -134,12 +134,13 @@ export function WorkspacePicker({
 
 /** A started conversation owns its working copy; only its branch stays mutable. */
 export function WorkspaceIdentity({ worktree }: { worktree: boolean }) {
+  const t = useT();
   const Icon = worktree ? FolderTree : Folder;
-  const label = worktree ? "Worktree" : "Current checkout";
+  const label = worktree ? t("ui.sourceControl.worktree") : t("ui.workspace.currentCheckout");
   return (
     <div
       title={`Workspace: ${label}`}
-      aria-label={`Workspace ${label}`}
+      aria-label={t("ui.workspace.workspaceNamed", { name: label })}
       className="-ml-1.5 flex h-6 min-w-0 shrink-0 items-center gap-1.5 px-1.5 text-[12px] text-content/55 opacity-40"
     >
       <Icon className="size-3.5 shrink-0" />
@@ -255,7 +256,7 @@ function WorkspaceModePicker({
       setPickError(undefined);
     }, HOVER_CLOSE_MS);
   };
-  const label = mode === "worktree" ? "New worktree" : "Current checkout";
+  const label = mode === "worktree" ? t("ui.workspace.newWorktree") : t("ui.workspace.currentCheckout");
   const shortcut = keybindingShortcutLabel(
     "Composer: Toggle Workspace",
     WORKSPACE_MODE_SHORTCUT,
@@ -273,7 +274,7 @@ function WorkspaceModePicker({
           type="button"
           disabled={!enabled}
           title={shortcut ? `Workspace: ${label} (${shortcut})` : undefined}
-          aria-label={`Workspace ${label}`}
+          aria-label={t("ui.workspace.workspaceNamed", { name: label })}
           aria-keyshortcuts={shortcutTokens ?? undefined}
           aria-haspopup="dialog"
           aria-expanded={open}
@@ -437,7 +438,7 @@ function WorkspaceModePicker({
                 )}
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[13px]">
-                    {tree.branch ?? `Detached ${tree.head.slice(0, 7)}`}
+                    {tree.branch ?? t("ui.sourceControl.detachedHash", { hash: tree.head.slice(0, 7) })}
                   </span>
                   <span className="block truncate font-mono text-[10px] text-content/40">
                     {prettyCwd(tree.path)}
@@ -532,13 +533,13 @@ export function WorktreeBasePicker({
     <div ref={anchor} className="relative flex min-w-0 shrink-0">
       <GitPickerTrigger
         disabled={!enabled}
-        title={`Create from ${selected}`}
-        aria-label={`Create worktree from ${selected}`}
+        title={t("ui.workspace.createFromNamed", { name: selected })}
+        aria-label={t("ui.workspace.createWorktreeFromNamed", { name: selected })}
         aria-haspopup="dialog"
         aria-expanded={open}
         onMouseDown={(event) => event.preventDefault()}
         onClick={() => setOpen((value) => !value)}
-        label={`From ${selected}`}
+        label={t("ui.workspace.fromNamed", { name: selected })}
         loading={loading}
       />
       {open ? (

@@ -551,7 +551,7 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
             />
           ) : null}
           <span className="truncate">
-            {cwd ? projectName(cwd) : "No project"}
+            {cwd ? projectName(cwd) : t("ui.quickComposer.noProject")}
           </span>
           <ChevronDown className="size-3 shrink-0 opacity-60" />
         </button>
@@ -613,8 +613,11 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
           }}
           placeholder={
             cwd
-              ? `Start a ${HARNESS_TITLE[model.harness]} session in ${projectName(cwd)}…`
-              : "Open a project in MonoCode first"
+              ? t("ui.quickComposer.startSessionInProject", {
+                  harness: HARNESS_TITLE[model.harness],
+                  project: projectName(cwd),
+                })
+              : t("ui.quickComposer.openProjectFirst")
           }
           disabled={!cwd}
           aria-label={t("ui.quickComposer.prompt")}
@@ -645,8 +648,8 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
           aria-expanded={picker === "attachments"}
           title={
             attachmentsSupported
-              ? "Attach files or take a screenshot"
-              : "This provider does not support attachments"
+              ? t("ui.quickComposer.attachFilesOrScreenshot")
+              : t("ui.quickComposer.providerWithoutAttachments")
           }
           disabled={!attachmentsSupported || attachments.loading || busy}
           onMouseDown={(event) => event.preventDefault()}
@@ -694,10 +697,10 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
           ) : (
             <>
               <span>
-                <Kbd>↵</Kbd> start
+                <Kbd>↵</Kbd> {t("ui.quickComposer.startHint")}
               </span>
               <span>
-                <Kbd>⌘↵</Kbd> start and open
+                <Kbd>⌘↵</Kbd> {t("ui.quickComposer.startAndOpenHint")}
               </span>
             </>
           )}
@@ -707,7 +710,9 @@ export function QuickComposer({ onShown }: { onShown: () => void }) {
             disabled={!canSubmit}
             className="rounded-md bg-accent px-2.5 py-1 text-[12px] font-medium text-white disabled:opacity-40"
           >
-            {leadingMode?.name === DRAFT_COMMAND.name ? "Save draft" : "Start"}
+            {leadingMode?.name === DRAFT_COMMAND.name
+              ? t("ui.quickComposer.saveDraft")
+              : t("ui.quickComposer.start")}
           </button>
         </span>
       </div>

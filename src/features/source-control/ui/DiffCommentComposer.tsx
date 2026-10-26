@@ -40,7 +40,7 @@ export function DiffCommentComposer({
       width={320}
       onDismiss={onDismiss}
       role="dialog"
-      aria-label={`Comment on ${location}`}
+      aria-label={t("ui.sourceControl.commentOnNamed", { name: location })}
       className="p-2"
     >
       <form

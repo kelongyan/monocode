@@ -107,7 +107,11 @@ export function CreateWorktreeDialog({
           />
         </div>
         <div className="flex flex-col gap-1.5 text-[12px] text-content/70">
-          <span>{existing ? "Existing branch" : "New branch name"}</span>
+          <span>
+            {existing
+              ? t("ui.sourceControl.existingBranch")
+              : t("ui.sourceControl.newBranchName")}
+          </span>
           {existing ? (
             <SearchableSelect
               label={t("ui.sourceControl.existingBranch")}

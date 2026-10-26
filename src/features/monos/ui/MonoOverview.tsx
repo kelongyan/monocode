@@ -253,8 +253,8 @@ export function MonoOverview({
                 <IconButton
                   label={
                     habits && habits.length >= HABITS_MAX
-                      ? `At most ${HABITS_MAX} habits`
-                      : "New habit"
+                      ? t("monos.atMostHabits", { max: HABITS_MAX })
+                      : t("monos.newHabit")
                   }
                   disabled={habitsFull}
                   onClick={() => push({ kind: "new-habit" })}
@@ -267,7 +267,9 @@ export function MonoOverview({
                 icon={ListBullet}
                 selected={tab === "activity"}
                 aria-label={
-                  tab === "activity" ? "Hide activity" : "Show activity"
+                  tab === "activity"
+                    ? t("monos.hideActivity")
+                    : t("monos.showActivity")
                 }
                 aria-pressed={tab === "activity"}
                 onClick={() =>
@@ -311,7 +313,7 @@ export function MonoOverview({
           role="tabpanel"
           aria-label={
             tab === "activity"
-              ? "Activity"
+              ? t("monos.activity")
               : TABS.find((entry) => entry.id === tab)?.label
           }
           hidden={tab === "changes"}
@@ -570,12 +572,13 @@ function DocumentRow({
   card: ArtifactCard;
   onOpen: (id: string) => void;
 }) {
+  const t = useT();
   const label = artifactLabel(card.kind);
   return (
     <button
       type="button"
       data-mono-document={card.id}
-      aria-label={`Open ${label.toLowerCase()} ${card.title}`}
+      aria-label={t("monos.openDocumentAria", { kind: label.toLowerCase(), title: card.title })}
       onClick={() => onOpen(card.id)}
       className="flex w-full min-w-0 items-center gap-2.5 rounded-md px-2 py-2 text-left hover:bg-content/5"
     >

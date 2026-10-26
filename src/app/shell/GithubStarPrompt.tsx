@@ -139,7 +139,7 @@ export function GithubStarPrompt() {
           />
         )}
         <span className="min-w-0 truncate text-xs font-medium leading-tight">
-          {busy ? "Starring…" : "Star on GitHub"}
+          {busy ? t("ui.shell.starring") : t("ui.shell.starOnGitHub")}
         </span>
       </button>
       <button

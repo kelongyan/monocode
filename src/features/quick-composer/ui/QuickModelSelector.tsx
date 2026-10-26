@@ -182,7 +182,8 @@ export function QuickModelSelector({
         className="grid h-11 shrink-0 grid-flow-col auto-cols-fr items-center gap-1 border-b border-stroke px-2"
       >
         {tabs.map((id, index) => {
-          const title = id === "favorites" ? "Favorites" : HARNESS_TITLE[id];
+          const title =
+            id === "favorites" ? t("composer.favorites") : HARNESS_TITLE[id];
           return (
             <button
               key={id}
@@ -309,8 +310,8 @@ export function QuickModelSelector({
                   type="button"
                   title={
                     favorites.includes(item.id)
-                      ? "Remove from favorites"
-                      : "Add to favorites"
+                      ? t("composer.removeFromFavorites")
+                      : t("composer.addToFavorites")
                   }
                   aria-label={`${favorites.includes(item.id) ? "Remove" : "Add"} ${item.name} ${favorites.includes(item.id) ? "from" : "to"} favorites`}
                   onClick={() => {
@@ -332,10 +333,10 @@ export function QuickModelSelector({
           ) : (
             <p className="px-2 py-6 text-center text-[12px] text-content/45">
               {query
-                ? "No matching models"
+                ? t("composer.noMatchingModels")
                 : visibleTab === "favorites"
-                  ? "No favorite models"
-                  : "Loading models…"}
+                  ? t("composer.noFavoriteModels")
+                  : t("ui.quickComposer.loadingModels")}
             </p>
           )}
         </div>
@@ -348,7 +349,9 @@ export function QuickModelSelector({
                   aria-label={t("ui.quickComposer.fastMode")}
                   aria-pressed={fastEnabled}
                   title={
-                    fastEnabled ? "Turn off fast mode" : "Turn on fast mode"
+                    fastEnabled
+                      ? t("ui.quickComposer.turnOffFastMode")
+                      : t("ui.quickComposer.turnOnFastMode")
                   }
                   onClick={() =>
                     changeSetting(fast.id, fastEnabled ? fastOff : fastOn)

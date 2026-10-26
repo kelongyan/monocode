@@ -106,7 +106,9 @@ export function InboxDescriptionSummary({
           }`}
           strokeWidth={1.75}
         />
-        {expanded ? "Show less" : "Show full description"}
+        {expanded
+          ? t("ui.inbox.showLess")
+          : t("ui.inbox.showFullDescription")}
         {!expanded && excerpt.images > 0 ? (
           <span className="text-content/35">
             · {excerpt.images} {excerpt.images === 1 ? "image" : "images"}
@@ -168,8 +170,8 @@ export function InboxPrChangesGlance({
             className="ml-auto inline-flex items-center gap-0.5 hover:text-content"
           >
             {files.length > shown.length
-              ? `View all ${files.length}`
-              : "View diff"}
+              ? t("ui.inbox.viewAllCount", { count: files.length })
+              : t("ui.inbox.viewDiff")}
             <ChevronRight className="size-3.5" strokeWidth={1.75} />
           </button>
         ) : null}
