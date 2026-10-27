@@ -886,7 +886,11 @@ pub fn harness_resolve_antigravity() -> Result<AntigravityBinary, String> {
             args: antigravity_args(),
         })
         .ok_or_else(|| {
-            "Antigravity ACP server (agy_acp_server.par) not found. Install Antigravity and run `agy` once in Terminal.".into()
+            if cfg!(windows) {
+                "Antigravity ACP server (agy_acp_server.exe) not found. Install Antigravity or place agy_acp_server.exe in your PATH or %LOCALAPPDATA%\\agy\\bin.".into()
+            } else {
+                "Antigravity ACP server (agy_acp_server.par) not found. Install Antigravity and run `agy` once in Terminal.".into()
+            }
         })
 }
 
@@ -1841,6 +1845,8 @@ fn is_harness_argv_token(part: &str) -> bool {
             | "hermes"
             | "devin"
             | "agy_acp_server.par"
+            | "agy_acp_server.exe"
+            | "agy_acp_server"
             | "pi"
             | "worker-server"
             | "app-server"
@@ -2112,9 +2118,6 @@ fn configured_binary_fingerprint(path: &Path) -> Option<String> {
 }
 
 fn resolve_harness_binary_override(provider: &str, binary_path: &str) -> Result<PathBuf, String> {
-    if provider == "antigravity" && cfg!(windows) {
-        return Err("Antigravity ACP server overrides are not supported on Windows.".into());
-    }
     let names: &[&str] = match provider {
         "claude" => &["claude"],
         "codex" => &["codex"],
@@ -2125,7 +2128,13 @@ fn resolve_harness_binary_override(provider: &str, binary_path: &str) -> Result<
         "omp" => &["omp"],
         "fx" => &["fx"],
         "hermes" => &["hermes"],
-        "antigravity" => &["agy_acp_server.par"],
+        "antigravity" => {
+            if cfg!(windows) {
+                &["agy_acp_server", "agy_acp_server.exe"]
+            } else {
+                &["agy_acp_server.par"]
+            }
+        }
         "devin" => &["devin"],
         _ => {
             return Err(format!(
@@ -2520,20 +2529,36 @@ fn resolve_devin() -> Option<PathBuf> {
 }
 
 fn resolve_antigravity() -> Option<PathBuf> {
-    // The .par wrapper is a POSIX self-extracting archive — Antigravity ships
-    // no Windows ACP binary, so report the provider unavailable there instead
-    // of probing paths that can never be executable.
-    if cfg!(windows) {
-        return None;
-    }
     let mut candidates = Vec::new();
-    if let Some(home) = dirs_home().map(PathBuf::from) {
-        // Prefer the wrapper: it sets the server's required resource directory.
-        candidates.push(home.join(".local/bin/agy_acp_server.par"));
-        candidates.push(home.join(".local/share/agy-acp/agy_acp_server.par"));
+    #[cfg(windows)]
+    {
+        if let Some(local_app_data) = std::env::var_os("LOCALAPPDATA").map(PathBuf::from) {
+            candidates.push(local_app_data.join("agy/bin/agy_acp_server.exe"));
+            candidates.push(local_app_data.join("agy/agy_acp_server.exe"));
+            candidates.push(local_app_data.join("Programs/agy/agy_acp_server.exe"));
+        }
+        if let Some(home) = dirs_home().map(PathBuf::from) {
+            candidates.push(home.join(".local/bin/agy_acp_server.exe"));
+            candidates.push(home.join(".gemini/antigravity/bin/agy_acp_server.exe"));
+            candidates.push(home.join(".gemini/antigravity/agy_acp_server.exe"));
+        }
+        if let Some(from_shell) = which_via_login_shell("agy_acp_server.exe") {
+            candidates.push(from_shell);
+        }
+        if let Some(from_shell) = which_via_login_shell("agy_acp_server") {
+            candidates.push(from_shell);
+        }
     }
-    if let Some(from_shell) = which_via_login_shell("agy_acp_server.par") {
-        candidates.push(from_shell);
+    #[cfg(not(windows))]
+    {
+        if let Some(home) = dirs_home().map(PathBuf::from) {
+            // Prefer the wrapper: it sets the server's required resource directory.
+            candidates.push(home.join(".local/bin/agy_acp_server.par"));
+            candidates.push(home.join(".local/share/agy-acp/agy_acp_server.par"));
+        }
+        if let Some(from_shell) = which_via_login_shell("agy_acp_server.par") {
+            candidates.push(from_shell);
+        }
     }
     first_binary(candidates)
 }
@@ -4157,6 +4182,26 @@ mod exec_allowlist_tests {
 #[cfg(all(windows, test))]
 mod windows_binary_tests {
     use super::*;
+
+    #[test]
+    fn antigravity_resolver_discovers_windows_binary() {
+        let dir = std::env::temp_dir().join(format!("monocode-agy-win-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let server = dir.join("agy_acp_server.exe");
+        std::fs::write(&server, b"MZ mock binary").unwrap();
+        let candidates = vec![server.clone()];
+        assert_eq!(first_binary(candidates), Some(server.clone()));
+        assert!(looks_like_harness_argv(
+            "C:\\Users\\User\\AppData\\Local\\agy\\bin\\agy_acp_server.exe"
+        ));
+        assert!(is_harness_argv_token("agy_acp_server.exe"));
+        assert_eq!(
+            resolve_harness_binary_override("antigravity", &server.to_string_lossy()),
+            Ok(server)
+        );
+        std::fs::remove_dir_all(dir).unwrap();
+    }
 
     #[test]
     fn configured_binary_path_accepts_windows_shim_extension() {

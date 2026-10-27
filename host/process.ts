@@ -20,7 +20,10 @@ const binaryNames: Record<RemoteProvider, string[]> = {
   omp: ["omp"],
   fx: ["fx"],
   hermes: ["hermes"],
-  antigravity: ["agy_acp_server.par"],
+  antigravity:
+    process.platform === "win32"
+      ? ["agy_acp_server", "agy_acp_server.exe"]
+      : ["agy_acp_server.par"],
   devin: ["devin"],
 };
 
@@ -38,7 +41,22 @@ const providerDirectories = (provider: RemoteProvider): string[] => {
       join(home, ".hermes", "hermes-agent", "venv", "bin"),
       join(home, ".hermes", "hermes-agent", ".venv", "bin"),
     ],
-    antigravity: [join(home, ".local", "share", "agy-acp")],
+    antigravity: [
+      join(home, ".local", "share", "agy-acp"),
+      ...(process.platform === "win32"
+        ? [
+            join(
+              process.env.LOCALAPPDATA ?? join(home, "AppData", "Local"),
+              "agy",
+              "bin",
+            ),
+            join(
+              process.env.LOCALAPPDATA ?? join(home, "AppData", "Local"),
+              "agy",
+            ),
+          ]
+        : []),
+    ],
     devin: [
       process.platform === "win32"
         ? join(
@@ -171,8 +189,6 @@ export async function resolveProvider(
   provider: RemoteProvider,
 ): Promise<string> {
   const windows = process.platform === "win32";
-  if (windows && provider === "antigravity")
-    throw new Error("Antigravity ACP is not available on Windows");
   for (const directory of providerDirectories(provider)) {
     if (!directory) continue;
     for (const name of binaryNames[provider]) {

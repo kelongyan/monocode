@@ -161,10 +161,14 @@ pub(crate) fn list_skills_from(
         // Windows keeps Devin's user config under %APPDATA% instead.
         #[cfg(windows)]
         add_root(
-            std::env::var_os("APPDATA")
-                .map(PathBuf::from)
-                .unwrap_or_else(|| home.join("AppData/Roaming"))
-                .join("devin/skills"),
+            if cfg!(test) {
+                home.join("AppData/Roaming/devin/skills")
+            } else {
+                std::env::var_os("APPDATA")
+                    .map(PathBuf::from)
+                    .unwrap_or_else(|| home.join("AppData/Roaming"))
+                    .join("devin/skills")
+            },
             "user",
             "devin",
         );
