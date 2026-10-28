@@ -70,7 +70,7 @@ type Resume = {
 };
 
 // Bound startup and control requests; a prompt may legitimately run much longer.
-const INIT_TIMEOUT_MS = 12_000;
+const INIT_TIMEOUT_MS = 60_000;
 const SESSION_TIMEOUT_MS = 45_000;
 const CONTROL_TIMEOUT_MS = 15_000;
 const PROMPT_TIMEOUT_MS = 30 * 60_000;

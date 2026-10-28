@@ -881,9 +881,12 @@ pub fn harness_resolve_devin() -> Result<CursorBinary, String> {
 #[tauri::command(async)]
 pub fn harness_resolve_antigravity() -> Result<AntigravityBinary, String> {
     resolve_antigravity()
-        .map(|path| AntigravityBinary {
-            path: path.to_string_lossy().into_owned(),
-            args: antigravity_args(),
+        .map(|path| {
+            sync_antigravity_credentials();
+            AntigravityBinary {
+                path: path.to_string_lossy().into_owned(),
+                args: antigravity_args(),
+            }
         })
         .ok_or_else(|| {
             if cfg!(windows) {
@@ -3036,7 +3039,143 @@ fn prepare_child(cmd: &mut Command, command: &str) {
     if command_basename(command) == "grok" {
         apply_grok_env(cmd);
     }
+    if command_basename(command) == "agy_acp_server" {
+        apply_antigravity_env(cmd, command);
+    }
     isolate_child(cmd);
+}
+
+fn apply_antigravity_env(cmd: &mut Command, command: &str) {
+    sync_antigravity_credentials();
+    if std::env::var_os("ANTIGRAVITY_HARNESS_PATH").is_none() {
+        if let Some(parent) = Path::new(command).parent() {
+            let candidates: &[&str] = if cfg!(windows) {
+                &["localharness_external.exe", "localharness.exe"]
+            } else {
+                &["localharness_external", "localharness"]
+            };
+            for candidate in candidates {
+                let candidate_path = parent.join(candidate);
+                if candidate_path.is_file() {
+                    cmd.env("ANTIGRAVITY_HARNESS_PATH", candidate_path);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+fn sync_antigravity_credentials() {
+    let gemini_home = std::env::var_os("GEMINI_HOME")
+        .map(PathBuf::from)
+        .or_else(|| dirs_home().map(|h| PathBuf::from(h).join(".gemini")));
+    let Some(home) = gemini_home else { return };
+    let acp_dir = home.join("antigravity-acp");
+    let settings_file = acp_dir.join("settings.json");
+    let token_file = acp_dir.join("acp_token.json");
+
+    // Ensure settings.json has auth.type = "oauth-personal" if not configured
+    let needs_settings = if settings_file.is_file() {
+        std::fs::read_to_string(&settings_file)
+            .ok()
+            .and_then(|c| serde_json::from_str::<serde_json::Value>(&c).ok())
+            .map(|json| json.get("auth").and_then(|a| a.get("type")).is_none())
+            .unwrap_or(true)
+    } else {
+        true
+    };
+
+    if needs_settings {
+        let _ = std::fs::create_dir_all(&acp_dir);
+        let mut settings_json = if settings_file.is_file() {
+            std::fs::read_to_string(&settings_file)
+                .ok()
+                .and_then(|c| serde_json::from_str::<serde_json::Value>(&c).ok())
+                .unwrap_or_else(|| serde_json::json!({}))
+        } else {
+            serde_json::json!({})
+        };
+        if let Some(obj) = settings_json.as_object_mut() {
+            if !obj.contains_key("auth") {
+                obj.insert("auth".into(), serde_json::json!({"type": "oauth-personal"}));
+                let _ = std::fs::write(
+                    &settings_file,
+                    serde_json::to_string_pretty(&settings_json).unwrap_or_default(),
+                );
+            }
+        }
+    }
+
+    // Sync token from system keyring (gemini:antigravity) to acp_token.json
+    #[cfg(any(windows, target_os = "macos", target_os = "linux"))]
+    {
+        if let Ok(entry) = keyring::Entry::new("gemini", "antigravity") {
+            if let Ok(password) = entry.get_password() {
+                if let Ok(cred_json) = serde_json::from_str::<serde_json::Value>(&password) {
+                    if let Some(refresh_token) = cred_json
+                        .get("token")
+                        .and_then(|t| t.get("refresh_token"))
+                        .and_then(|r| r.as_str())
+                    {
+                        let current_rt = if token_file.is_file() {
+                            std::fs::read_to_string(&token_file)
+                                .ok()
+                                .and_then(|c| serde_json::from_str::<serde_json::Value>(&c).ok())
+                                .and_then(|j| {
+                                    j.get("refresh_token")
+                                        .and_then(|r| r.as_str())
+                                        .map(|s| s.to_string())
+                                })
+                        } else {
+                            None
+                        };
+
+                        if current_rt.as_deref() != Some(refresh_token) {
+                            let client_id = base64::Engine::decode(
+                                &base64::engine::general_purpose::STANDARD,
+                                "MTA3MTAwNjA2MDU5MS10bWhzc2luMmgyMWxjcmUyMzV2dG9sb2poNGc0MDNlcC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbQ==",
+                            )
+                            .ok()
+                            .and_then(|b| String::from_utf8(b).ok())
+                            .unwrap_or_default();
+                            let client_secret = base64::Engine::decode(
+                                &base64::engine::general_purpose::STANDARD,
+                                "R09DU1BYLUs1OEZXUjQ4NkxkTExKMW1MQjhzWEM0ejZxREFm",
+                            )
+                            .ok()
+                            .and_then(|b| String::from_utf8(b).ok())
+                            .unwrap_or_default();
+
+                            let token_blob = serde_json::json!({
+                                "client_id": client_id,
+                                "client_secret": client_secret,
+                                "refresh_token": refresh_token,
+                                "token_uri": "https://oauth2.googleapis.com/token",
+                                "scopes": [
+                                    "https://www.googleapis.com/auth/cloud-platform",
+                                    "https://www.googleapis.com/auth/userinfo.email",
+                                    "https://www.googleapis.com/auth/aicode"
+                                ]
+                            });
+                            let _ = std::fs::create_dir_all(&acp_dir);
+                            let _ = std::fs::write(
+                                &token_file,
+                                serde_json::to_string_pretty(&token_blob).unwrap_or_default(),
+                            );
+                            #[cfg(unix)]
+                            {
+                                use std::os::unix::fs::PermissionsExt;
+                                let _ = std::fs::set_permissions(
+                                    &token_file,
+                                    std::fs::Permissions::from_mode(0o600),
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /// fx keeps its Gateway credential in the macOS Keychain and reads it by
